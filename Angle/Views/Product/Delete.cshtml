@@ -1,0 +1,117 @@
+﻿@model Angle.Models.ViewModels.ProductViewModel.ProductViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Confirm";
+
+
+
+
+    }
+
+    @section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+    <script type="text/javascript">
+        var parentsTypes = new Array();
+        var myavaibles = new Array();
+        var myAttributes = new Array();
+
+      
+        selectedchilds = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.SelectedChilds)));
+        myAttributes = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.MyAttributes)));
+
+        console.log(myAttributes);
+        console.log(selectedchilds);
+        setMyChilds(selectedchilds);
+        loadExistingAttributes();
+      /*  console.log(test1);
+        console.log(test1[3]['Childs'][0]['ChildID']);
+        //var test123 = test1.find(x.TypeID == 13);
+        var abc = test1.find(x => x.ID == 13)['Childs'];
+        console.log(abc);*/
+        console.log(myavaibles);
+        document.getElementById("selectcustomer").value = "@Model.CustomerID";
+        document.getElementById("selectproject").value = "@Model.ProjectID";
+        document.getElementById("selectstockinformation").value = "@Model.StockInformationID";
+        
+
+    </script>
+
+
+
+
+
+}
+
+
+
+<div class="content-heading">
+    <div>Products<small>Delete a Product</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Product Information</div>
+            <div class="card-body">
+                <form asp-action="Delete" asp-controller="Product" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" asp-for="ID" value="@Model.ID" />
+                    <input type="hidden" asp-for="ParentID" value="@Model.ParentID" />
+
+
+   
+
+  
+
+    
+     
+
+
+
+
+
+
+
+
+                    <div class="card b">
+                        <div class="card-header bg-danger text-bold">Delete Product</div>
+                        <div class="card-body bt">
+                            <p>Are you sure you want to delete this Product?</p>
+                            <p>Type: @Model.Type</p>
+                            <p>Serial Number: @Model.SerialNumber</p>
+                            <p>Description: @Model.Description</p>
+                            <p>Parent product:</p>
+                            <strong>- @Model.ParentName</strong>
+                            <p>Child products: </p>
+                            @foreach (string childDescription in Model.TypeChild)
+                            {
+                                <strong>- @childDescription</strong><br />
+                            }
+                            <br /><br />
+                            <button class="btn btn-secondary" type="submit"><span class="text-danger">Delete Product</span></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

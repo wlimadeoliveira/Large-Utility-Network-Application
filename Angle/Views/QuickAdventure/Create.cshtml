@@ -1,0 +1,19 @@
+﻿@model Angle.Models.ViewModels.QuickAdventureViewModel
+
+@{
+    ViewData["Title"] = "Scan Product";
+}
+
+@section scripts{ 
+<script>
+    $(document).ready(function () {
+        $("#createquick").submit();
+    })
+</script>
+}
+
+
+<form id="createquick" asp-action="Create" asp-controller="QuickAdventure">
+    <input type="hidden" asp-for="ProductID" value="@Model.Product.ID" />
+    <input type="hidden" value="@User.Identity.Name" asp-for="Email" />
+</form>

@@ -1,0 +1,161 @@
+﻿@model Angle.Models.ViewModels.ProductViewModel.ProductCreateViewModel
+@using Newtonsoft.Json.Serialization;
+
+
+
+@{
+    ViewData["Title"] = "Acquire a Product";
+    var test = ViewBag.ListOfChilds;
+    var avaibles = ViewBag.ListOfAvaible;
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+    </script>
+    <script src="~/vendor/jquery/dist/jquery.validate.js"></script>
+    <script src="~/vendor/jquery/dist/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+    <script type="text/javascript">
+        $('#selectedtype').change(function () {
+            var typeId = $('#selectedtype').val();
+            var url = '/Product/GetTypeChild';
+            // Get Childs
+            $.getJSON(url, { Id: typeId }, function (data) {
+                var item = "";
+                $('#selectchilds').empty();
+                $.each(data, function (i, child) {
+                    item += '<option value ="' + child.value + '">' + child.text + '</option>';
+                }
+                );
+                $('#selectchilds').html(item);
+                $("#selectchilds").trigger("chosen:updated");
+            }
+            );
+            //Get Type Attributes
+            var typeId2 = $('#selectedtype').val();
+            var url2 = '/Type/GetTypeAttribute';
+            $.getJSON(url2, { Id: typeId2 }, function (data) {
+                var item = "";                     
+                $.each(data, function (i, attribute) {
+                    item += '<div class="form-group" ><label class="control-label col-md-3 col-sm-3 col-xs-12">' + attribute.name + '<span class="required">*</span></label> <div class="col-md-9 col-sm-9 col-xs-12"><input type="text"  name="ValueSelectedAttributes" required="required" value="' + attribute.value + '" class="form-control"></div></div> <input name="SelectedAttributes" type="hidden" value="' + attribute.id + '"/>';           
+                }
+                );
+                $('#listattributes').html(item);            
+            }
+            );
+        }
+        );
+   
+
+    </script>
+}
+
+<div class="content-heading">
+    <div>Products<small>Acquire a product</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Product Information</div>
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="Product" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" value="@User.Identity.Name" asp-for="Email" />
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type</label><span class="required">*</span>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="selectedtype" required asp-for="DeviceTypeID" class="form-control"  asp-items="@(new SelectList(@ViewBag.ListOfType,"ID","Name"))">
+                                
+                            </select>
+                            <span asp-validation-for="DeviceTypeID" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="cloneform">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Serial Number <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" id="title" asp-for="SerialNumber" required="required" class="form-control">
+                           <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                            Description <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea asp-for="Description" id="message" required="required" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="CustomerID" asp-items="@(new SelectList(@ViewBag.ListOfCustomers,"ID","CompanyName"))" class="chosen-select form-control">
+                                <option value="" disabled selected>Select a Project</option>
+                            </select>
+                            <span asp-validation-for="CustomerID" class="field-validation-error"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Project</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="ProjectID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfProjects,"ID","Title"))">
+                                <option value="" selected>Select a Project</option>
+                            </select>
+                            <span asp-validation-for="ProjectID" class="field-validation-error"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Stock Information</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="StockInformationID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfStockInformations,"ID","Description"))">
+                                <option value="" selected>Select Stock Information</option>
+                            </select>
+                            <span asp-validation-for="StockInformationID" class="field-validation-error"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Avaible Childs</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="selectchilds" asp-for="TypeChild" class="form-control" multiple>
+                            </select>
+                            <span asp-validation-for="TypeChild" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div id="hiddenAttributeID">
+                    </div>
+                    <div id="listattributes">
+                    </div>
+                    <hr />
+                    <div id="beforesubmit" class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <input type="button" onclick="history.go(-1)" value="Cancel" class="btn btn-primary" />
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

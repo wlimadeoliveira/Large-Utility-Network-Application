@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Bootstrap Admin App">
     <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
-    <title>@ViewData["Title"] - Bootstrap Admin Template</title>
+    <title>@ViewData["Title"] - LUNA</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Place styles for plugins -->
     @if (IsSectionDefined("Styles"))
-        {@RenderSection("Styles", required: false)}
+    {@RenderSection("Styles", required: false)}
 
     <environment names="Development">
         <!-- =============== VENDOR STYLES ===============-->
@@ -69,11 +69,12 @@
         </footer>
     </div>
 
-    @if (IsSectionDefined("BodyArea")) {
+    @if (IsSectionDefined("BodyArea"))
+    {
         @RenderSection("BodyArea", required: false)
     }
 
-    <environment names="Development">
+    <environment names="Development,Staging,Production">
 
         <!-- =============== VENDOR SCRIPTS ===============-->
 
@@ -82,22 +83,27 @@
         <script src="~/vendor/screenfull/dist/screenfull.js"></script>
         <script src="~/vendor/i18next/i18next.js"></script>
         <script src="~/vendor/i18next-xhr-backend/i18nextXHRBackend.js"></script>
-        <!--
         <script src="~/vendor/jquery/dist/jquery.js"></script>
         <script src="~/vendor/popper.js/dist/umd/popper.js"></script>
         <script src="~/vendor/bootstrap/dist/js/bootstrap.js"></script>
-        -->
 
         <!-- =============== PAGE VENDOR SCRIPTS ===============-->
         @RenderSection("scripts", required: false)
 
         <!-- =============== APP SCRIPTS ===============-->
-
         <!-- Wrapper -->
         <script src="~/master/js/modules/common/wrapper.js"></script>
         <!-- App init -->
         <script src="~/master/js/app.init.js"></script>
         <!-- Modules -->
+        <script src="~/master/js/modules/charts/chart-knob.js"></script>
+        <script src="~/master/js/modules/charts/chart.js"></script>
+        <script src="~/master/js/modules/charts/chartist.js"></script>
+        <script src="~/master/js/modules/charts/easypiechart.js"></script>
+        <script src="~/master/js/modules/charts/flot.js"></script>
+        <script src="~/master/js/modules/charts/morris.js"></script>
+        <script src="~/master/js/modules/charts/rickshaw.js"></script>
+        <script src="~/master/js/modules/charts/sparkline.js"></script>
         <script src="~/master/js/modules/common/bootstrap-start.js"></script>
         <script src="~/master/js/modules/common/card-tools.js"></script>
         <script src="~/master/js/modules/common/constants.js"></script>
@@ -112,34 +118,32 @@
         <script src="~/master/js/modules/common/table-checkall.js"></script>
         <script src="~/master/js/modules/common/toggle-state.js"></script>
         <script src="~/master/js/modules/common/trigger-resize.js"></script>
+        <script src="~/master/js/modules/elements/cards.js"></script>
+        <script src="~/master/js/modules/elements/nestable.js"></script>
+        <script src="~/master/js/modules/elements/notify.js"></script>
+        <script src="~/master/js/modules/elements/porlets.js"></script>
+        <script src="~/master/js/modules/elements/sortable.js"></script>
+        <script src="~/master/js/modules/elements/sweetalert.js"></script>
+        <script src="~/master/js/modules/extras/calendar.js"></script>
+        <script src="~/master/js/modules/extras/jqcloud.js"></script>
+        <script src="~/master/js/modules/extras/search.js"></script>
+        <script src="~/master/js/modules/forms/color-picker.js"></script>
+        <script src="~/master/js/modules/forms/forms.js"></script>
+        <script src="~/master/js/modules/forms/imagecrop.js"></script>
+        <script src="~/master/js/modules/forms/select2.js"></script>
+        <script src="~/master/js/modules/forms/upload.js"></script>     
+        <script src="~/master/js/modules/forms/xeditable.js"></script>
+        <script src="~/master/js/modules/maps/gmap.js"></script>
+        <script src="~/master/js/modules/maps/vector.map.demo.js"></script>
+        <script src="~/master/js/modules/maps/vector.map.js"></script>
+        <script src="~/master/js/modules/pages/pages.js"></script>
+        <script src="~/master/js/modules/tables/bootgrid.js"></script>
+        <script src="~/master/js/modules/tables/datatable.js"></script>
         <!-- Custom -->
         <script src="~/master/js/custom/custom.js"></script>
-
     </environment>
 
-    <environment names="Staging,Production">
 
-        <!-- =============== VENDOR SCRIPTS ===============-->
-
-        <script src="~/vendor/modernizr/modernizr.custom.js"></script>
-        <script src="~/vendor/js-storage/js.storage.js"></script>
-        <script src="~/vendor/screenfull/dist/screenfull.js"></script>
-        <script src="~/vendor/i18next/i18next.js"></script>
-        <script src="~/vendor/i18next-xhr-backend/i18nextXHRBackend.js"></script>
-        <!--
-        <script src="~/vendor/jquery/dist/jquery.js"></script>
-        <script src="~/vendor/popper.js/dist/umd/popper.js"></script>
-        <script src="~/vendor/bootstrap/dist/js/bootstrap.js"></script>
-        -->
-
-        <!-- =============== PAGE VENDOR SCRIPTS ===============-->
-        @RenderSection("scripts", required: false)
-
-        <!-- =============== APP SCRIPTS ===============-->
-
-        <script src="~/js/app.js"></script>
-
-    </environment>
 
 
 

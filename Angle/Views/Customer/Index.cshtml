@@ -1,0 +1,99 @@
+﻿@model IEnumerable<LUNA.Models.Customer>
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+    <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+    <style>
+        .filters input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+    <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+    <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+    <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/vendor/jszip/dist/jszip.js"></script>
+    <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+    <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+
+}
+
+<div class="content-heading">
+    <div class="row"></div>
+    <div class="col">
+        Customers<small></small>
+    </div>
+    <div class="col">
+        <a class="float-right" href="@Url.Action("Create", "Customer")"><button type="button" class="btn btn-oval btn-info"> <span class="fa-1x mr-2 fas fa-plus-circle"></span>NEW</button></a>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">List of all Customer <small></small></div>
+            <div class="text-sm"></div>
+        </div>
+        <div class="card-body">
+            <div id="printbuttons"></div><br />
+            <div id="togglecolumn" class="btn-group-toggle" data-toggle="buttons">
+                <!-- See master/js/datatable.js at the end of file for toggle button function-->
+            </div>
+            <table class="table table-striped my-4 w-100" id="datatable2">
+                <thead>
+                    <tr class="tableheader">
+                        <th>CompanyName</th>
+                        <th>Phone Number</th>
+                        <th>Address Office</th>
+                        <th>Address Bill</th>
+                        <th>Options</th>
+                    </tr>
+                    <tr class="filters" style="width: 100%;padding: 3px;box-sizing: border-box;">
+                        <th>CompanyName</th>
+                        <th>Phone Number</th>
+                        <th>Address Office</th>
+                        <th>Address Bill</th>
+                        <th hidden>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td>@customer.CompanyName</td>
+                            <td>@customer.PhoneNumber</td>
+                            <td>@customer.AddressOffice</td>
+                            <td>@customer.AddressBill</td>
+                            <td><a href="@Url.Action("Edit", "Customer",new { id = customer.ID })">Edit</a> / <a href="@Url.Action("Delete", "Customer", new { id = customer.ID })">Delete</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+

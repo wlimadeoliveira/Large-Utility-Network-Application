@@ -2,7 +2,7 @@
  *
  * Angle - Bootstrap Admin Template
  *
- * Version: 4.5.5
+ * Version: 4.7.1
  * Author: @themicon_co
  * Website: http://themicon.co
  * License: https://wrapbootstrap.com/help/licenses
@@ -30,8 +30,6 @@ body {
   height: auto;
   min-height: 100%;
   overflow-x: hidden; }
-  .wrapper.ng-leave {
-    display: none; }
   .wrapper .aside-container {
     position: absolute;
     width: 220px;
@@ -332,9 +330,8 @@ _:-ms-lang(x),
   margin-right: auto; }
   .layout-h .wrapper .section-container .content-wrapper .content-heading {
     display: none; }
-
-.layout-h .wrapper .section-container {
-  margin-top: 0; }
+    .layout-h .wrapper .section-container .content-wrapper .content-heading + .breadcrumb {
+      display: none; }
 
 .layout-h .wrapper .offsidebar {
   margin-top: 55px; }
@@ -504,7 +501,7 @@ _:-ms-lang(x),
       top: auto;
       left: 0;
       right: 0; }
-  @media (min-width: 992px) {
+  @media (min-width: 576px) {
     .topnavbar .dropdown {
       position: relative; }
       .topnavbar .dropdown .dropdown-menu {
@@ -530,7 +527,16 @@ _:-ms-lang(x),
   .topnavbar .navbar-nav > .nav-item.show > .nav-link,
   .topnavbar .navbar-nav > .nav-item.show > .nav-link:hover,
   .topnavbar .navbar-nav > .nav-item.show > .nav-link:focus {
-    background-color: transparent; }
+    display: inline-block;
+    box-shadow: 0 -3px 0 rgba(0, 0, 0, 0.125) inset;
+    background-color: transparent;
+    transition: all 0.2s; }
+    @media (prefers-reduced-motion: reduce) {
+      .topnavbar .navbar-nav > .nav-item.active > .nav-link, .topnavbar .navbar-nav > .nav-item.active > .nav-link:hover, .topnavbar .navbar-nav > .nav-item.active > .nav-link:focus,
+      .topnavbar .navbar-nav > .nav-item.show > .nav-link,
+      .topnavbar .navbar-nav > .nav-item.show > .nav-link:hover,
+      .topnavbar .navbar-nav > .nav-item.show > .nav-link:focus {
+        transition: none; } }
   .topnavbar .navbar-nav > li > [data-toggle='navbar-search'] {
     position: absolute;
     top: 0;
@@ -1238,8 +1244,11 @@ select.form-control-sm {
 .custom-select {
   -webkit-appearance: none; }
 
+.custom-control-label::before,
+.custom-control-label::after {
+  top: 0.19rem; }
+
 .custom-control-label::before {
-  top: 0.19rem;
   border: 1px solid #dde6e9; }
 
 fieldset {
@@ -1527,6 +1536,9 @@ fieldset {
     background-color: #060a0d;
     border-color: #020304; }
   .btn-inverse:focus, .btn-inverse.focus {
+    color: #fff;
+    background-color: #060a0d;
+    border-color: #020304;
     box-shadow: 0 0 0 0.2rem rgba(54, 64, 71, 0.5); }
   .btn-inverse.disabled, .btn-inverse:disabled {
     color: #fff;
@@ -1550,6 +1562,9 @@ fieldset {
     background-color: #2e9e83;
     border-color: #2b957a; }
   .btn-green:focus, .btn-green.focus {
+    color: #fff;
+    background-color: #2e9e83;
+    border-color: #2b957a;
     box-shadow: 0 0 0 0.2rem rgba(85, 198, 170, 0.5); }
   .btn-green.disabled, .btn-green:disabled {
     color: #fff;
@@ -1573,6 +1588,9 @@ fieldset {
     background-color: #5b4eac;
     border-color: #564aa3; }
   .btn-purple:focus, .btn-purple.focus {
+    color: #fff;
+    background-color: #5b4eac;
+    border-color: #564aa3;
     box-shadow: 0 0 0 0.2rem rgba(135, 125, 196, 0.5); }
   .btn-purple.disabled, .btn-purple:disabled {
     color: #fff;
@@ -1596,6 +1614,9 @@ fieldset {
     background-color: #f30ee0;
     border-color: #e90bd6; }
   .btn-pink:focus, .btn-pink.focus {
+    color: #fff;
+    background-color: #f30ee0;
+    border-color: #e90bd6;
     box-shadow: 0 0 0 0.2rem rgba(247, 81, 233, 0.5); }
   .btn-pink.disabled, .btn-pink:disabled {
     color: #fff;
@@ -2152,12 +2173,13 @@ fieldset {
   line-height: 18px;
   vertical-align: middle; }
 
-/* Checked state */
 .c-checkbox,
 .c-radio {
+  /* Checked state */
   /* override for radio */
   /* Disable state */
-  /* override for radio */ }
+  /* override for radio */
+  /* Focus state */ }
   .c-checkbox input[type=checkbox]:checked + span:before,
   .c-checkbox input[type=radio]:checked + span:before,
   .c-radio input[type=checkbox]:checked + span:before,
@@ -2189,6 +2211,11 @@ fieldset {
     .c-checkbox input[type=radio]:disabled + span:before,
     .c-radio input[type=radio]:disabled + span:before {
       color: #ddd; }
+  .c-checkbox input[type=checkbox]:focus + span,
+  .c-checkbox input[type=radio]:focus + span,
+  .c-radio input[type=checkbox]:focus + span,
+  .c-radio input[type=radio]:focus + span {
+    box-shadow: 0 0 0 0.2rem rgba(93, 156, 236, 0.25); }
 
 .c-radio.c-radio-nofont {
   /* override for radio */
@@ -2237,7 +2264,7 @@ fieldset {
 .switch {
   display: flex;
   align-items: center;
-  direction: row; }
+  margin: 0; }
   .switch span {
     position: relative;
     display: inline-block;
@@ -2285,6 +2312,9 @@ fieldset {
 .switch input:disabled + span {
   background-color: #f1f1f1;
   cursor: not-allowed; }
+
+.switch input:focus + span {
+  box-shadow: 0 0 0 0.2rem rgba(93, 156, 236, 0.25); }
 
 .note-editor {
   background-image: -webkit-linear-gradient(#eee 0.1em, transparent 0.1em);

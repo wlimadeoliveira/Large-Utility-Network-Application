@@ -1,0 +1,80 @@
+﻿@model Angle.Models.ViewModels.FeatureViewModels.DeleteFeatureViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Are you sure you want to delete?";
+
+
+
+
+    }
+
+    @section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+
+
+
+
+
+
+}
+
+
+
+<div class="content-heading">
+    <div>Feature<small>Delete a Feature</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Feature Information</div>
+            <div class="card-body">
+                <form asp-action="Delete" asp-controller="Feature" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" asp-for="ID" value="@Model.ID" />                   
+                    <div class="card b">
+                        <div class="card-header bg-danger text-bold">Delete Feature</div>
+                        <div class="card-body bt">
+                            <p>Are you sure you want to delete this Feature?</p>
+                            <p>Name:  @Model.Name</p>
+                            <p>Description: @Model.Description</p>
+
+
+
+                            <p>This Feature will be removed from following Types: </p>
+                            @foreach (var typeName in @Model.typeNames)
+                            {
+                                <strong>- @typeName </strong>
+                            }
+                            <br />
+                            <br />
+                            <input type="checkbox" asp-for="decisionControll" />
+                            <label for="decisionControll"><strong>I Agree</strong></label>
+                            <br /><br />
+                            <button class="btn btn-secondary" type="submit"><span class="text-danger">Delete Feature</span></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

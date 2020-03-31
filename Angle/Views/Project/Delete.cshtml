@@ -1,0 +1,73 @@
+﻿@model Angle.Models.ViewModels.ProjectViewModels.DeleteProjectViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Are you sure you want to delete?";
+
+
+
+
+    }
+
+    @section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+
+@section scripts{
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+    <script type="text/javascript">
+    </script>
+}
+
+
+
+<div class="content-heading">
+    <div>Project<small>Delete an Project</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Project Information</div>
+            <div class="card-body">
+                <form asp-action="Delete" asp-controller="Project" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" asp-for="ID" value="@Model.ID" />                   
+                    <div class="card b">
+                        <div class="card-header bg-danger text-bold">Delete Project</div>
+                        <div class="card-body bt">
+                            <p>Are you sure you want to delete this Project?</p>
+                            <p>Title: <strong>@Model.Title</strong> </p>
+                            <br />
+                            <p>Description: <strong>@Model.Description</strong> </p>
+                            <br />
+                            <p>Customer: <strong>@try
+                            {@Model.customer.CompanyName}
+                            catch { }</strong> </p>
+                            <br />
+
+                            <br /><br />
+
+                            <p><strong>WARNING!!!!<br /> This could lead to Irreparable inconsistency in the Database and Information loss.</strong></p>
+                            <br />
+                            <br />
+
+                            <input type="checkbox" asp-for="decisionControll" />
+                            <label for="decisionControll"><strong>Sure! I know exactly what I'm doing!</strong></label>
+                            <br />
+                            <button class="btn btn-secondary" type="submit"><span class="text-danger">Delete Project</span></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

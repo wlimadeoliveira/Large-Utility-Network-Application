@@ -1,0 +1,72 @@
+﻿@model Angle.Models.ViewModels.CustomerViewModels.DeleteCustomerViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Are you sure you want to delete?";
+
+
+
+
+    }
+
+    @section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+
+@section scripts{
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+    <script type="text/javascript">
+    </script>
+}
+
+
+
+<div class="content-heading">
+    <div>Customers<small>Delete an Customer</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Customer Information</div>
+            <div class="card-body">
+                <form asp-action="Delete" asp-controller="Customer" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" asp-for="ID" value="@Model.ID" />                   
+                    <div class="card b">
+                        <div class="card-header bg-danger text-bold">Delete Customer</div>
+                        <div class="card-body bt">
+                            <p>Are you sure you want to delete this Customer?</p>
+                            <p>Name: <strong>@Model.CompanyName</strong> </p>
+                            <br />
+                            <br />
+                            <p>This Customer is still relationated with following Products: </p>
+                            @foreach (var product in @Model.products)
+                            {
+                                <strong>@product.Description</strong><br />
+                            }
+                            <br /><br />
+
+                            <p><strong>WARNING!!!!<br /> This could lead to irreparable inconsistency in the Database or Information loss.</strong></p>
+                            <br />
+                            <br />
+                          
+                            <input type="checkbox" asp-for="decisionControll" />
+                            <label for="smartControll"><strong>Sure! I know exactly what I'm doing!</strong></label>
+                            <br />
+                            <button class="btn btn-secondary" type="submit"><span class="text-danger">Delete Customer</span></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

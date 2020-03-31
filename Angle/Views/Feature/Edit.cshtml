@@ -1,0 +1,51 @@
+﻿@model LUNA.Models.Models.Feature
+
+@{
+    ViewData["Title"] = "Update Features";
+}
+
+<div class="content-heading">
+    <div>Feature<small>Update Feature</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Feature Information</div>
+            <div class="card-body">
+                <form asp-action="Edit" asp-controller="Feature" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                    <input type="hidden" value="@Model.ID" />
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input asp-for="Name" value="@Model.Name" type="text" id="title" required="required" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Description<span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea asp-for="Description" value="@Model.Description" type="text" id="title" required="required" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <input type="button" onclick="history.go(-1)" value="Cancel" class="btn btn-primary" />
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

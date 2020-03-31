@@ -1,0 +1,145 @@
+﻿@model IEnumerable<LUNA.Models.Models.QuickAdventure>
+
+
+
+@{
+    ViewData["Title"] = "MyAdventures";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+    <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+    <style>
+        .filters input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+    </style>
+
+}
+
+@section scripts{
+    <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+    <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+    <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+    <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/vendor/jszip/dist/jszip.js"></script>
+    <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+    <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+    <script>
+      /*  $(".myadventureslist").click(function () {
+            var id = $(this).attr("id");
+            alert(id);
+        }
+        )*/
+        $(function() {
+            $('.myadventureslist').click(function () {
+                $('#details').load(this.href, function () {
+
+                                         var table1 = $('#datatable3').DataTable({
+            'paging': true,
+            'ordering': true,
+                                             'info': true,
+            "orderSequence": ["desc", "asc"],
+    responsive: true,
+                    stateSave: false,
+                   
+            oLanguage: {
+                sSearch: 'Search all columns:',
+                sLengthMenu: '_MENU_ records per page',
+                info: 'Showing page _PAGE_ of _PAGES_',
+                zeroRecords: 'Nothing found - sorry',
+                infoEmpty: 'No records available',
+                infoFiltered: '(filtered from _MAX_ total records)',
+                oPaginate: {
+                    sNext: '<em class="fa fa-caret-right"></em>',
+                    sPrevious: '<em class="fa fa-caret-left"></em>'
+                }
+            },
+            keys: true
+});
+
+                    }
+
+
+
+                );
+        return false;
+    });
+});
+
+
+    </script>
+
+
+}
+
+<div class="content-heading">
+    <div class="row"></div>
+    <div class="col">
+        My Adventures<small></small>
+    </div>
+    <div class="col">
+       
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div id="details" class="col-8">
+
+        </div>
+        <div class="col-4">
+            <div class="card mb-3 border-danger">
+                <div class="card-header text-white bg-danger">Scanned</div>
+                <b class="card-body">
+                    <table class="table table-striped my-4 w-100" id="datatable1">
+                        <thead>
+                            <tr>
+                                <th>Serial Number</th>
+                                <th>Type</th>
+                                <th>Options</th>                           
+                            </tr>
+                        </thead>
+                        <tbody id="historytablebody" class="myadventureslist">
+
+                            @foreach (var adventure in Model)
+                            {
+                            <tr >
+                                <td id="@adventure.ProductID" >
+                                    @try
+                                    {@adventure.Product.SerialNumber}
+                                catch { }
+                                </td>
+                                <td>
+                                    @try
+                                    {@adventure.Product.Type.Description}
+                                catch { }
+                                </td>
+                                <td>@Html.ActionLink("Details","ProductDetail","QuickAdventure",new { id = adventure.ProductID}, new { @class = "myadventureslist"} )</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </b>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

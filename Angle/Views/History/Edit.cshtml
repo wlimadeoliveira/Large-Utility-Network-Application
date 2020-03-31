@@ -1,0 +1,75 @@
+﻿@model LUNA.Models.History
+
+@{
+    ViewData["Title"] = "History";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+        });
+
+          $("#bootstrapbadge").val('@Model.BootStrapBadge').trigger("chosen:updated");
+
+    </script>
+}
+
+<div class="content-heading">
+    <div>Histories<small>Edit an History</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your History Type</div>
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="History" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" value="@Model.ID" />
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Description <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input asp-for="Description" type="text" id="title" required="required" value="@Model.Description" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group badge-">
+                        <label asp-for="BootStrapBadge" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Signalisation<span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="bootstrapbadge" asp-for="BootStrapBadge" class="form-control">
+                                <option value="primary" class="bg-primary-light">primary</option>
+                                <option value="success" class="bg-success-light">success</option>
+                                <option value="danger" class="bg-danger-light">danger</option>
+                                <option value="warning" class="bg-warning-light">warning</option>
+                                <option value="info" class="bg-info-light">info</option>
+                                <option value="light" class="bg-gray-lighter">lighter</option>
+                                <option value="inverse" class="bg-inverse-light">dark</option>
+                                <option value="pink" class="bg-pink-light">pink</option>
+                                <option value="purple" class="bg-purple-light">purple</option>
+                            </select>
+                        </div>
+                    </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <input type="button" onclick="history.go(-1)" class="btn btn-primary" value="Cancel">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+</form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

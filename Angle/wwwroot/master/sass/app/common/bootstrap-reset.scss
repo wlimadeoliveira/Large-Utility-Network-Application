@@ -233,8 +233,11 @@ select.form-control-sm {
     -webkit-appearance: none;
 }
 
-.custom-control-label::before {
+.custom-control-label::before,
+.custom-control-label::after {
     top: 0.19rem;
+}
+.custom-control-label::before {
     border: 1px solid $gray;
 }
 

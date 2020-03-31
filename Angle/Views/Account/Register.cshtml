@@ -1,0 +1,77 @@
+﻿@model Angle.Models.ViewModels.AccountViewModel.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@section  scripts{
+    <script type="text/javascript">      
+        
+     
+       
+    </script>
+
+
+ }
+
+
+<div class="card card-flat">
+    <div class="card-header text-center bg-dark"></div>
+    <div class="card-body">
+        <p class="text-center py-2"></p>
+        <form method="post" asp-controller="Account" asp-action="Register" class="mb-3" id="registerForm">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="text-muted" >FirstName</label>
+                <div class="input-group with-focus">
+                    <input asp-for="FirstName" class="form-control border-right-0" id="signupInputEmail1" type="text" placeholder="Your First Name" autocomplete="off">
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-envelope"></em></span></div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="text-muted" >Last Name</label>
+                <div class="input-group with-focus">
+                    <input asp-for="LastName" class="form-control border-right-0" id="signupInputEmail1" type="text" placeholder="Your Last Name" autocomplete="off">
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-envelope"></em></span></div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="Function" class="text-muted" >Company Function</label>
+                <div class="input-group with-focus">
+                    <input asp-for="Function" class="form-control border-right-0" id="signupInputEmail1" type="text" placeholder="Your Intern Company Function" autocomplete="off">
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-envelope"></em></span></div>
+                </div>
+               
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="text-muted" for="signupInputEmail1">Email address</label>
+                <div class="input-group with-focus">
+                    <input asp-for="Email" class="form-control border-right-0" id="signupInputEmail1" type="email" placeholder="Enter email" autocomplete="off" required>
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-envelope"></em></span></div>
+                </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="text-muted" for="signupInputPassword1">Password</label>
+                <div class="input-group with-focus">
+                    <input asp-for="Password" class="form-control border-right-0" id="signupInputPassword1" type="password" placeholder="Password" autocomplete="off" required>
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-lock"></em></span></div>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="text-muted" for="signupInputRePassword1">Retype Password</label>
+                <div class="input-group with-focus">
+                    <input asp-for="ConfirmPassword" class="form-control border-right-0" id="signupInputRePassword1" type="password" placeholder="Retype Password" autocomplete="off" required data-parsley-equalto="#signupInputPassword1">
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-lock"></em></span></div>
+
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button class="btn btn-block btn-primary mt-3" type="submit">Create account</button>
+        </form>
+        <p class="pt-3 text-center">Have an account?</p><a class="btn btn-block btn-secondary" href="login.html">Signup</a>
+    </div>
+</div>

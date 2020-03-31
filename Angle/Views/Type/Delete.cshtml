@@ -1,0 +1,102 @@
+﻿@model Angle.Models.ViewModels.TypeViewModels.TypeDeleteViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Are you sure you want to delete?";
+
+
+
+
+    }
+
+    @section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+    <script type="text/javascript">
+        var parentsTypes = new Array();
+        var myavaibles = new Array();
+        var myAttributes = new Array();
+
+      
+        selectedchilds = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.SelectedChilds)));
+        myAttributes = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.MyAttributes)));
+
+        console.log(myAttributes);
+        console.log(selectedchilds);
+        setMyChilds(selectedchilds);
+        loadExistingAttributes();
+      /*  console.log(test1);
+        console.log(test1[3]['Childs'][0]['ChildID']);
+        //var test123 = test1.find(x.TypeID == 13);
+        var abc = test1.find(x => x.ID == 13)['Childs'];
+        console.log(abc);*/
+        console.log(myavaibles);
+
+        
+
+    </script>
+
+
+
+
+
+}
+
+
+
+<div class="content-heading">
+    <div>Types<small>Delete a Type</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Type Information</div>
+            <div class="card-body">
+                <form asp-action="Delete" asp-controller="Type" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" asp-for="ID" value="@Model.ID" />                   
+                    <div class="card b">
+                        <div class="card-header bg-danger text-bold">Delete Product</div>
+                        <div class="card-body bt">
+                            <p>Are you sure you want to delete this Type?</p>
+                            <p>Name:  @Model.Name</p>
+                            <p>Description: @Model.Description</p>
+
+
+
+                            <p>Do you wish to delete all Products of this Type?: </p>
+                            @foreach (var product in @Model.Products)
+                            {
+                                <strong>- @product.Description  / @product.SerialNumber</strong>
+                            }
+                            <br />
+                            <br />
+                            <input type="checkbox" asp-for="deleteProducts" />
+                            <label for="deleteProducts"><strong>Delete all products from this type!</strong></label>
+                            <br /><br />
+                            <button class="btn btn-secondary" type="submit"><span class="text-danger">Delete Type</span></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

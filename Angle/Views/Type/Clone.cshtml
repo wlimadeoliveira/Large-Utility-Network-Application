@@ -1,0 +1,131 @@
+﻿@model Angle.Models.ViewModels.TypeViewModels.TypeCreateViewModel
+
+@{
+    ViewData["Title"] = "Add a Type";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+@section scripts{
+    <script type="text/javascript" src="~/master/js/custom/edit.js">
+    </script>
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+
+        var myChilds = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.selectedChilds)));
+
+        var myAttributes = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.selectedAttributes)));
+        var myFeatures = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.selectedFeatures)));
+        var myAttributeArray = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.selectedAttributesArray)));
+        setExistingAttributes(myAttributes);
+        console.log(myAttributes);
+        $("#multiSelect").val(myAttributeArray);
+        $("#multiSelect").chosen().trigger('chosen:updated');
+         //$("#multiSelect").val(myAttributes);
+        //$("#multiSelect").chosen().trigger('chosen:updated');
+
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js">
+        document.getElementById("cloneddescription").value = @Model.Description;
+        document.getElementById("clonedname").value = @Model.Name;
+    </script>
+
+
+}
+
+
+
+<div class="content-heading">
+    <div>Type<small>Add a Project</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Type Information</div>
+            <div class="card-body">
+                <form asp-action="Clone" asp-controller="Type" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="form-group" id="cloneform">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="Name" id="clonedname" required="required" class="form-control" />
+
+                            <span asp-validation-for="Name" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="cloneform">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Description">
+                            Description <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea asp-for="Description" id="cloneddescription" required="required" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type Childs</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="mychilds" asp-for="TypeChild" asp-items="@(new SelectList(@ViewBag.ListOfType,"ID","Name"))" multiple class="chosen-select form-control">
+                            </select>
+                            <span asp-validation-for="TypeChild" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Feature</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="myfeatures" asp-for="SelectedFeatures" asp-items="@(new SelectList(@ViewBag.ListOfFeature,"ID","Name"))" multle class="chosen-select form-control">
+                            </select>
+                            <span asp-validation-for="SelectedFeatures" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group mb-4">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Attributes</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="multiSelect" asp-items="@(new SelectList(@ViewBag.ListOfAttribute,"ID","Name"))" multiple class="chosen-select form-control">
+                            </select>
+                            <span class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div id="hiddenAttributeID">
+
+                    </div>
+
+
+                    <div id="listattributes"></div>
+
+
+
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <input type="button" onclick="history.go(-1)" value="Cancel" class="btn btn-primary" />
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

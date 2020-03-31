@@ -1,0 +1,56 @@
+﻿@model Angle.Models.ViewModels.Ivy.LocationViewModel
+el
+@{
+    ViewData["Title"] = "Insert an Location";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+
+    </script>
+}
+
+
+
+<div class="content-heading">
+    <div>Projects<small>Insert a Location</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Location</div>
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="Location" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="Description" id="message" required="required" class="form-control" />
+
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="submit" class="btn btn-primary">Cancel</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

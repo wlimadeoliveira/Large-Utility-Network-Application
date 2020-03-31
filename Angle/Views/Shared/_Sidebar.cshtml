@@ -1,3 +1,4 @@
+@inject  SignInManager<Angle.Models.ViewModels.AccountViewModel.ApplicationUser> signInManager;
 <!-- START Sidebar (left)-->
 <div class="aside-inner">
     <nav class="sidebar" data-sidebar-anyclick-close="">
@@ -6,20 +7,36 @@
             <!-- START user info-->
             <li class="has-user-block">
                 <div id="user-block" class="collapse">
-                    <div class="item user-block">
-                        <!-- User picture-->
-                        <div class="user-block-picture">
-                            <div class="user-block-status">
-                                <img src="~/images/user/02.jpg" alt="Avatar" width="60" height="60" class="img-thumbnail rounded-circle" />
-                                <div class="circle bg-success circle-lg"></div>
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <div class="item user-block">
+                            <!-- User picture-->
+                            <div class="user-block-picture">
+                                <div class="user-block-status">
+                                    <img src="~/images/user/02.jpg" alt="Avatar" width="60" height="60" class="img-thumbnail rounded-circle" />
+                                    <div class="circle bg-success circle-lg"></div>
+                                </div>
+                            </div>
+                            <!-- Name and Job-->
+                            <div class="user-block-info">
+                                <span class="user-block-name">Hello, @User.Identity.Name</span>
+                                <form method="post" asp-action="logout" asp-controller="account">
+                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
+                                        Logout
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                        <!-- Name and Job-->
-                        <div class="user-block-info">
-                            <span class="user-block-name">Hello, Mike</span>
-                            <span class="user-block-role">Designer</span>
-                        </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <br />
+                        <br />
+                        <a asp-action="Login" asp-controller="account">Login</a>
+                        <br />
+                        <br />
+                        <a asp-action="Register" asp-controller="account">Register</a>
+                    }
                 </div>
             </li>
             <!-- END user info-->
@@ -27,16 +44,190 @@
             <li class="nav-heading">
                 <span>Main Navigation</span>
             </li>
-            <li class="@Html.isActive(controller: "SingleView")">
-                <a href="@Url.Action("Index", "SingleView")" title="SingleView">
-                    <em class="far fa-file"></em>                    
-                    <span data-localize="sidebar.nav.SINGLEVIEW">SingleView</span>
-                </a>
-            </li>
+
+
+            <!--    <li class=" ">
+        <a href="#products" title="Forum" data-toggle="collapse"><em class="fas fa-angle-right"></em><span>Products</span></a>
+        <ul class="sidebar-nav sidebar-subnav collapse" id="products">
+            <li class="sidebar-subnav-header">Products</li>
+            <li class=" "><a href="@Url.Action("Index", "Product")" title="MyProducts"><span>My Products</span></a></li>
+            <li class=" "><a href="@Url.Action("Create", "Product")" title="Create"><span>Create</span></a></li>
+
+        </ul>
+    </li>-->
+            @if (signInManager.IsSignedIn(User))
+            {
+
+                <!-- START Product Admin -->
+                <li class=" ">
+                    <a href="#productadmin" title="Multilevel" data-toggle="collapse"><em class="fa-2x mr-2 fas fa-robot"></em><span>Product Admin</span></a>
+                    <ul class="sidebar-nav sidebar-subnav collapse" id="productadmin">
+                        <li class="sidebar-subnav-header">Products</li>
+                        <li class=" ">
+                            <!--Products-->
+                            <a href="#products" title="Products" data-toggle="collapse"><em class="icon-present"></em><span>Products</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="products">
+                                <li class="sidebar-subnav-header">Products</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Product")"> <a href="@Url.Action("Index", "Product")" title="My Products"><em class="icon-list"></em><span>My Products</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Product")"><a href="@Url.Action("Create", "Product")" title="Create an Product"><em class="icon-plus"></em><span>Add</span></a></li>
+                                <li class=" @Html.isActive(action: "Index", controller: "ProductHistory")"><a href="@Url.Action("Index", "ProductHistory")" title="Show all product histories"><em class="fas fa-history"></em><span>Product Histories</span></a></li>
+                            </ul>
+                        </li>
+                        <!--Type-->
+                        <li class=" ">
+                            <a href="#type" title="Types" data-toggle="collapse"><em class="icon-social-dropbox"></em><span>Type</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="type">
+                                <li class="sidebar-subnav-header">Type</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Type")"><a href="@Url.Action("Index", "Type")" title="List of Types"><em class="icon-list"></em><span>My Types</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Type")"><a href="@Url.Action("Create", "Type")" title="Create a Type"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                        <!--Feature-->
+                        <li class=" ">
+                            <a href="#feature" title="Types" data-toggle="collapse"><em class="icon-puzzle"></em><span>Feature</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="feature">
+                                <li class="sidebar-subnav-header">Feature</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Feature")"><a href="@Url.Action("Index", "Feature")" title="List of Types"><em class="icon-list"></em><span>My Features</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Feature")"><a href="@Url.Action("Create", "Feature")" title="Create a Type"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                        <!--Attribute-->
+                        <li class=" ">
+                            <a href="#attribute" title="Types" data-toggle="collapse"><em class="icon-layers"></em><span>Attribute</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="attribute">
+                                <li class="sidebar-subnav-header">Attribute</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Attribute")"><a href="@Url.Action("Index", "Attribute")" title="List of Attributes"><em class="icon-list"></em><span>My Attributes</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Attribute")"><a href="@Url.Action("Create", "Attribute")" title="Create a Attributes"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+
+                        <!--Customers-->
+                        <li class=" ">
+                            <a href="#customers" title="Customers" data-toggle="collapse"><em class="icon-badge"></em><span>Customers</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="customers">
+                                <li class="sidebar-subnav-header">Customers</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Customer")"><a href="@Url.Action("Index", "Customer")" title="Level1 Item"><em class="icon-list"></em><span>My Customers</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Customer")"><a href="@Url.Action("Create", "Customer")" title="Level1 Item"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                        <!--Projects-->
+                        <li class=" ">
+                            <a href="#projects" title="Projects" data-toggle="collapse"><em class="icon-briefcase"></em><span>Projects</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="projects">
+                                <li class="sidebar-subnav-header">Projects</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Project")"><a href="@Url.Action("Index", "Project")" title="List Projects"><em class="icon-list"></em><span>My Projects</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Project")"><a href="@Url.Action("Create", "Project")" title="Create a Project"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                        <!--Person-->
+                        <li class=" ">
+                            <a href="#person" title="Persons" data-toggle="collapse"><em class="icon-people"></em><span>Contacts</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="person">
+                                <li class="sidebar-subnav-header">Contacts</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Person")"><a href="@Url.Action("Index", "Person")" title="List Projects"><em class="icon-list"></em><span>My Contacts</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Person")"><a href="@Url.Action("Create", "Person")" title="Create a Project"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                        <li class=" ">
+                            <!--StockInformation-->
+                            <a href="#stockinformation" title="Stock Informations" data-toggle="collapse"><em class="icon-eyeglass"></em><span>Stock Information</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="stockinformation">
+                                <li class="sidebar-subnav-header">Stock Information</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "StockInformation")"><a href="@Url.Action("Index", "StockInformation")" title="List Stock Information"><em class="icon-list"></em><span>My StockInformation</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "StockInformation")"><a href="@Url.Action("Create", "StockInformation")" title="Create a Stock Information"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                        <li class=" ">
+                            <!--History Type-->
+                            <a href="#historytype" title="History Types" data-toggle="collapse"><em class="icon-notebook"></em><span>History Types</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="historytype">
+                                <li class="sidebar-subnav-header">Stock Information</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "History")"><a href="@Url.Action("Index", "History")" title="List History types"><em class="icon-list"></em><span>My History Types</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "History")"><a href="@Url.Action("Create", "History")" title="Create a History type"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <!-- End Product Admin -->
+
+
+
+                <!-- Start Inventar Admin -->
+                <li class=" ">
+                    <a href="#ivy" title="Multilevel" data-toggle="collapse"><em class="fa-2x mr-2 fas fa-microchip"></em><span>Inventory</span></a>
+                    <ul class="sidebar-nav sidebar-subnav collapse" id="ivy">
+                        <li class="sidebar-subnav-header">Inventory</li>
+                        <li class=" ">
+                            <!--Manufacturer-->
+                            <a href="#manufacturer" title="Manufacturer" data-toggle="collapse"><em class="fas fa-warehouse"></em><span>Manufacturer</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="manufacturer">
+                                <li class="sidebar-subnav-header">Manufacturers</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Manufacturer")"> <a href="@Url.Action("Index", "Manufacturer")" title="My Manufacturers"><em class="icon-list"></em><span>My Manufacturers</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Manufacturer")"><a href="@Url.Action("Create", "Manufacturer")" title="Insert a Manufacturer"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                            <!--Supplier-->
+                            <a href="#supplier" title="Supplier" data-toggle="collapse"><em class="fas fa-box-open"></em><span>Supplier</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="supplier">
+                                <li class="sidebar-subnav-header">Manufacturers</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Supplier")"> <a href="@Url.Action("Index", "Supplier")" title="My Suppliers"><em class="icon-list"></em><span>My Suppliers</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Supplier")"><a href="@Url.Action("Create", "Supplier")" title="Insert a Suppliers"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                            <!--Category-->
+                            <a href="#category" title="Category" data-toggle="collapse"><em class="fas fa-palette"></em><span>Category</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="category">
+                                <li class="sidebar-subnav-header">Categories</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Category")"> <a href="@Url.Action("Index", "Category")" title="My Categories"><em class="icon-list"></em><span>My Category</span></a></li>
+                                <li class=" @Html.isActive(action: "Create", controller: "Category")"><a href="@Url.Action("Create", "Category")" title="Insert a Category"><em class="icon-plus"></em><span>Add</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                </li>
+
+                <!-- End Inventar Admin -->
+            }
+            <!--Start User Admin-->
+            @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                <li class=" ">
+                    <a href="#useradmin" title="User Admin" data-toggle="collapse"><em class="fa-2x mr-2 fas fa-users"></em><span>User Admin</span></a>
+                    <ul class="sidebar-nav sidebar-subnav collapse" id="useradmin">
+                        <li class="sidebar-subnav-header">User Admin</li>
+                        <li class=" "><a href="@Url.Action("ListUsers", "Administration")" title="Edit users"><em class="fas fa-user-cog"></em><span>Users</span></a></li>
+                        <li class=" "><a href="@Url.Action("ListRoles", "Administration")" title="Edit users"><em class="fas fa-user-lock"></em><span>Roles</span></a></li>
+                    </ul>
+                </li>
+            }
+            <!--End User Admin-->
+
+            @if (signInManager.IsSignedIn(User))
+            {
+                <!-- START Account Admin -->
+                <li class=" ">
+                    <a href="#account" title="Account" data-toggle="collapse"><em class="fa-2x mr-2 far fa-id-badge"></em><span>Account</span></a>
+                    <ul class="sidebar-nav sidebar-subnav collapse" id="account">
+                        <li class="sidebar-subnav-header">Account</li>
+                        <li class=" "><a href="@Url.Action("Login", "Account")" title="MyAccount"><em class="fas fa-user-check"></em><span>My Account</span></a></li>
+                    </ul>
+                </li>
+                <!-- End Account Admin -->
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
         </ul>
         <!-- END sidebar nav-->
     </nav>
 </div>
 <!-- END Sidebar (left)-->
-
-

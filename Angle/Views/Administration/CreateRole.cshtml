@@ -1,0 +1,35 @@
+﻿@model Angle.Models.ViewModels.RoleViewModel
+@{
+    ViewData["Title"] = "Role";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+    </script>
+
+
+}
+
+
+<div class="card card-flat">
+    <div class="card-header text-center bg-dark">Create New Role</div>
+    <div class="card-body">
+        <p class="text-center py-2"></p>
+        <form method="post" asp-controller="Administration" asp-action="CreateRole" class="mb-3" id="registerForm">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RoleName" class="text-muted">Role</label>
+                <div class="input-group with-focus">
+                    <input asp-for="RoleName" class="form-control border-right-0" id="signupInputEmail1" type="text" placeholder="User Role" autocomplete="off">
+                    <div class="input-group-append"><span class="input-group-text text-muted bg-transparent border-left-0"><em class="fa fa-envelope"></em></span></div>
+                </div>
+
+            </div>
+            
+            <button class="btn btn-block btn-primary mt-3" type="submit">Create Role</button>
+        </form>
+       
+    </div>
+</div>
+

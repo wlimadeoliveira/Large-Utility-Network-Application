@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail>
+@{
+    ViewData["Title"] = "TimeLine";
+}
+
+
+
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/fortawesome/fontawesome-free/css/brands.css">
+    <link rel="stylesheet" href="~/vendor/fortawesome/fontawesome-free/css/regular.css">
+    <link rel="stylesheet" href="~/vendor/fortawesome/fontawesome-free/css/solid.css">
+    <link rel="stylesheet" href="~/vendor/fortawesome/fontawesome-free/css/fontawesome.css"><!-- SIMPLE LINE ICONS-->
+    <link rel="stylesheet" href="~/vendor/simple-line-icons/css/simple-line-icons.css"><!-- ANIMATE.CSS-->
+    <link rel="stylesheet" href="~/vendor/animate.css/animate.css"><!-- WHIRL (spinners)-->
+    <link rel="stylesheet" href="~/vendor/whirl/dist/whirl.css"><!-- =============== PAGE VENDOR STYLES ===============-->
+    <!-- =============== BOOTSTRAP STYLES ===============-->
+    <link rel="stylesheet" href="~/css/bootstrap.css" id="bscss"><!-- =============== APP STYLES ===============-->
+    <link rel="stylesheet" href="css/app.css" id="maincss">
+
+    <link rel="stylesheet" href="~/css/timeline.css" id="maincss">
+}
+
+
+<div class="content-heading">
+    <div>Time Line<small> @ViewBag.ProductDescription / @ViewBag.SerialNumber</small> <small><a href="@Url.Action("Details", "ProductHistory",new { id =  @ViewBag.ProductID  })">Show as List</a></small></div>
+</div>
+
+
+<!-- ul.timeline-alt-->
+<ul class="timeline">
+
+    @{
+        string now = "";
+        
+        int counter = 0;
+        foreach (var history in Model)
+        {
+            if(now != history.Date) {<text> <li class="timeline-separator" data-datetime="@history.Date"></li> </text> };
+            if (counter % 2 == 0)
+            {
+                    @:<li>
+                    }
+                    else
+                    {
+                        @:<li class="timeline-inverted">
+}
+<text><div class="timeline-badge @history.History.History.BootStrapBadge"><em class=""></em></div>
+    <div class="timeline-card">
+        <div class="popover @if (counter % 2 == 0) {<text>right</text> } else { <text>left</text> } ">
+            <h4 class="popover-header">@history.History.History.Description<small> </small> </h4>
+            <div class="arrow"></div>
+            <div class="popover-body">
+                <p>@history.History.Comment</p><small><a><em class="fa fa-user mr-2"></em> @history.UserName</a></small>
+            </div>
+        </div>
+    </div>
+</text>
+
+@:</li>
+              
+
+                now = history.Date;
+                counter++;
+            }
+
+        }
+
+
+        <!-- START timeline item-->
+        <li class="timeline-end"><a class="timeline-badge" href="#"><em class="fa fa-plus"></em></a></li><!-- END timeline item-->
+    </ul><!-- END timeline-->
+
+
+
+
+
+
+@section scripts{
+    <script src="~/vendor/modernizr/modernizr.custom.js"></script><!-- STORAGE API-->
+    <script src="~/vendor/js-storage/js.storage.js"></script><!-- SCREENFULL-->
+    <script src="~/vendor/screenfull/dist/screenfull.js"></script><!-- i18next-->
+    <script src="~/vendor/i18next/i18next.js"></script>
+    <script src="~/vendor/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+    <script src="~/vendor/jquery/dist/jquery.js"></script>
+    <script src="~/vendor/popper.js/dist/umd/popper.js"></script>
+    <script src="~/vendor/bootstrap/dist/js/bootstrap.js"></script><!-- =============== PAGE VENDOR SCRIPTS ===============-->
+    <!-- =============== APP SCRIPTS ===============-->
+
+}
+
+
+
+
+
+

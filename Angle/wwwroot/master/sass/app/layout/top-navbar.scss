@@ -84,7 +84,7 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     }
 
     .dropdown {
-        // position: static; // allow header to be parent of dropdown
+        position: static; // allow header to be parent of dropdown
         .dropdown-menu {
             position: absolute;
             margin-top: 0; // close to header
@@ -93,7 +93,7 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
             right: 0;
         }
     } // Top navbar dropdown on desktop
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(sm) {
         .dropdown {
             position: relative;
             .dropdown-menu {

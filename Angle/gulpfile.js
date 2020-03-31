@@ -103,12 +103,16 @@ gulp.task('clean', gulp.series('clean:js', 'clean:css'));
 gulp.task('js', function() {
     return gulp.src(paths.js)
         .pipe($.concat('app.js'))
+        .pipe($.babel())
+        .on('error', handleError)
         .pipe(gulp.dest(paths.concatJsDest));
 });
 
 gulp.task('min:js', function() {
     return gulp.src(paths.js)
         .pipe($.concat('app.js'))
+        .pipe($.babel())
+        .on('error', handleError)
         .pipe($.uglify({
             output: {
                 comments: saveLicense

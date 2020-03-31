@@ -95,10 +95,9 @@ $ui-bg-color: #ddd;
     }
 }
 
-
-/* Checked state */
 .c-checkbox,
 .c-radio {
+    /* Checked state */
     input[type=checkbox]:checked+span:before,
     input[type=radio]:checked+span:before {
         color: #fff;
@@ -132,6 +131,12 @@ $ui-bg-color: #ddd;
         &:before {
             color: $ui-bg-color;
         }
+    }
+
+    /* Focus state */
+    input[type=checkbox]:focus + span,
+    input[type=radio]:focus + span {
+        box-shadow: 0 0 0 0.2rem rgba($ui-fg-color, .25)
     }
 }
 
@@ -218,7 +223,7 @@ $switch-sm-hg: $switch-sm-wd/2;
 .switch {
     display: flex;
     align-items: center;
-    direction: row;
+    margin: 0;
     & span {
         position: relative;
         display: inline-block;
@@ -268,6 +273,9 @@ $switch-sm-hg: $switch-sm-wd/2;
     &:disabled+span {
         background-color: #f1f1f1;
         cursor: not-allowed;
+    }
+    &:focus + span {
+        box-shadow: 0 0 0 0.2rem rgba($ui-fg-color, .25)
     }
 }
 

@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
+*@
+
+@{
+    List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
+}
+
+
+<div class="card mb-3 border-danger">
+    <div class="card-header text-white bg-danger">History</div>
+    <b class="card-body">
+        <table class="table table-striped my-4 w-100" id="datatable3">
+            <thead>
+                <tr>
+                    <th>Date Time</th>
+                    <th>Status</th>
+                    <th>Comment</th>
+
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody id="historytablebody">
+
+                @foreach (var productHistory in histories)
+                {
+                <tr>
+                    <td>
+                        @try
+                        {@productHistory.History.Date.ToString("dd/MM/yyyy H:mm")}
+                    catch { }
+                    </td>
+                    <td class="badge-@try {@productHistory.History.History.BootStrapBadge} catch { }">
+                        <b>
+                            @try
+                            {@productHistory.History.History.Description}
+                        catch { }
+                        </b>
+                    </td>
+                    <td>
+                        @try
+                        {@productHistory.History.Comment}
+                    catch { }
+                    </td>
+
+                    <td>
+                        @try
+                        {@productHistory.UserName}
+                    catch { }
+                    </td>
+                </tr>
+                }
+
+               
+            </tbody>
+        </table>
+        </b>
+        </div>
+      
+

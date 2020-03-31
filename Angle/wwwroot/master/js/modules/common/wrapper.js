@@ -19,7 +19,7 @@
         if (typeof global.jQuery === 'undefined')
             global.$ = factory();
     }
-}(this, function() {
+}(window, function() {
 
     // HELPERS
     function arrayFrom(obj) {

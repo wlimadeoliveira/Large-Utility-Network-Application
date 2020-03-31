@@ -1,0 +1,274 @@
+﻿@model IEnumerable<LUNA.Models.Models.ProductViewModel>
+
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+
+<div class="content-heading">
+   <div class="row"></div>
+    <div class="col">
+        Products<small></small> 
+    </div>
+    <div class="col"><a class="float-right" href="@Url.Action("Create", "Product")"><button type="button" class="btn btn-oval btn-info"> <span class="fa-1x mr-2 fas fa-plus-circle"></span>NEW</button></a>
+</div>
+    </div>
+<div class="container-fluid">
+    <!--  History ADD card-->
+    <div class="row">
+        <div class="col">
+            <div id="addHistory" class="card collapse">
+                <div class="card-header">
+                    <div class="card-title" id="productDescription">Add an History to:</div>
+                    <div class="text-sm"></div>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Product" asp-action="AddHistory">
+                        <input type="hidden" name="Email" value="@User.Identity.Name" />
+                        <input id="productID" type="hidden" name="ProductID" value="" />
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Product History</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select id="historytypes" name="HistoryID" class="form-control">
+                                    @foreach (LUNA.Models.History history in @ViewBag.HistoryType)
+                                    {
+                                        <option value="@history.ID" class="bg-@history.BootStrapBadge-light"> @history.Description </option>
+                                    }
+                                </select>
+                                <span class="field-validation-error"> <a href="#addHistorytype" data-toggle="collapse">add</a> </span>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                Comment <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <textarea name="Comment" id="message" required="required" class="form-control"></textarea>
+                                <span class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button href="#addHistory" data-toggle="collapse" class="btn btn-primary">Cancel</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Add History type Card Form-->
+        <div class="col collapse" id="addHistorytype">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title" id="productDescription">Create a new History Type</div>
+                    <div class="text-sm"></div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" asp-controller="History" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        <div class="form-group">
+                            <label name="Description" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Description <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input name="Description" type="text" id="title" required="required" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label name="BootStrapBadge" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Signalisation<span class="required">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select id="badgecolor" name="BootStrapBadge" class="form-control">
+                                    <option value="primary" class="bg-primary-light">primary</option>
+                                    <option value="success" class="bg-success-light">success</option>
+                                    <option value="danger" class="bg-danger-light">danger</option>
+                                    <option value="warning" class="bg-warning-light">warning</option>
+                                    <option value="info" class="bg-info-light">info</option>
+                                    <option value="light" class="bg-gray-lighter">lighter</option>
+                                    <option value="inverse" class="bg-inverse-light">dark</option>
+                                    <option value="pink" class="bg-pink-light">pink</option>
+                                    <option value="purple" class="bg-purple-light">purple</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button href="#addHistorytype" data-toggle="collapse" class="btn btn-primary">Cancel</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--  Productlist card-->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">List of all Products <small></small></div>
+            <div class="text-sm"></div>
+        </div>
+        <div class="card-body">
+            <div id="printbuttons"></div><br />
+            <div id="togglecolumn" class="btn-group-toggle" data-toggle="buttons">
+                <!-- See master/js/datatable.js at the end of file for toggle button function-->
+            </div>
+            <table class="table table-striped my-4 w-100" id="datatable2">
+                <thead>
+                    <tr class="tableheader">
+                        <th>Type</th>
+                        <th>Serial Number</th>
+                        <th>Description</th>
+                        <th>Project</th>
+                        <th>Customer</th>
+                        <th id="not-export-col">Options</th>
+                        <th name="notexport">History</th>
+                        <th>In Use</th>
+                    </tr>
+                    <tr class="filters" style="width: 100%;padding: 3px;box-sizing: border-box;">
+                        <th>Type</th>
+                        <th>Serial Number</th>
+                        <th>Description</th>
+                        <th>Project</th>
+                        <th>Customer</th>
+                        <th id="not-export-col" hidden>Options</th>
+                        <th name="notexport" hidden>History</th>
+                        <th hidden>In Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>
+                                @try
+                                {@product.TypeName}
+                            catch { }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Detail", "Product", new { id = product.ProductID })">
+                                    @try
+                                    {@product.SerialNumber}
+                                catch { }
+                                </a>
+                            </td>
+                            <td>
+                                @try
+                                {@product.ProductDescription}
+                            catch { }
+                            </td>
+                            <td>
+                                @try
+                                {@product.ProjectName}
+                            catch { }
+                            </td>
+                            <td>
+                                @try
+                                {@product.CustomerName}
+                            catch { }
+                            </td>
+                            <td><a href="@Url.Action("Edit", "Product", new { id = product.ProductID })">Edit</a> | <a href="@Url.Action("Delete", "Product", new { id = product.ProductID })">Delete</a> | <a href="@Url.Action("Clone", "Product", new { id = product.ProductID })">Clone</a>   </td>
+                            <td><a href="#addHistory" data-toggle="collapse" onclick="setHistoryInformation('@product.ProductID','@product.ProductDescription')">Add</a> | <a href="@Url.Action("Details", "ProductHistory", new { id = product.ProductID })">Show</a></td>
+                            <td class="@if (product.ParentID == null){<text>bg-gray</text>}else{<text>bg-primary-light</text>}" data-toggle="tooltip" data-placement="top" @if (product.ParentSerialNumber.Length > 1) { <text> title="@product.ParentSerialNumber" </text> }>  </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section Styles {
+    <environment names="Development">
+        <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+        <style>
+            .filters input {
+                width: 100%;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+        </style>
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+        <style>
+            .filters input {
+                width: 100%;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+        </style>
+    </environment>
+}
+@section Scripts{
+    <environment names="Development">
+        <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+        <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+        <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+        <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+        <script src="~/vendor/jszip/dist/jszip.js"></script>
+        <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+        <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+        <script src="~/master/js/custom/producthistory.js"></script>
+        <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("select").chosen();
+                $("chosen-select").chosen();
+
+            });
+            $("#historytypes").chosen({ width: '200px' });
+            $("#badgecolor").chosen({ width: '100px' });
+
+        </script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+        <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+        <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+        <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+        <script src="~/vendor/jszip/dist/jszip.js"></script>
+        <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+        <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+        <script src="~/master/js/custom/producthistory.js"></script>
+        <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("select").chosen();
+                $("chosen-select").chosen();
+            });
+            $("#historytypes").chosen({ width: '200px' });
+            $("#badgecolor").chosen({ width: '100px' });
+
+        </script>
+    </environment>
+}
