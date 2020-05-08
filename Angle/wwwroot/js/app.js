@@ -4178,7 +4178,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     });
   }
 })(); // DATATABLES
-// -----------------------------------
 
 
 (function () {
@@ -4187,18 +4186,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   $(initDatatables);
 
   function initDatatables() {
-    if (!$.fn.DataTable) return; // Zero configuration
-
+    if (!$.fn.DataTable) return;
     $('#datatable1').DataTable({
       'paging': true,
-      // Table pagination
       'ordering': true,
-      // Column ordering
       'info': true,
-      // Bottom left status text
       responsive: true,
-      // Text translation options
-      // Note the required keywords between underscores (e.g _MENU_)
       oLanguage: {
         sSearch: '<em class="fas fa-search"></em>',
         sLengthMenu: '_MENU_ records per page',
@@ -4210,32 +4203,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           sNext: '<em class="fa fa-caret-right"></em>',
           sPrevious: '<em class="fa fa-caret-left"></em>'
         }
-      }
-    }); // Filter
-
-    $('#datatable2').DataTable({
-      'paging': true,
-      // Table pagination
-      'ordering': true,
-      // Column ordering
-      'info': true,
-      // Bottom left status text
-      responsive: true,
-      // Text translation options
-      // Note the required keywords between underscores (e.g _MENU_)
-      oLanguage: {
-        sSearch: 'Search all columns:',
-        sLengthMenu: '_MENU_ records per page',
-        info: 'Showing page _PAGE_ of _PAGES_',
-        zeroRecords: 'Nothing found - sorry',
-        infoEmpty: 'No records available',
-        infoFiltered: '(filtered from _MAX_ total records)',
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>'
-        }
       },
-      // Datatable Buttons setup
       dom: 'Bfrtip',
       buttons: [{
         extend: 'copy',
@@ -4256,16 +4224,502 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         className: 'btn-info'
       }]
     });
-    $('#datatable3').DataTable({
+    var table = $('#datatable2').DataTable({
       'paging': true,
       // Table pagination
       'ordering': true,
       // Column ordering
       'info': true,
       // Bottom left status text
+      //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      orderCellsTop: true,
       responsive: true,
       // Text translation options
       // Note the required keywords between underscores (e.g _MENU_)
+      oLanguage: {
+        sSearch: 'Search all columns:',
+        'pageLength': 10,
+        aLengthMenu: [[10, 20, 25, 50, -1], [10, 20, 25, 50, 'All']],
+        info: 'Showing page _PAGE_ of _PAGES_',
+        zeroRecords: 'Nothing found - sorry',
+        infoEmpty: 'No records available',
+        infoFiltered: '(filtered from _MAX_ total records)',
+        oPaginate: {
+          sNext: '<em class="fa fa-caret-right"></em>',
+          sPrevious: '<em class="fa fa-caret-left"></em>'
+        },
+        keys: true
+      },
+      // Datatable Buttons setup
+      dom: 'Blfrtip',
+      buttons: [{
+        extend: 'copy',
+        className: 'btn-info',
+        exportOptions: {
+          columns: ':visible'
+        }
+      }, {
+        extend: 'csv',
+        className: 'btn-info',
+        exportOptions: {
+          columns: ':visible'
+        }
+      }, {
+        extend: 'excel',
+        className: 'btn-info',
+        title: 'XLS-File'
+      }, {
+        extend: 'pdf',
+        className: 'btn-info',
+        title: $('title').text(),
+        exportOptions: {
+          columns: ':visible'
+        }
+      }, {
+        extend: 'print',
+        className: 'btn-info'
+      }]
+    });
+    $("#printbuttons").append($("div.dt-buttons").addClass('float-right'));
+    $("#datatable2_length").addClass('float-right'); //function for togglebuttons
+
+    var items = "";
+    var index = 0;
+    $("thead .tableheader th").each(function () {
+      items += '<button class="toggle-vis btn btn-secondary" type="button" data-column="' + index + '">' + $(this).text() + '</button>';
+      index++;
+    });
+    $('#togglecolumn').html(items);
+    console.log(table);
+    $('button.toggle-vis').on('click', function (e) {
+      e.preventDefault(); // Get the column API object
+
+      var column = table.column($(this).attr('data-column')); // Toggle the visibility
+
+      column.visible(!column.visible());
+    }); // Setup - add a text input to each footer cell
+
+    $('#datatable2 thead .filters th').each(function () {
+      var title = $('#datatable2 thead tr:eq(0) th').eq($(this).index()).text();
+      $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+    }); // Apply the search
+
+    table.columns().eq(0).each(function (colIdx) {
+      $('input', $('.filters th')[colIdx]).on('keyup change', function () {
+        table.column(colIdx).search(this.value).draw();
+      });
+    }); //Draws row after History Quick add on Product Details
+
+    /*$('#buttonhistory').click(function (evt) {
+        evt.preventDefault();
+        var comment = $('#comment').val();
+        var datetime = new Date().toLocaleString()
+        var user = $('#useremail').val();
+        var status = $('#historytypes option:selected').text();
+        var badge = $('#historytypes option:selected').attr('class');
+        var rowNode = table1.row.add([status, comment, datetime, user]).order([2, 'desc']).draw().node();
+          $(rowNode).children(':first').addClass(badge);         
+    });*/
+  }
+})();
+
+function addAttributeAjax() {
+  $.post('/Attribute/Create', $('#attributeform').serialize(), function () {
+    $('#attributesucces').html('Attribute was succesfuly added');
+  });
+}
+
+function createAttribute() {
+  $.post('/Attribute/CreateQuick', $('#attributeform').serialize(), function (data, status) {
+    $('#attributesucces').html('Attribute was succesfuly added');
+    return data;
+  });
+} // Custom Code
+// -----------------------------------
+
+
+(function () {
+  'use strict';
+
+  $(initCustom);
+
+  function initCustom() {// custom code
+  }
+})();
+
+var index = [];
+$("#selecttypes").chosen({
+  no_results_text: "Oops, nothing found!",
+  search_contains: true
+});
+$("#multiSelect").chosen({
+  no_results_text: "Oops, nothing found!",
+  search_contains: true
+});
+$("#TypeChild").chosen({
+  no_results_text: "Oops, nothing found!",
+  search_contains: true
+});
+$("#SelectedFeatures").chosen({
+  no_results_text: "Oops, nothing found!",
+  search_contains: true
+});
+
+function getTypeChilds(parents, parentID) {
+  try {
+    var childs = parents.find(function (x) {
+      return x.ID == parentID;
+    })['Childs'];
+    return childs;
+  } catch (_unused) {
+    return 0;
+  }
+}
+
+function clearSelectedTypes() {
+  $('#selecttypes').html("");
+  $("#selecttypes").chosen().trigger('chosen:updated');
+  document.getElementById("listattributes").innerHTML = "";
+} //set childs in Edit Mode ONLOAD
+
+
+function setMyChilds(childs) {
+  var childsID = new Array();
+
+  for (var i = 0; i < childs.length; i++) {
+    var select = document.getElementById("selecttypes");
+    var option = document.createElement("option");
+    option.text = childs[i]['Description'];
+    option.value = childs[i]['ID'];
+    select.add(option);
+    childsID.push(childs[i]['ID']);
+  }
+
+  $('#selecttypes').val(childsID);
+  $("#selecttypes").chosen().trigger('chosen:updated');
+}
+
+function updateCloneMultiSelection() {
+  $('#clonedchilds').val(myChilds);
+  $("#clonedchilds").chosen().trigger('chosen:updated');
+  $('#clonedfeatures').val(myFeatures);
+  $("#clonedfeatures").chosen().trigger('chosen:updated');
+  $('#multiSelect').val(myAttributes);
+  $("#multiSelect").chosen().trigger('chosen:updated');
+}
+
+function setAvailbleChilds(selectID, parents, parentID) {
+  var select = document.getElementById(selectID);
+  var childs = getTypeChilds(parents, parentID);
+  var avaibleChilds = new Array();
+
+  if (childs != 0) {
+    for (var i = 0; i < childs.length; i++) {
+      avaibleChilds.push(myavaibles.filter(function (x) {
+        return x.DeviceTypeID == childs[i]['Child']['ID'];
+      })); // getAttributes(childs[i]['Child']['ID']);
+    }
+
+    for (var j = 0; j < avaibleChilds[0].length; j++) {
+      var option = document.createElement("option");
+      option.text = avaibleChilds[0][j]['SerialNumber'] + " " + avaibleChilds[0][j]['Description'];
+      option.value = avaibleChilds[0][j]['ID'];
+      select.add(option);
+    }
+  }
+
+  $("#selecttypes").trigger("chosen:updated");
+  console.log(avaibleChilds);
+} //allow duplicate selection of typechild
+
+
+$('#TypeChild').on('change', function (e, params) {
+  var selectedText = $("#TypeChild option:selected:last").html();
+
+  if (params.selected != null) {
+    $('#TypeChild').append('<option value=' + params.selected + '>' + selectedText + '</option>');
+    $("#TypeChild").trigger("chosen:updated");
+  }
+
+  if (params.deselected != null) {}
+});
+$('#multiSelect').on('change', function (e, params) {
+  // alert(e.target.value);
+  // alert(this.value);
+  if (params.selected != null) {
+    //setTypeChilds('selecttypes', parentsTypes, params.selected)
+    createAttributeNode(params.selected); //getAttributes(params.selected);
+  }
+
+  if (params.deselected != null) {
+    deleteNodes("attribute" + params.deselected, "listattributes");
+    deleteNodes("hidden" + params.deselected, "hiddenAttributeID"); // deleteAttribute(params.deselected);
+  } //createNodes()
+
+});
+
+function cloneExistingAttributes() {
+  var parentNode = document.getElementById("listattributes");
+  var element = document.getElementById("cloneform").cloneNode(true);
+} //For Edit Page, it loads existing Product Attributes and Create Attributes Nodes;
+
+
+function loadExistingAttributes() {
+  var parentNode = document.getElementById("listattributes"); // var attributes = child['Child']['TypeAttribute'];
+
+  for (var i = 0; i < myAttributes.length; i++) {
+    var element = document.getElementById("cloneform").cloneNode(true);
+    var elementLabel = element.childNodes[1];
+    var elemntInput = element.childNodes[3].firstChild.nextSibling;
+    elementLabel.innerText = myAttributes[i]['Attribute']['Name'];
+    createHiddenInputNode(myAttributes[i]['Attribute']['ID']);
+    elemntInput.value = myAttributes[i]['Value'];
+    elemntInput.setAttribute("name", "ValueSelectedAttributes");
+    element.setAttribute("id", "attribute" + myAttributes[i]['Attribute']['ID']);
+    parentNode.append(element);
+  }
+}
+
+function createAttributeNode(id) {
+  var parentNode = document.getElementById("listattributes");
+  var name = document.getElementsByClassName("search-choice")[document.getElementsByClassName("search-choice").length - 1].childNodes[0].innerText;
+  var element = document.getElementById("cloneform").cloneNode(true);
+  var elementLabel = element.childNodes[1];
+  var elemntInput = element.childNodes[3].firstChild.nextSibling;
+  elementLabel.innerText = name; // selected text?
+
+  var elemntInput = element.childNodes[3].firstChild.nextSibling;
+  elemntInput.value = "";
+  element.setAttribute("id", "attribute" + id);
+  elemntInput.setAttribute("name", "ValueSelectedAttributes");
+  parentNode.append(element);
+  createHiddenInputNode(name, id);
+}
+
+function getAttributes(childID) {
+  var child = parentsTypes.find(function (x) {
+    return x.ID == childID;
+  });
+  var separator = "<hr><div align='right' id='separator" + childID + "'>" + child['Name'] + "</div>";
+  var parentNode = document.getElementById("listattributes");
+  parentNode.innerHTML += separator; // var attributes = child['Child']['TypeAttribute'];
+
+  for (var i = 0; i < child['TypeAttributes'].length; i++) {
+    console.log(child['TypeAttributes'][i]);
+    var element = document.getElementById("cloneform").cloneNode(true);
+    var elementLabel = element.childNodes[1];
+    var elemntInput = element.childNodes[3].firstChild.nextSibling;
+    elementLabel.innerText = child['TypeAttributes'][i]['Attribute']['Name'];
+    createHiddenInputNode(child['TypeAttributes'][i]['Attribute']['ID']);
+    elemntInput.value = "";
+    elemntInput.setAttribute("name", "ValueSelectedAttributes");
+    element.setAttribute("id", "attribute" + child['TypeAttributes'][i]['Attribute']['ID']);
+    parentNode.append(element);
+  }
+
+  var attributes = child['TypeAttributes'];
+}
+
+function deleteAttribute(childID) {
+  var child = parentsTypes.find(function (x) {
+    return x.ID == childID;
+  });
+  var parent = document.getElementById("listattributes");
+
+  for (var i = 0; i < child['TypeAttributes'].length; i++) {
+    var childElement = document.getElementById("attribute" + child['TypeAttributes'][i]['Attribute']['ID']);
+    parent.removeChild(childElement);
+  }
+
+  var child = document.getElementById("separator" + childID);
+  var parent = document.getElementById("listattributes");
+  parent.removeChild(child);
+} // VERAAAALTET BITTE LÖSCHEN!
+
+
+function createNodes(item) {
+  var content = item.childNodes[0].innerText;
+  createHiddenInputNode(content);
+
+  if (document.getElementById("ipntxt" + content) == null) {
+    var deleteButtom = item.childNodes[1];
+    var cln = document.getElementById("cloneform").cloneNode(true);
+    var formlabel = cln.childNodes[1];
+    var forminput = cln.childNodes[3].firstChild.nextSibling;
+    cln.setAttribute("id", "ipntxt" + content); // forminput.setAttribute("name", "ValueSelectedAttributes[" + deleteButtom.getAttribute("data-option-array-index")+"]");
+
+    forminput.setAttribute("name", "ValueSelectedAttributes");
+    forminput.value = "";
+    deleteButtom.setAttribute("onclick", "deleteNodes('ipntxt" + content + "','" + content + "')");
+    var test50 = deleteButtom.getAttribute("data-option-array-index");
+    formlabel.innerText = content + "*";
+    var parentNode = document.getElementById("listattributes");
+    parentNode.append(cln);
+  }
+}
+
+function createHiddenInputNode(value, id) {
+  var hiddenInput = document.createElement("input");
+  hiddenInput.setAttribute("name", "SelectedAttributes");
+  hiddenInput.setAttribute("value", value);
+  hiddenInput.setAttribute("type", "hidden");
+  hiddenInput.setAttribute("id", "hidden" + id);
+  hiddenInput.setAttribute("class", "hiddenInputNodes");
+  document.getElementById("hiddenAttributeID").appendChild(hiddenInput);
+}
+
+function deleteNodes(id, parentnodeID) {
+  var parent = document.getElementById(parentnodeID);
+  var child = document.getElementById(id);
+  parent.removeChild(child);
+}
+
+function deleteHiddenInputNodes(value) {
+  var hiddenInputNodes = document.getElementById("hiddenAttributeID");
+
+  while (hiddenInputNodes.length) {
+    hiddenInputNodes.removeChild(document.getElementById("hidden" + value));
+  }
+}
+
+function nodeValues(content, value) {
+  this.content = content;
+  this.value = value;
+}
+
+function setExistingAttributes(myAttributes) {
+  var parentNode = document.getElementById("listattributes"); // var attributes = child['Child']['TypeAttribute'];
+
+  for (var i = 0; i < myAttributes.length; i++) {
+    var element = document.getElementById("cloneform").cloneNode(true);
+    var elementLabel = element.childNodes[1];
+    var elemntInput = element.childNodes[3].firstChild.nextSibling;
+    elementLabel.innerText = myAttributes[i]['Attribute']['Name'];
+    CreateHiddenInputNode(myAttributes[i]['Attribute']['ID']);
+    elemntInput.value = myAttributes[i]['Value'];
+    elemntInput.setAttribute("name", "ValueSelectedAttributes");
+    element.setAttribute("id", "attribute" + myAttributes[i]['Attribute']['ID']);
+    parentNode.append(element);
+  }
+} //Allow multiple selection on typechild in type edit view
+
+
+$('#mychilds').on('change', function (e, params) {
+  var selectedText = $("#mychilds option:selected:last").html();
+
+  if (params.selected != null) {
+    $('#mychilds').append('<option value=' + params.selected + '>' + selectedText + '</option>');
+    $("#mychilds").trigger("chosen:updated");
+  }
+
+  if (params.deselected != null) {}
+});
+$('#editmultiSelect').on('change', function (e, params) {
+  // alert(e.target.value);
+  // alert(this.value);
+  if (params.selected != null) {
+    //setTypeChilds('selecttypes', parentsTypes, params.selected)
+    editCreateAttributeNode(params.selected); //getAttributes(params.selected);
+  }
+
+  if (params.deselected != null) {
+    DeleteNodes("attribute" + params.deselected, "listattributes");
+    DeleteNodes("hidden" + params.deselected, "hiddenAttributeID"); // deleteAttribute(params.deselected);
+  } //createNodes()
+
+}); //For Edit Type
+
+function editCreateAttributeNode(id) {
+  var parentNode = document.getElementById("listattributes");
+  var name = document.getElementsByClassName("search-choice")[document.getElementsByClassName("search-choice").length - 1].childNodes[0].innerText;
+  var element = document.getElementById("cloneform").cloneNode(true);
+  var elementLabel = element.childNodes[1];
+  var elemntInput = element.childNodes[3].firstChild.nextSibling;
+  elementLabel.innerText = name; // selected text?
+
+  var elemntInput = element.childNodes[3].firstChild.nextSibling;
+  elemntInput.value = "";
+  element.setAttribute("id", "attribute" + id);
+  elemntInput.setAttribute("name", "ValueSelectedAttributes");
+  parentNode.append(element);
+  editCreateHiddenInputNode(name, id);
+}
+
+function CreateHiddenInputNode(value, id) {
+  var hiddenInput = document.createElement("input");
+  hiddenInput.setAttribute("name", "SelectedAttributes");
+  hiddenInput.setAttribute("value", value);
+  hiddenInput.setAttribute("type", "hidden");
+  hiddenInput.setAttribute("id", "hidden" + id);
+  hiddenInput.setAttribute("class", "hiddenInputNodes");
+  document.getElementById("hiddenAttributeID").appendChild(hiddenInput);
+} //FOR TYPE EDIT MOD!
+
+
+function editCreateHiddenInputNode(value, id) {
+  var hiddenInput = document.createElement("input");
+  hiddenInput.setAttribute("name", "SelectedAttributes");
+  hiddenInput.setAttribute("value", id);
+  hiddenInput.setAttribute("type", "hidden");
+  hiddenInput.setAttribute("id", "hidden" + id);
+  hiddenInput.setAttribute("class", "hiddenInputNodes");
+  document.getElementById("hiddenAttributeID").appendChild(hiddenInput);
+}
+
+function DeleteNodes(id, parentnodeID) {
+  var parent = document.getElementById(parentnodeID);
+  var child = document.getElementById(id);
+  parent.removeChild(child);
+}
+
+var table1 = $('#datatable3').DataTable({
+  'paging': true,
+  'ordering': true,
+  'info': true,
+  "orderSequence": ["desc", "asc"],
+  responsive: true,
+  stateSave: false,
+  oLanguage: {
+    sSearch: 'Search all columns:',
+    sLengthMenu: '_MENU_ records per page',
+    info: 'Showing page _PAGE_ of _PAGES_',
+    zeroRecords: 'Nothing found - sorry',
+    infoEmpty: 'No records available',
+    infoFiltered: '(filtered from _MAX_ total records)',
+    oPaginate: {
+      sNext: '<em class="fa fa-caret-right"></em>',
+      sPrevious: '<em class="fa fa-caret-left"></em>'
+    }
+  },
+  keys: true
+});
+$('#buttonhistory').click(function (evt) {
+  evt.preventDefault();
+  $('#historyaddedsuccess').html("");
+  $.ajax({
+    type: "POST",
+    url: '/Product/QuickAddHistory',
+    data: $('#formproducthistory').serialize(),
+    dataType: 'application/json',
+    async: false,
+    cache: false,
+    success: function success(data, status) {
+      alert("Hello");
+    },
+    error: function error(data, status) {}
+  });
+  console.log($('#formproducthistory').serialize());
+  $('#historyaddedsuccess').html("History was succesfully added");
+  var url = '@Url.Action("HistoryTable", "Product", new { id = Model.ID})';
+  table1.destroy();
+  $("#historytable").load(url, function () {
+    var table1 = $('#datatable3').DataTable({
+      'paging': true,
+      'ordering': true,
+      'info': true,
+      "orderSequence": ["desc", "asc"],
+      responsive: true,
+      stateSave: false,
       oLanguage: {
         sSearch: 'Search all columns:',
         sLengthMenu: '_MENU_ records per page',
@@ -4278,19 +4732,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           sPrevious: '<em class="fa fa-caret-left"></em>'
         }
       },
-      // Datatable key setup
       keys: true
     });
-  }
-})(); // Custom Code
-// -----------------------------------
+  });
+});
 
-
-(function () {
-  'use strict';
-
-  $(initCustom);
-
-  function initCustom() {// custom code
-  }
-})();
+function setHistoryInformation(id, description) {
+  document.getElementById("productID").value = id;
+  document.getElementById("productDescription").innerHTML = "Add an History to: " + description;
+}
