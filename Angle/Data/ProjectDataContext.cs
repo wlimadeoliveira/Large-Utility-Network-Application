@@ -28,7 +28,10 @@ namespace LUNA.Models.Models
         public DbSet<Feature> Features { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<StockInformation> StockInformation { get; set; }
-        public DbSet<QuickAdventure> QuickAdventure { get; set; }
+       // public DbSet<QuickAdventure> QuickAdventure { get; set; }
+        public DbSet<Action_QR> Action_QR { get; set; }
+        public DbSet<Controller_QR> Controller_QR { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         public ProjectDataContext(DbContextOptions<ProjectDataContext> options) : base(options)
         {
@@ -135,7 +138,7 @@ namespace LUNA.Models.Models
                 .HasOne(pf => pf.Article)
                 .WithMany(p => p.ProjectArticles)
                 .HasForeignKey(p => p.ArticleID);
-            builder.Entity<QuickAdventure>()
+     /*       builder.Entity<QuickAdventure>()
 .HasKey(qa => new { qa.ProductID, qa.UserID });
             builder.Entity<QuickAdventure>()
               .HasOne(qa => qa.Product)
@@ -144,7 +147,31 @@ namespace LUNA.Models.Models
             builder.Entity<QuickAdventure>()
                 .HasOne(qa => qa.User)
                 .WithMany(qa => qa.QuickAdventures)
-                .HasForeignKey(qa => qa.UserID);
+                .HasForeignKey(qa => qa.UserID);*/
+
+
+            
+            // Defining Composite Keys for Index_QR, Composite of ActionID, ControllerID and ProductID
+            builder.Entity<Index_QR>()
+            .HasKey(qr => new { qr.ActionID, qr.ControllerID, qr.ProductID});
+            builder.Entity<Index_QR>()
+              .HasOne(qr => qr.Action_QR)
+              .WithMany(qr => qr.Index_QRs)
+              .HasForeignKey(qr =>qr.ActionID);
+            builder.Entity<Index_QR>()
+                .HasOne(qr => qr.Controller_QR)
+                .WithMany(qr => qr.Index_QRs)
+                .HasForeignKey(qr =>qr.ControllerID);
+            builder.Entity<Index_QR>()
+    .HasOne(qr => qr.Product)
+    .WithMany(qr => qr.Index_QRs)
+    .HasForeignKey(qr => qr.ProductID);
+            builder.Entity<Index_QR>()
+        .HasOne(qr => qr.User)
+        .WithMany(qr => qr.Index_QRs)
+        .HasForeignKey(qr => qr.UserID)
+                    .HasConstraintName("UserID")
+                   .OnDelete(DeleteBehavior.Cascade);
 
 
             base.OnModelCreating(builder);

@@ -34,13 +34,13 @@ namespace Angle.Controllers
            
          
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-         
-            List<QuickAdventure> myAdventures = _db.QuickAdventure.Include(b=> b.Product).Include("Product.Type").Where(b => b.UserID == userId).ToList();
 
-       
- 
+            //  List<QuickAdventure> myAdventures = _db.QuickAdventure.Include(b=> b.Product).Include("Product.Type").Where(b => b.UserID == userId).ToList();
 
-            return View(myAdventures);
+
+
+
+            return View();//myAdventures);
         }
 
         [HttpGet]
@@ -70,7 +70,7 @@ namespace Angle.Controllers
                 DateTime = DateTime.Now
                 
             };
-            _db.QuickAdventure.Add(model);
+           // _db.QuickAdventure.Add(model);
             _db.SaveChanges();
             return View("CreateSuccessful");
         }

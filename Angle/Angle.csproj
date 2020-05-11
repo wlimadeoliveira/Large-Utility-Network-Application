@@ -5,6 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200307132103_MigQuickAdventure.cs" />
+    <Compile Remove="Migrations\20200307132103_MigQuickAdventure.Designer.cs" />
+    <Compile Remove="Migrations\20200511120210_Table_Index_Controller_Action_QR.cs" />
+    <Compile Remove="Migrations\20200511120210_Table_Index_Controller_Action_QR.Designer.cs" />
+    <Compile Remove="Migrations\20200511131056_Create_Table_QR_Index_Controlle_Action.cs" />
+    <Compile Remove="Migrations\20200511131056_Create_Table_QR_Index_Controlle_Action.Designer.cs" />
+    <Compile Remove="Migrations\20200511132555_Create_Table_QR_Index_Controlle_Action.cs" />
+    <Compile Remove="Migrations\20200511132555_Create_Table_QR_Index_Controlle_Action.Designer.cs" />
+    <Compile Remove="Migrations\20200511142317_Create_Table_QR_Index_Controller_Action.cs" />
+    <Compile Remove="Migrations\20200511142317_Create_Table_QR_Index_Controller_Action.Designer.cs" />
+    <Compile Remove="Migrations\20200511144651_Create_Table_QR_Index_Controller_Action.cs" />
+    <Compile Remove="Migrations\20200511144651_Create_Table_QR_Index_Controller_Action.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />

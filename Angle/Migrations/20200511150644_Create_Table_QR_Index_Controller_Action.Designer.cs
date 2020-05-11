@@ -3,14 +3,16 @@ using System;
 using LUNA.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Angle.Migrations
 {
     [DbContext(typeof(ProjectDataContext))]
-    partial class ProjectDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200511150644_Create_Table_QR_Index_Controller_Action")]
+    partial class Create_Table_QR_Index_Controller_Action
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
