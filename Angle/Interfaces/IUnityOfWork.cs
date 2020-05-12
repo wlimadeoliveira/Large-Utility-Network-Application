@@ -22,6 +22,10 @@ namespace Angle.Interfaces
         ILocation Location { get; }
         IArticle Article { get; }
         IHistory History { get; }
+        IIndex_QR Index_QR { get; }
+        IAction_QR Action_QR { get; }
+        IController_QR Controller_QR { get; }
+
         void Save();   
     }
 }

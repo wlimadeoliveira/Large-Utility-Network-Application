@@ -16,6 +16,8 @@ using Angle.Models.ViewModels.ProductHistoryViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Angle.Models.ViewModels.AttributeViewModel;
+using Angle.Helpers;
+using Microsoft.AspNetCore.Html;
 
 namespace Angle.Controllers
 {
@@ -467,6 +469,19 @@ namespace Angle.Controllers
             }
             ViewBag.histories = histories;
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
+
+            var QRCode = _unityOfWork.Index_QR.GetByProductId(id);
+
+            if(QRCode != null)
+            {
+                var host = Request.Host;
+                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" +host + Url.Action(QRCode.Action_QR.Name, QRCode.Controller_QR.Name, QRCode.ProductID ));
+            }
+            else
+            {
+                ViewBag.QrCode = new HtmlString("<a href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName =  "Product", actionName = "Detail" })+"> Generate QR Code for This Product"+ "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
+            }
+
 
             return View(product);
         }

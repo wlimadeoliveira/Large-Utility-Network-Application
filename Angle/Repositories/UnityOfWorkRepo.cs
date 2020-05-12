@@ -26,6 +26,9 @@ namespace Angle.Repositories
         private LocationRepo _locationRepo;
         private ArticleRepo _articleRepo;
         private HistoryRepo _historyRepo;
+        private Index_QRRepo _index_QRRepo;
+        private Controller_QRRepo _controller_QRRepo;
+        private Action_QRRepo _action_QRRepo;
 
         public UnityOfWorkRepo(ProjectDataContext context)
         {
@@ -142,6 +145,30 @@ namespace Angle.Repositories
                 return _historyRepo = _historyRepo ?? new HistoryRepo(_context);
             }
         }
+        public IIndex_QR Index_QR
+        {
+            get
+            {
+                return _index_QRRepo = _index_QRRepo?? new Index_QRRepo(_context);
+            }
+        }
+
+        public IController_QR Controller_QR
+        {
+            get
+            {
+                return _controller_QRRepo = _controller_QRRepo ?? new Controller_QRRepo(_context);
+            }
+        }
+
+        public IAction_QR Action_QR
+        {
+            get
+            {
+                return _action_QRRepo = _action_QRRepo ?? new Action_QRRepo(_context);
+            }
+        }
+
 
         public void Save()
         {

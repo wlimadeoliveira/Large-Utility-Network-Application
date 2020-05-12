@@ -79,7 +79,8 @@ namespace Angle
 
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-
+            services.AddControllersWithViews()
+            .AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

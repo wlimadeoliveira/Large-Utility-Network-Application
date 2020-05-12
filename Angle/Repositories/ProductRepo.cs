@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Angle.Repositories
 {
+    ///
     public class ProductRepo : IProduct
     {
         private readonly ProjectDataContext _context;

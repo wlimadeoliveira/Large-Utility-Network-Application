@@ -31,6 +31,7 @@ namespace LUNA.Models.Models
        // public DbSet<QuickAdventure> QuickAdventure { get; set; }
         public DbSet<Action_QR> Action_QR { get; set; }
         public DbSet<Controller_QR> Controller_QR { get; set; }
+        public DbSet<Index_QR> Index_QR { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         public ProjectDataContext(DbContextOptions<ProjectDataContext> options) : base(options)

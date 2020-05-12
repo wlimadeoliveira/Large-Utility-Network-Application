@@ -10,9 +10,9 @@ namespace Angle.Interfaces
     public interface IIndex_QR
     {
         List<Index_QR> GetAll();
-        Index_QR GetById(long Id);
-        void Insert(Index_QR Index_QR);
-        void Update(Index_QR Index_QR);
-        void Delete(Index_QR Index_QR);
+        Index_QR GetByProductId(long id);
+        void Insert(Index_QR index_QR);
+        void Update(Index_QR index_QR);
+        void Delete(Index_QR index_QR);
     }
 }
