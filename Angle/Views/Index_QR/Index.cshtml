@@ -1,0 +1,198 @@
+﻿@model IEnumerable<LUNA.Models.Models.Index_QR>
+@{
+    ViewData["Title"] = "QR-Code Index";
+}
+
+
+
+
+<div class="content-heading">
+    <div class="row"></div>
+    <div class="col">
+        QR-Code Admin<small></small>
+    </div>
+
+</div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"> <small>My QRs</small></div>
+            <div class="text-sm"></div>
+        </div>
+        <div class="card-body">
+            <div id="printbuttons"></div><br />
+            <div id="togglecolumn" class="btn-group-toggle" data-toggle="buttons">
+                <!-- See master/js/datatable.js at the end of file for toggle button function-->
+            </div>
+            <table class="table table-striped my-4 w-100" id="datatable2">
+                <thead>
+                    <tr class="tableheader">
+                        <th>Product Serial Number</th>
+                        <th>Controller</th>
+                        <th>Action</th>
+                        <th>Parameter</th>
+                        <th>IsActive</th>
+                        <th>Created by</th>
+                        <th>Created Date</th>
+                        <th>Options</th>
+                    </tr>
+                    <tr class="filters" style="width: 100%;padding: 3px;box-sizing: border-box;">
+                        <th>Product Serial Number</th>
+                        <th>Controller</th>
+                        <th>Action</th>
+                        <th>Parameter</th>
+                        <th>IsActive</th>
+                        <th>Created by</th>
+                        <th>Created Date</th>
+                        <th hidden>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var qr in Model)
+                    {
+                        <tr>
+                            <td>
+                                @try
+                                {@qr.Product.SerialNumber}
+                            catch { }
+                            </td>
+                            <td>
+                                @try
+                                {@qr.Controller_QR.Name}
+                            catch { }
+                            </td>
+                            <td>
+                                @try
+                                {@qr.Action_QR.Name}
+                            catch { }
+                            </td>
+
+                            <td>
+                                @try
+                                {
+                                    @qr.Parameter
+                                }
+                                catch { }
+                            </td>
+                            <td>
+                                @if (@qr.IsActive)
+                                {
+                                    @:activated
+                                }
+                                else
+                                {
+                                    @:deactivated
+                                }
+                            </td>
+                            <td>
+                                @try
+                                {@qr.User.Email}
+                            catch { }
+                            </td>
+                            <td>
+                                @try
+                                {@qr.Created.ToString("dd/MM/yyyy")}
+                            catch { }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("ChangeStatus", "Index_QR", new { productId = qr.ProductID})">
+                                    @if (@qr.IsActive)
+                                    {
+                                        @:Deactivate |
+                                    }
+                                    else
+                                    {
+                                        @:Activate |
+                                    }
+
+                                </a> <a href="@Url.Action("Delete", "Index_QR", new { productId = qr.ProductID })">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+@section Styles {
+    <environment names="Development">
+        <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+        <style>
+            .filters input {
+                width: 100%;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+        </style>
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+        <style>
+            .filters input {
+                width: 100%;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+        </style>
+    </environment>
+}
+@section Scripts{
+    <environment names="Development">
+        <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+        <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+        <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+        <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+        <script src="~/vendor/jszip/dist/jszip.js"></script>
+        <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+        <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+        
+        <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+        
+      
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+        <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+        <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+        <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+        <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+        <script src="~/vendor/jszip/dist/jszip.js"></script>
+        <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+        <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+      
+        <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+
+
+    </environment>
+}
+
+
+
+
+
+
+
+

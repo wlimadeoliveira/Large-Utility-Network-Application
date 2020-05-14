@@ -10,6 +10,7 @@ namespace Angle.Controllers
     {
         public IActionResult Index()
         {
+            
             return View();
         }
 

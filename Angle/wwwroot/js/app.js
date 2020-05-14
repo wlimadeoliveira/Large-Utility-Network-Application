@@ -4290,7 +4290,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       index++;
     });
     $('#togglecolumn').html(items);
-    console.log(table);
     $('button.toggle-vis').on('click', function (e) {
       e.preventDefault(); // Get the column API object
 

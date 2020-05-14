@@ -91,7 +91,7 @@
             index++;
         });
         $('#togglecolumn').html(items);
-        console.log(table);
+       
 
         $('button.toggle-vis').on('click', function (e) {
             e.preventDefault();

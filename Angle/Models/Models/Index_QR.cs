@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-namespace Angle.Models.Models
+namespace LUNA.Models.Models
 {
     // Model for Index_QR, It's also used to generate Database Entities with EntityFrameWork Core
     // Composite Key: ActionID, ControllerID, ProductID

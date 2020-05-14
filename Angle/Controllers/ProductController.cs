@@ -475,16 +475,43 @@ namespace Angle.Controllers
             if(QRCode != null)
             {
                 var host = Request.Host;
-                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" +host + Url.Action(QRCode.Action_QR.Name, QRCode.Controller_QR.Name, QRCode.ProductID ));
+                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" +host.Host + Url.Action("Redirect", "Index_QR", new { productId = QRCode.ProductID }));
             }
             else
             {
-                ViewBag.QrCode = new HtmlString("<a href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName =  "Product", actionName = "Detail" })+"> Generate QR Code for This Product"+ "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
+                ViewBag.QrCode = new HtmlString("<a href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName =  "Product", actionName = "Wizard" })+"> Generate QR Code for This Product"+ "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
             }
-
-
             return View(product);
         }
+
+
+
+        public IActionResult Wizard(long id)
+        {
+            var product = _unityOfWork.Product.GetByIdDetailed(id);
+            List<Product> childs = _unityOfWork.Product.getChilds(id);
+            ViewBag.childs = childs;
+            List<ProductHistoryViewModelDetail> histories = new List<ProductHistoryViewModelDetail>();
+            foreach (var productHistory in product.ProductHistories)
+            {
+                ProductHistoryViewModelDetail history = new ProductHistoryViewModelDetail()
+                {
+                    History = productHistory,
+                    UserName = _db.Users.FirstOrDefault(x => x.Id == productHistory.UserID).FirstName + " " + _db.Users.FirstOrDefault(x => x.Id == productHistory.UserID).LastName
+                };
+                histories.Add(history);
+            }
+            ViewBag.histories = histories;
+            ViewBag.HistoryType = _unityOfWork.History.GetAll();
+
+           
+
+    
+            return View(product);
+        }
+
+
+
 
         public PartialViewResult HistoryTable(long id)
         {

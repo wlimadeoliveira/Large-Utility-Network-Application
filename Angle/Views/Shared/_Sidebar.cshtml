@@ -146,6 +146,16 @@
                                 <li class=" @Html.isActive(action: "Create", controller: "History")"><a href="@Url.Action("Create", "History")" title="Create a History type"><em class="icon-plus"></em><span>Add</span></a></li>
                             </ul>
                         </li>
+
+                        <li class=" ">
+                            <!--History Type-->
+                            <a href="#qradmin" title="QR Admin" data-toggle="collapse"><em class="icon-frame"></em><span>QR Admin</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="qradmin">
+                                <li class="sidebar-subnav-header">Stock Information</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Index_QR")"><a href="@Url.Action("Index", "Index_QR")" title="List of Registered QR"><em class="icon-list"></em><span>My QRs</span></a></li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </li>
                 <!-- End Product Admin -->

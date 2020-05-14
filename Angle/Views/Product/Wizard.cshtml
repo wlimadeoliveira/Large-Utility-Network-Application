@@ -2,10 +2,10 @@
 @using Angle.Helpers
 
 @{
-    ViewData["Title"] = "Product Detail";
+    ViewData["Title"] = "Product Wizard";
     List<LUNA.Models.Product> childs = ViewBag.childs;
     List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
-    var myQR = ViewBag.QrCode; 
+    var myQR = ViewBag.QrCode;
 }
 
 
@@ -83,12 +83,12 @@
                                         </dl>
                                     </div>
                                     <div class="col-4">
-                                        
-                                        
+
+
                                         @myQR
-                                    <label>Resize(in pixel):</label>
-                                    <input type="text" onchange="resizeMyQR(this.value)" class="form-control"/>
-                                     </div>
+                                        <label>Resize(in pixel):</label>
+                                        <input type="text" onchange="resizeMyQR(this.value)" class="form-control" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -311,3 +311,5 @@
 
 
     }
+
+

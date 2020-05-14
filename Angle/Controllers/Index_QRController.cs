@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using LUNA.Models;
 using System.Security.Claims;
+using LUNA.Models.Models;
 
 namespace Angle.Controllers
 {
@@ -23,7 +24,8 @@ namespace Angle.Controllers
         // GET: Index_QR
         public ActionResult Index()
         {
-            return View();
+            var Index_QRs = _unityOfWork.Index_QR.GetAll();
+            return View(Index_QRs);
         }
 
         // GET: Index_QR/Details/5
@@ -37,9 +39,11 @@ namespace Angle.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Redirect(int id)
+        public ActionResult Redirect(long productId)
         {
-            return View();
+            var QR = _unityOfWork.Index_QR.GetByProductId(productId);
+            
+            return RedirectToAction(QR.Action_QR.Name, QR.Controller_QR.Name, QR.ProductID);
         }
 
     
@@ -61,7 +65,10 @@ namespace Angle.Controllers
                 Action_QR = action_QR,
                 //ProductID = productID,
                 // ControllerID = controller_QR.ID,
-                UserID = User.FindFirst(ClaimTypes.NameIdentifier).Value
+                UserID = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                Created = DateTime.Now,
+                IsActive = true
+                
 
             };
 
@@ -96,9 +103,13 @@ namespace Angle.Controllers
         }
 
         // GET: Index_QR/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int productId)
         {
-            return View();
+            var QR = _unityOfWork.Index_QR.GetByProductId(productId);
+            _unityOfWork.Index_QR.Delete(QR);
+            _unityOfWork.Save();
+            var QRs = _unityOfWork.Index_QR.GetAll();
+            return View(nameof(Index),QRs);
         }
 
         // POST: Index_QR/Delete/5
@@ -117,5 +128,25 @@ namespace Angle.Controllers
                 return View();
             }
         }
+
+        public ActionResult ChangeStatus(int productId)
+        {
+            var QR = _unityOfWork.Index_QR.GetByProductId(productId);
+            if (QR.IsActive)
+            {
+                QR.IsActive = false;
+            }
+            else
+            {
+                QR.IsActive = true;
+            }
+            _unityOfWork.Index_QR.Update(QR);
+            _unityOfWork.Save();
+            var QRs = _unityOfWork.Index_QR.GetAll();
+            return View(nameof(Index), QRs);
+        }
+
+
+
     }
 }

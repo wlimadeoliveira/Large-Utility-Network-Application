@@ -35,7 +35,7 @@ namespace Angle.Repositories
         /// <returns>Returns an List with all Index_QR entities as Index_QR Objects, and Includes Action_QR and Controller QR_Objects </returns>
         List<Index_QR> IIndex_QR.GetAll()
         {
-            return _context.Index_QR.Include(x=>x.Action_QR).Include(y=>y.Controller_QR).ToList();
+            return _context.Index_QR.Include(x=>x.Action_QR).Include(y=>y.Controller_QR).Include(j => j.Product).ToList();
         }
 
         /// <summary>
