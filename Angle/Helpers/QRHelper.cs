@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿using LUNA.Models.Models;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -26,7 +27,14 @@ namespace Angle.Helpers
         {
             var qrWriter = new BarcodeWriter();
             qrWriter.Format = BarcodeFormat.QR_CODE;
-            qrWriter.Options = new EncodingOptions() { Height = height, Width = width, Margin = margin };
+
+            qrWriter.Options = new ZXing.QrCode.QrCodeEncodingOptions
+            {
+                ErrorCorrection = ZXing.QrCode.Internal.ErrorCorrectionLevel.L,
+                Height = 150,
+                Width = 150,
+                QrVersion = 3
+            };
 
             using (var q = qrWriter.Write(url))
             {
@@ -41,5 +49,34 @@ namespace Angle.Helpers
                 }
             }
         }
+
+        public static bool IsQRValid(Index_QR QR)
+        {          
+            if (!QR.IsActive)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public static string CheckQRError(Index_QR QR)
+        {
+            if (QR == null)
+            {
+                return ">>> This QR Code is not registered in our System. Probaly this product was deleted of the system, please contact the System Administrator";
+            }
+            else if (!IsQRValid(QR))
+            {
+                return ">>> This QR Code is Deactivated";
+            }
+        
+            return "";
+            
+
+        }
+
     }
 }

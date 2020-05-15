@@ -530,6 +530,25 @@ namespace Angle.Controllers
             return PartialView("_HistoryTable");
         }
 
+        public PartialViewResult TimeLine(long id)
+        {
+            var product = _unityOfWork.Product.GetByIdDetailed(id);
+            List<ProductHistoryViewModelDetail> histories = new List<ProductHistoryViewModelDetail>();
+            foreach (var productHistory in product.ProductHistories)
+            {
+                ProductHistoryViewModelDetail history = new ProductHistoryViewModelDetail()
+                {
+                    History = productHistory,
+                    UserName = _db.Users.FirstOrDefault(x => x.Id == productHistory.UserID).FirstName + " " + _db.Users.FirstOrDefault(x => x.Id == productHistory.UserID).LastName
+                };
+                histories.Add(history);
+            }
+            histories.Reverse();
+            ViewBag.histories = histories;
+            return PartialView("TimeLine");
+        }
+
+
         [HttpGet]
         public JsonResult HistoryTableJson(long id)
         {

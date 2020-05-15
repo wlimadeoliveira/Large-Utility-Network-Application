@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using LUNA.Models;
 using System.Security.Claims;
 using LUNA.Models.Models;
+using Angle.Helpers;
 
 namespace Angle.Controllers
 {
@@ -39,14 +40,31 @@ namespace Angle.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Redirect(long productId)
+        public ActionResult Redirect(long Id) 
         {
-            var QR = _unityOfWork.Index_QR.GetByProductId(productId);
-            
+            var QR = _unityOfWork.Index_QR.GetByProductId(Id);
+
+            var errorMessage = QRHelper.CheckQRError(QR);
+            if(errorMessage != "")
+            {
+                
+                return RedirectToAction("QRErrorMode", "Index_QR", new { errorMessage = errorMessage});
+            }
+
+           
             return RedirectToAction(QR.Action_QR.Name, QR.Controller_QR.Name, QR.ProductID);
         }
 
-    
+        public ActionResult QRErrorMode(string errorMessage)
+        {
+
+            ViewBag.ErrorMessage = errorMessage;
+
+
+            return View();
+        }
+
+
 
 
         // POST: Index_QR/Create
@@ -57,7 +75,6 @@ namespace Angle.Controllers
                 Controller_QR controller_QR= _unityOfWork.Controller_QR.GetAll().FirstOrDefault(b => b.Name == controllerName);
                 Action_QR action_QR = _unityOfWork.Action_QR.GetAll().FirstOrDefault(b => b.Name == actionName);
                 Product Product = _unityOfWork.Product.GetById(productID);
-
             Index_QR model = new Index_QR()
             {
                 Product = Product,

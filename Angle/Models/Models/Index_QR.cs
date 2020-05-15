@@ -15,16 +15,12 @@ namespace LUNA.Models.Models
     {
         [ForeignKey("Action")]
         public long ActionID { get; set; }
-
         [ForeignKey("Controller")]
-        public long ControllerID { get; set; }
-        
+        public long ControllerID { get; set; }       
         [ForeignKey("Product")]
-        public long ProductID { get; set; }
-        
-       [ForeignKey("User")]
-        public string UserID { get; set; }
-       
+        public long ProductID { get; set; }  
+        [ForeignKey("User")]
+        public string UserID { get; set; }      
         public string Parameter { get; set; }
         public bool IsActive { get; set; }
         public DateTime Created { get; set; }

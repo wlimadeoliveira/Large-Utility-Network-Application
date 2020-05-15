@@ -5,7 +5,8 @@
     ViewData["Title"] = "Product Wizard";
     List<LUNA.Models.Product> childs = ViewBag.childs;
     List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
-    var myQR = ViewBag.QrCode;
+    histories.Reverse();
+    
 }
 
 
@@ -13,7 +14,7 @@
 
 
 <div class="content-heading">
-    <div>@Model.SerialNumber <small>Product Detail</small></div>
+    <div>@Model.SerialNumber <small>Product Wizard</small></div>
 </div>
 <div class="row">
     <div class="col-xl-6">
@@ -25,16 +26,19 @@
                     <div class="dropdown-divider"></div><a class="dropdown-item" href="@Url.Action("Delete", "Product",new { id = Model.ID})">Delete</a>
                 </div>
             </div>
-
-
-
-
             <div class="card-body">
                 <div class="row">
                     <div class="col-xl-12">
-                        <div class="card mb-3 border-primary">
-                            <div class="card-header text-white bg-primary">Product</div>
-                            <div class="card-body">
+                        <div class="card ">
+                            <button data-target="#productinfo" aria-expanded="true" data-toggle="collapse"  class="card flex-row align-items-center align-items-stretch border-0">
+                                <div class="col-4 d-flex align-items-center bg-primary-dark justify-content-center rounded-left"><em class="icon-info fa-3x"></em></div>
+                                <div class="col-8 py-3 bg-primary rounded-right">
+                                    <div class="h2 mt-0">Product Info</div>
+                                    <div class="text-uppercase"></div>
+                                </div>
+                            </button>
+                            
+                            <div id="productinfo" class="card-body collapse">
                                 <div class="row">
                                     <div class="col-8">
                                         <dl class="row">
@@ -85,20 +89,26 @@
                                     <div class="col-4">
 
 
-                                        @myQR
-                                        <label>Resize(in pixel):</label>
-                                        <input type="text" onchange="resizeMyQR(this.value)" class="form-control" />
+
+
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-12">
-                        <div class="card mb-3 border-success">
-                            <div class="card-header text-white bg-success">Specs</div>
-                            <div class="card-body">
+                        <div class="card ">
+                            <button data-target="#productspecs" aria-expanded="true" data-toggle="collapse" class="card flex-row align-items-center align-items-stretch border-0">
+                                <div class="col-4 d-flex align-items-center bg-success-dark justify-content-center rounded-left"><em class="icon-settings fa-3x"></em></div>
+                                <div class="col-8 py-3 bg-success rounded-right">
+                                    <div class="h2 mt-0">Specs</div>
+                                    <div class="text-uppercase"></div>
+                                </div>
+                            </button>
+                            <div id="productspecs" class="card-body collapse">
                                 <dl class="row">
                                     @foreach (var myattribute in Model.ProductAttributes)
                                     {
@@ -112,9 +122,15 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-12">
-                        <div class="card mb-3 border-warning">
-                            <div class="card-header text-white bg-warning">Components</div>
-                            <div class="card-body">
+                        <div class="card">
+                            <button data-target="#productcomponents" aria-expanded="true" data-toggle="collapse" class="card flex-row align-items-center align-items-stretch border-0">
+                                <div class="col-4 d-flex align-items-center bg-warning-dark justify-content-center rounded-left"><em class="icon-social-dropbox fa-3x"></em></div>
+                                <div class="col-8 py-3 bg-warning rounded-right">
+                                    <div class="h2 mt-0">Components</div>
+                                    <div class="text-uppercase"></div>
+                                </div>
+                            </button>
+                            <div id="productcomponents" class="card-body collapse">
                                 <table class="table table-striped my-4 w-100" id="datatable2">
                                     <thead>
                                         <tr>
@@ -187,7 +203,7 @@
                 </div>
 
                 <div id="historytable">
-                    <partial name="_HistoryTable" for="@histories" />
+                    <partial name="TimeLine" for="@histories" />
                 </div>
 
             </div>
@@ -197,6 +213,7 @@
         <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
         <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
         <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+        <link rel="stylesheet" href="~/css/timeline.css">
     }
 
     @section scripts{
@@ -269,35 +286,10 @@
                     $('#historyaddedsuccess').html("History was succesfully added");
 
 
-                    var url = '@Url.Action("HistoryTable", "Product", new { id = Model.ID})';
+                    var url = '@Url.Action("TimeLine", "Product", new { id = Model.ID})';
 
-                    table1.destroy();
-                    $("#historytable").load(url, function () {
-
-                                         var table1 = $('#datatable3').DataTable({
-            'paging': true,
-            'ordering': true,
-                                             'info': true,
-            "orderSequence": ["desc", "asc"],
-    responsive: true,
-                    stateSave: false,
-
-            oLanguage: {
-                sSearch: 'Search all columns:',
-                sLengthMenu: '_MENU_ records per page',
-                info: 'Showing page _PAGE_ of _PAGES_',
-                zeroRecords: 'Nothing found - sorry',
-                infoEmpty: 'No records available',
-                infoFiltered: '(filtered from _MAX_ total records)',
-                oPaginate: {
-                    sNext: '<em class="fa fa-caret-right"></em>',
-                    sPrevious: '<em class="fa fa-caret-left"></em>'
-                }
-            },
-            keys: true
-});
-
-                    });
+                    
+                    $("#historytable").load(url);
 
 
 

@@ -11,7 +11,6 @@
     <div class="col">
         QR-Code Admin<small></small>
     </div>
-
 </div>
 <div class="container-fluid">
     <div class="card">
@@ -53,9 +52,11 @@
                     {
                         <tr>
                             <td>
-                                @try
-                                {@qr.Product.SerialNumber}
-                            catch { }
+                                <a href="@Url.Action("Detail", "Product", new { id = qr.ProductID })">
+                                    @try
+                                    {@qr.Product.SerialNumber}
+                                catch { }
+                                </a>
                             </td>
                             <td>
                                 @try
@@ -105,7 +106,6 @@
                                     {
                                         @:Activate |
                                     }
-
                                 </a> <a href="@Url.Action("Delete", "Index_QR", new { productId = qr.ProductID })">Delete</a>
                             </td>
                         </tr>
