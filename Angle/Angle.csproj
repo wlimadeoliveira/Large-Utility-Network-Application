@@ -17,11 +17,16 @@
     <Compile Remove="Migrations\20200511142317_Create_Table_QR_Index_Controller_Action.Designer.cs" />
     <Compile Remove="Migrations\20200511144651_Create_Table_QR_Index_Controller_Action.cs" />
     <Compile Remove="Migrations\20200511144651_Create_Table_QR_Index_Controller_Action.Designer.cs" />
+    <Compile Remove="Migrations\20200515194224_Migration for Productions Test.cs" />
+    <Compile Remove="Migrations\20200515194224_Migration for Productions Test.Designer.cs" />
+    <Compile Remove="Migrations\20200515201020_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200515201020_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200518090405_added_ID_For_QRIndex.cs" />
+    <Compile Remove="Migrations\20200518090405_added_ID_For_QRIndex.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
@@ -38,7 +43,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" Version="5.8.64" />
     <PackageReference Include="Sendgrid" Version="9.13.1" />
-    <PackageReference Include="ServiceStack.Interfaces" Version="5.8.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.5" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.6" />
   </ItemGroup>
 

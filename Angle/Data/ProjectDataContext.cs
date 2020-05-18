@@ -41,6 +41,7 @@ namespace LUNA.Models.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             builder.Entity<ProjectPerson>()
                   .HasKey(pp => new { pp.ProjectID, pp.PersonID });
             builder.Entity<ProjectPerson>()
@@ -153,9 +154,9 @@ namespace LUNA.Models.Models
 
             
             // Defining Composite Keys for Index_QR, Composite of ActionID, ControllerID and ProductID
-            builder.Entity<Index_QR>()
-            .HasKey(qr => new { qr.ActionID, qr.ControllerID, qr.ProductID});
-            builder.Entity<Index_QR>()
+           builder.Entity<Index_QR>()
+            .HasKey(qr => new { qr.Id});
+           builder.Entity<Index_QR>()
               .HasOne(qr => qr.Action_QR)
               .WithMany(qr => qr.Index_QRs)
               .HasForeignKey(qr =>qr.ActionID);
@@ -175,7 +176,7 @@ namespace LUNA.Models.Models
                    .OnDelete(DeleteBehavior.Cascade);
 
 
-            base.OnModelCreating(builder);
+            
         }
     }
 }

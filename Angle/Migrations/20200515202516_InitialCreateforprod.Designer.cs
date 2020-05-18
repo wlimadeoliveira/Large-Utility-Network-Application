@@ -3,14 +3,16 @@ using System;
 using LUNA.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Angle.Migrations
 {
     [DbContext(typeof(ProjectDataContext))]
-    partial class ProjectDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200515202516_InitialCreateforprod")]
+    partial class InitialCreateforprod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,14 +343,13 @@ namespace Angle.Migrations
 
             modelBuilder.Entity("LUNA.Models.Models.Index_QR", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
                     b.Property<long>("ActionID")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ControllerID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductID")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("Created")
@@ -360,15 +361,10 @@ namespace Angle.Migrations
                     b.Property<string>("Parameter")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<long>("ProductID")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("UserID")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActionID");
+                    b.HasKey("ActionID", "ControllerID", "ProductID");
 
                     b.HasIndex("ControllerID");
 

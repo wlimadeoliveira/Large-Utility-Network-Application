@@ -13,13 +13,15 @@ namespace LUNA.Models.Models
     // Composite Key: ActionID, ControllerID, ProductID
     public class Index_QR
     {
-        [ForeignKey("Action")]
+        [Key]
+        public long Id { get; set; } 
+        [ForeignKey("ActionID")]
         public long ActionID { get; set; }
-        [ForeignKey("Controller")]
+        [ForeignKey("ControllerID")]
         public long ControllerID { get; set; }       
-        [ForeignKey("Product")]
+        [ForeignKey("ProductID")]
         public long ProductID { get; set; }  
-        [ForeignKey("User")]
+        [ForeignKey("UserID")]
         public string UserID { get; set; }      
         public string Parameter { get; set; }
         public bool IsActive { get; set; }

@@ -54,8 +54,11 @@ namespace Angle.Repositories
         /// <param name="index_QR">Index_QR object passed from Controller and created from User in View (ProductDetails view)</param>
         public void Insert(Index_QR index_QR)
         {
-            _context.Index_QR.Add(index_QR);
-            _context.SaveChanges();
+            if (!QRExist(index_QR))
+            {
+                _context.Index_QR.Add(index_QR);
+                _context.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -68,6 +71,18 @@ namespace Angle.Repositories
             _context.SaveChanges();
         }
 
+        public bool QRExist(Index_QR index_QR)
+        {
+            var QR = _context.Index_QR.FirstOrDefault(d => d.ProductID == index_QR.Product.ID && d.ActionID == index_QR.Action_QR.ID && d.ControllerID == index_QR.Controller_QR.ID);
+            if(QR != null)
+            {
+                return true;
+            }
+            return false;
+
+
+        }
+
         /// <summary>
         /// Deletes Index_QR entitie from Database
         /// </summary>
@@ -76,6 +91,13 @@ namespace Angle.Repositories
         {
             _context.Index_QR.Remove(index_QR);
             _context.SaveChanges();
+        }
+
+
+        public Index_QR GetById(long id)
+        {
+            return  _context.Index_QR.Include(b=>b.Product).Include(c=>c.Action_QR).Include(d=>d.Controller_QR).Include(e=>e.User).FirstOrDefault(x => x.Id == id);
+         
         }
     }
 }

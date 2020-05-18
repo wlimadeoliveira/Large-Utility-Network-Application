@@ -42,17 +42,15 @@ namespace Angle.Controllers
         /// <returns></returns>
         public ActionResult Redirect(long Id) 
         {
-            var QR = _unityOfWork.Index_QR.GetByProductId(Id);
+            var QR = _unityOfWork.Index_QR.GetById(Id);
 
             var errorMessage = QRHelper.CheckQRError(QR);
             if(errorMessage != "")
-            {
-                
+            {            
                 return RedirectToAction("QRErrorMode", "Index_QR", new { errorMessage = errorMessage});
             }
-
            
-            return RedirectToAction(QR.Action_QR.Name, QR.Controller_QR.Name, QR.ProductID);
+            return RedirectToAction(QR.Action_QR.Name, QR.Controller_QR.Name, new { id = QR.ProductID });
         }
 
         public ActionResult QRErrorMode(string errorMessage)
@@ -72,6 +70,8 @@ namespace Angle.Controllers
         public ActionResult Create(long productID, string controllerName, string actionName)
         {
            
+                
+
                 Controller_QR controller_QR= _unityOfWork.Controller_QR.GetAll().FirstOrDefault(b => b.Name == controllerName);
                 Action_QR action_QR = _unityOfWork.Action_QR.GetAll().FirstOrDefault(b => b.Name == actionName);
                 Product Product = _unityOfWork.Product.GetById(productID);
@@ -85,8 +85,7 @@ namespace Angle.Controllers
                 UserID = User.FindFirst(ClaimTypes.NameIdentifier).Value,
                 Created = DateTime.Now,
                 IsActive = true
-                
-
+               
             };
 
                 _unityOfWork.Index_QR.Insert(model);
@@ -120,9 +119,9 @@ namespace Angle.Controllers
         }
 
         // GET: Index_QR/Delete/5
-        public ActionResult Delete(int productId)
+        public ActionResult Delete(int Id)
         {
-            var QR = _unityOfWork.Index_QR.GetByProductId(productId);
+            var QR = _unityOfWork.Index_QR.GetById(Id);
             _unityOfWork.Index_QR.Delete(QR);
             _unityOfWork.Save();
             var QRs = _unityOfWork.Index_QR.GetAll();
@@ -146,9 +145,9 @@ namespace Angle.Controllers
             }
         }
 
-        public ActionResult ChangeStatus(int productId)
+        public ActionResult ChangeStatus(int id)
         {
-            var QR = _unityOfWork.Index_QR.GetByProductId(productId);
+            var QR = _unityOfWork.Index_QR.GetById(id);
             if (QR.IsActive)
             {
                 QR.IsActive = false;

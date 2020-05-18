@@ -475,7 +475,7 @@ namespace Angle.Controllers
             if(QRCode != null)
             {
                 var host = Request.Host;
-                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" +host.Host + Url.Action("Redirect", "Index_QR", new { productId = QRCode.ProductID }));
+                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" +host.Host + Url.Action("Redirect", "Index_QR", new { id = QRCode.Id }));
             }
             else
             {

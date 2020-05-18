@@ -45,10 +45,6 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
-            "Microsoft.AspNet.Mvc": {
-              "target": "Package",
-              "version": "[5.2.7, )"
-            },
             "Microsoft.AspNetCore.Identity": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -99,9 +95,13 @@
               "target": "Package",
               "version": "[9.13.1, )"
             },
-            "ServiceStack.Interfaces": {
+            "System.Drawing.Common": {
               "target": "Package",
-              "version": "[5.8.0, )"
+              "version": "[4.7.0, )"
+            },
+            "ZXing.Net": {
+              "target": "Package",
+              "version": "[0.16.5, )"
             },
             "ZXing.Net.Bindings.Windows.Compatibility": {
               "target": "Package",
