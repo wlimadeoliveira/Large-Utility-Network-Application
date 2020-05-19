@@ -12,10 +12,16 @@
 
 
 
+    <div class="content-heading">
+        <div class="row"></div>
+        <div class="col">
+             @Model.Description<small>@Model.SerialNumber</small>
+        </div>
+        <div class="col">
+            <a class="float-right" href="@Url.Action("Create", "Product")"><button type="button" class="btn btn-oval btn-info"> <span class="fa-1x mr-2 fas fa-plus-circle"></span>NEW</button></a>
+        </div>
+    </div>
 
-<div class="content-heading">
-    <div>@Model.SerialNumber <small>Product Wizard</small></div>
-</div>
 <div class="row">
     <div class="col-xl-6">
         <div class="card mb-3 border-info">
@@ -284,11 +290,7 @@
                     });
                     console.log($('#formproducthistory').serialize());
                     $('#historyaddedsuccess').html("History was succesfully added");
-
-
                     var url = '@Url.Action("TimeLine", "Product", new { id = Model.ID})';
-
-                    
                     $("#historytable").load(url);
 
 

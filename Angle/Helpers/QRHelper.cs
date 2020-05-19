@@ -11,15 +11,12 @@ using HtmlHelper = Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper;
 using ZXing.QrCode;
 
 namespace Angle.Helpers
-{
-
-    
+{    
     public static class QRHelper
     {
         public static HtmlString GenerateQRCode(string url, string alt = "GeneratedQRCode", int height = 150, int width = 150, int margin = 0)
         {
-           
-
+   
             BarcodeWriter qrWriter = new BarcodeWriter
             {
                 Format = BarcodeFormat.QR_CODE,
