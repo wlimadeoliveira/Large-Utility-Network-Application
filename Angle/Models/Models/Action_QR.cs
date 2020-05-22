@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LUNA.Models.Models
 {
-  
+    // Model for Action_QR, It's also used for Migration and Database Entities Queries with EntityFrameWork Core
+
     public class Action_QR
     {
         [Key]

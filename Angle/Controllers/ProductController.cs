@@ -38,7 +38,7 @@ namespace Angle.Controllers
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
             var products = _unityOfWork.Product.GetAll();
             List<ProductViewModel> productsView = new List<ProductViewModel>();
-            foreach(var product in products)
+            foreach (var product in products)
             {
                 ProductViewModel model = new ProductViewModel()
                 {
@@ -77,7 +77,7 @@ namespace Angle.Controllers
             var listAvaible = Newtonsoft.Json.JsonConvert.SerializeObject(listOfAvailbeChildProducts, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             ViewBag.ListOfChilds = listType;
             ViewBag.ListOfAvaible = listAvaible;
-            
+
             return View();
         }
 
@@ -116,27 +116,27 @@ namespace Angle.Controllers
                     arrIndex++;
                 }
             }
-           
-                myProduct.ProductHistories.Add(history);
-                _unityOfWork.Product.Insert(myProduct);
-                _unityOfWork.Save();
 
-                try
+            myProduct.ProductHistories.Add(history);
+            _unityOfWork.Product.Insert(myProduct);
+            _unityOfWork.Save();
+
+            try
+            {
+                foreach (string productChild in product.TypeChild)
                 {
-                    foreach (string productChild in product.TypeChild)
-                    {
-                        var childProduct = _unityOfWork.Product.GetById(Convert.ToInt32(productChild));
-                        childProduct.ParentID = myProduct.ID;
-                        _unityOfWork.Product.Update(childProduct);
-                        _unityOfWork.Save();
-                    }
+                    var childProduct = _unityOfWork.Product.GetById(Convert.ToInt32(productChild));
+                    childProduct.ParentID = myProduct.ID;
+                    _unityOfWork.Product.Update(childProduct);
+                    _unityOfWork.Save();
                 }
-                catch { }
-                LoggingController.writeLog(product, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
-                return RedirectToAction("Index");
             }
-   
-        
+            catch { }
+            LoggingController.writeLog(product, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
+            return RedirectToAction("Index");
+        }
+
+
 
         public IActionResult Edit(long id)
         {
@@ -160,7 +160,7 @@ namespace Angle.Controllers
             {
                 childsID.Add(child.ID.ToString());
             }
-        
+
             var customerList = _db.Customer.ToArray();
             ViewBag.ListOfCustomers = customerList;
             var projectList = _db.Projects.ToArray();
@@ -178,12 +178,12 @@ namespace Angle.Controllers
                                                          Selected = true
                                                      };
             SelectList selectedChilds = new SelectList(selectList, "Value", "Text");
-            foreach(var child in selectedChilds)
+            foreach (var child in selectedChilds)
             {
                 child.Selected = true;
             }
             ViewBag.myChilds = selectedChilds;
-                   
+
             return View(myproduct);
         }
 
@@ -205,18 +205,18 @@ namespace Angle.Controllers
                 ParentID = product.ParentID,
             };
             myProduct.ProductAttributes.Clear();
-            foreach(var attribute in product.SelectedAttributes)
+            foreach (var attribute in product.SelectedAttributes)
             {
                 ProductAttribute model = new ProductAttribute
                 {
                     AttributeID = Convert.ToInt32(attribute),
                     Value = product.ValueSelectedAttributes[arrIndex],
-                    ProductID = product.ID                
+                    ProductID = product.ID
                 };
                 arrIndex++;
                 myProduct.ProductAttributes.Add(model);
             }
-            
+
 
 
 
@@ -224,7 +224,7 @@ namespace Angle.Controllers
             _unityOfWork.Save();
             //var childToExclude = _unityOfWork.Product.getChilds(myProduct.ID);
             var productChilds = _unityOfWork.Product.getChilds(myProduct.ID);
-            foreach(var child in productChilds)
+            foreach (var child in productChilds)
             {
                 child.ParentID = null;
                 _unityOfWork.Product.Update(child);
@@ -249,10 +249,10 @@ namespace Angle.Controllers
         public IActionResult Delete(int id)
         {
             Product product = _unityOfWork.Product.GetByIdForDelete(id);
-          Angle.Models.ViewModels.ProductViewModel.ProductViewModel productToDelete = new Angle.Models.ViewModels.ProductViewModel.ProductViewModel()
+            Angle.Models.ViewModels.ProductViewModel.ProductViewModel productToDelete = new Angle.Models.ViewModels.ProductViewModel.ProductViewModel()
             {
                 ID = product.ID,
-                Description = product.Description,              
+                Description = product.Description,
                 SerialNumber = product.SerialNumber,
             };
             var childs = _unityOfWork.Product.getChilds(product.ID);
@@ -327,7 +327,7 @@ namespace Angle.Controllers
                 LoggingController.writeLog(productHistory, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
 
 
-                return Json(productHistory) ;
+                return Json(productHistory);
             }
             catch
             {
@@ -390,17 +390,17 @@ namespace Angle.Controllers
         //Take -->Type ID as Parameter<--Returns all Type who aren't in use for an specific Product
         [HttpGet]
         public JsonResult GetTypeChild(long Id)
-        {           
+        {
             var childs = _unityOfWork.Type.GetById(Id).Childs;
             List<Product> productChilds = new List<Product>();
             var product = _unityOfWork.Product.getAvaibleProducts();
-            foreach(var child in childs)
+            foreach (var child in childs)
             {
                 var pchilds = product.Where(b => b.DeviceTypeID == child.ChildID).ToList();
                 foreach (var productchild in pchilds)
                 {
                     productChilds.Add(productchild);
-                }           
+                }
             }
             IEnumerable<SelectListItem> selectList = from s in productChilds
                                                      select new SelectListItem
@@ -409,7 +409,7 @@ namespace Angle.Controllers
                                                          Text = s.SerialNumber + " - " + s.Type.Name
                                                      };
             var childsList = new SelectList(selectList, "Value", "Text");
-            
+
 
             return Json(childsList);
         }
@@ -421,7 +421,7 @@ namespace Angle.Controllers
         {
             var validateName = await _db.Product.FirstOrDefaultAsync
                                 (x => x.SerialNumber == serialNumber);
-                                
+
             if (validateName == null)
             {
                 return Json(true);
@@ -473,20 +473,25 @@ namespace Angle.Controllers
 
             var QRCode = _unityOfWork.Index_QR.GetByProductId(id);
 
-            if(QRCode != null)
+            if (QRCode != null)
             {
                 var host = Request.Host;
-                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" +host.Host + Url.Action("Redirect", "Index_QR", new { id = QRCode.Id }));
+                ViewBag.QrCode = QRHelper.GenerateQRCode("http://" + host.Host + Url.Action("Redirect", "Index_QR", new { id = QRCode.Id }));
             }
             else
             {
-                ViewBag.QrCode = new HtmlString("<a href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName =  "Product", actionName = "Wizard" })+"> Generate QR Code for This Product"+ "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
+                ViewBag.QrCode = new HtmlString("<a href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName = "Product", actionName = "Wizard" }) + "> Generate QR Code for This Product" + "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
             }
             return View(product);
         }
 
 
-
+        /// <summary>
+        /// Is called when an QR Code is scanned in an mobile device
+        /// It prepares All Information of an specifict product and pass it to the Wizard View
+        /// </summary>
+        /// <param name="id">Product id</param>
+        /// <returns>Product Wizard View with specified product data</returns>
         public IActionResult Wizard(long id)
         {
             var product = _unityOfWork.Product.GetByIdDetailed(id);
@@ -505,9 +510,9 @@ namespace Angle.Controllers
             ViewBag.histories = histories;
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
 
-           
 
-    
+
+
             return View(product);
         }
 
@@ -527,7 +532,7 @@ namespace Angle.Controllers
                 };
                 histories.Add(history);
             }
-            ViewBag.histories = histories;         
+            ViewBag.histories = histories;
             return PartialView("_HistoryTable");
         }
 
