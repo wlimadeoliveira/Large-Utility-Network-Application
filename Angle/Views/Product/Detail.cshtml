@@ -5,6 +5,7 @@
     ViewData["Title"] = "Product Detail";
     List<LUNA.Models.Product> childs = ViewBag.childs;
     List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
+    
     var myQR = ViewBag.QrCode; 
 }
 
@@ -82,12 +83,11 @@
                                             </dd>
                                         </dl>
                                     </div>
-                                    <div class="col-4">
+                                    <div  class="col-4 float-right">
                                         
                                         
                                         @myQR
-                                    <label>Resize(in pixel):</label>
-                                    <input type="text" onchange="resizeMyQR(this.value)" class="form-control"/>
+                                  
                                      </div>
                                 </div>
                             </div>
@@ -141,6 +141,7 @@
             </div>
         </div>
     </div>
+    
     <div class="col-xl-6">
         <div class="card mb-3 border-info">
             <a href="#addHistory" role="button" aria-expanded="false" data-toggle="collapse" class="float-right btn btn-info"><em class="fa-1x mr-2 fas fa-plus-circle"></em>ADD History</a>
@@ -155,7 +156,7 @@
                             <input type="hidden" id="useremail" name="Email" value="@User.Identity.Name" />
                             <input id="productID" type="hidden" name="ProductID" value="@Model.ID" />
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Product History</label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Product History <a href="#addHistorytype" data-toggle="collapse" class="icon-plus"></a></label>
                                 <div class="col-md-9 col-sm-9 col-xs-12">
                                     <select id="historytypes" name="HistoryID" class="form-control">
                                         @foreach (LUNA.Models.History history in @ViewBag.HistoryType)
@@ -165,6 +166,7 @@
                                     </select>
                                     <span class="field-validation-error">  </span>
                                 </div>
+
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
@@ -185,7 +187,52 @@
                         </form>
                     </div>
                 </div>
+                <div class="col collapse" id="addHistorytype">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title" id="productDescription">Create a new History Type</div>
+                            <div class="text-sm"></div>
+                        </div>
+                        <div class="card-body">
+                            <form asp-action="CreateOnPost" asp-controller="History" id="formhistorytype" data-parsley-validate class="form-horizontal form-label-left"  >
+                                <div class="form-group">
+                                    <label name="Description" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Description <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input name="Description" type="text" id="title" required="required" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label name="BootStrapBadge" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Signalisation<span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select id="badgecolor" name="BootStrapBadge" class="form-control">
+                                            <option value="primary" class="bg-primary-light">primary</option>
+                                            <option value="success" class="bg-success-light">success</option>
+                                            <option value="danger" class="bg-danger-light">danger</option>
+                                            <option value="warning" class="bg-warning-light">warning</option>
+                                            <option value="info" class="bg-info-light">info</option>
+                                            <option value="light" class="bg-gray-lighter">lighter</option>
+                                            <option value="inverse" class="bg-inverse-light">dark</option>
+                                            <option value="pink" class="bg-pink-light">pink</option>
+                                            <option value="purple" class="bg-purple-light">purple</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button href="#addHistorytype" data-toggle="collapse" class="btn btn-primary">Cancel</button>
+                                        <button id="submithistorytype" type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
+                </div>
                 <div id="historytable">
                     <partial name="_HistoryTable" for="@histories" />
                 </div>
@@ -304,7 +351,33 @@
                 });
 
         </script>
+        <script>
+                    $('#submithistorytype').click(function (evt) {
+            evt.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/History/CreateOnPost',
+                data: $('#formhistorytype').serialize(),
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    let dropdown = $('#historytypes');
+                    dropdown.empty();
+                    dropdown.prop('selectedIndex', 0);
+                    $.each(data, function (key, entry) {
+                        dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-'+entry.bootStrapBadge+'-light').text(entry.description));
+  })
+                  /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
+                    $('#multiSelect').append(item);
+                    $("#multiSelect").trigger("chosen:updated");
+                    $('#attributesucces').html('Attribute was added successfully');*/
+                }
+            });
+        });
 
+
+        </script>
 
 
 

@@ -26,8 +26,8 @@
         var myAttributeArray = JSON.parse(JSON.stringify(@Html.Raw(@ViewBag.selectedAttributesArray)));
         setExistingAttributes(myAttributes);
         console.log(myAttributes);
-        $("#editmultiSelect").val(myAttributeArray);
-        $("#editmultiSelect").chosen().trigger('chosen:updated');
+        $("#multiSelect").val(myAttributeArray);
+        $("#multiSelect").chosen().trigger('chosen:updated');
      
  
 
@@ -81,7 +81,6 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type Childs</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <select id="mychilds" asp-for="TypeChild" asp-items="@(new SelectList(@ViewBag.ListOfType,"ID","Name"))" multiple class="chosen-select form-control">
-                       
                             </select>
                             <span asp-validation-for="TypeChild" class="field-validation-error"></span>
                         </div>
@@ -99,20 +98,25 @@
 
 
                     <div class="form-group mb-4">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Attributes</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Attributes <a href="#addattribute" data-toggle="collapse"> <em class="icon-plus"></em> </a></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select id="editmultiSelect" asp-items="@(new SelectList(@ViewBag.ListOfAttribute,"ID","Name"))" multiple class="chosen-select form-control">
+                            <select id="multiSelect" asp-items="@(new SelectList(@ViewBag.ListOfAttribute,"ID","Name"))" multiple class="chosen-select form-control">
                             </select>
                             <span class="field-validation-error"></span>
                         </div>
+
+
+
                     </div>
 
                     <div id="hiddenAttributeID">
-
                     </div>
 
 
                     <div id="listattributes"></div>
+
+
+
 
 
 

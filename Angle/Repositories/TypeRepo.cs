@@ -53,10 +53,12 @@ namespace Angle.Repositories
             _context.PType.Update(type);
         }
 
- 
+        public PType getChilds(long typeId)
+        {
+            //return _context.Product.Where(x => x.ParentID == parentID).Include(y=>y.Type).ToList();
+          //  List<PType> parents = _context.PType.Include(b => b.Childs).FirstOrDefault(c => c.Childs.ch)
 
-
-
-      
+            return _context.PType.Include(c => c.Childs).FirstOrDefault(x => x.ID == typeId);
+        }
     }
 }

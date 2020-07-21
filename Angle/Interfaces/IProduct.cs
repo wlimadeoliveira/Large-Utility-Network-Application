@@ -23,5 +23,6 @@ namespace Angle.Interfaces
         List<Product> getProductByCustomers(long customerID);
         List<Product> getAllProductsHistory();
         Product getProductWithHistory(long id);
+        List<Product> getParents(Product product, List<Product> parents);
     }
 }

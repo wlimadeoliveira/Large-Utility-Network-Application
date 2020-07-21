@@ -50,7 +50,7 @@
 
 
   <ItemGroup>
-    <Content Update="wwwroot/master/**/*" CopyToPublishDirectory="Never" />
+    <Content Update="wwwroot/master/**/*" CopyToPublishDirectory="Always" />
   </ItemGroup>
   <Target Name="PrepublishMinification" BeforeTargets="BeforeBuild">
     <Exec Command="gulp $(ConfigurationName)" />

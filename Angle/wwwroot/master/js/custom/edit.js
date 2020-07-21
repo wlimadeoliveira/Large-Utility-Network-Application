@@ -6,7 +6,7 @@
         var elementLabel = element.childNodes[1];
         var elemntInput = element.childNodes[3].firstChild.nextSibling;
         elementLabel.innerText = myAttributes[i]['Attribute']['Name'];
-        CreateHiddenInputNode(myAttributes[i]['Attribute']['ID']);
+        CreateHiddenInputNode(myAttributes[i]['Attribute']['Name'],myAttributes[i]['AttributeID']);
         elemntInput.value = myAttributes[i]['Value'];
         elemntInput.setAttribute("name", "ValueSelectedAttributes");
         element.setAttribute("id", "attribute" + myAttributes[i]['Attribute']['ID']);
@@ -61,10 +61,10 @@ function editCreateAttributeNode(id) {
     editCreateHiddenInputNode(name, id);
 }
 
-function CreateHiddenInputNode(value, id) {
+function CreateHiddenInputNode(name, id) {
     var hiddenInput = document.createElement("input");
     hiddenInput.setAttribute("name", "SelectedAttributes");
-    hiddenInput.setAttribute("value", value);
+    hiddenInput.setAttribute("value", name);
     hiddenInput.setAttribute("type", "hidden");
     hiddenInput.setAttribute("id", "hidden" + id);
     hiddenInput.setAttribute("class", "hiddenInputNodes");

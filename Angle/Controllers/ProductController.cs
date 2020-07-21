@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Angle.Models.ViewModels.AttributeViewModel;
 using Angle.Helpers;
 using Microsoft.AspNetCore.Html;
-
+using Angle.Repositories;
 
 namespace Angle.Controllers
 {
@@ -37,6 +37,8 @@ namespace Angle.Controllers
         {
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
             var products = _unityOfWork.Product.GetAll();
+            var types = _unityOfWork.Type.GetAll();
+            ViewBag.typesForSearch = new SelectList(types, "Name", "Name");           
             List<ProductViewModel> productsView = new List<ProductViewModel>();
             foreach (var product in products)
             {
@@ -50,8 +52,13 @@ namespace Angle.Controllers
                     TypeName = (product.Type?.Name ?? "").ToString(),
                     ParentID = (product.Parent?.ID ?? null),
                     ParentSerialNumber = (product.Parent?.SerialNumber ?? "").ToString(),
-
                 };
+
+                if (model.ParentID != null)
+                {
+                    int parentID = Convert.ToInt32(model.ParentID);
+                    model.ParentSerialNumber = _unityOfWork.Product.GetById(parentID).SerialNumber;
+                }
                 productsView.Add(model);
             }
             return View(productsView);
@@ -205,16 +212,19 @@ namespace Angle.Controllers
                 ParentID = product.ParentID,
             };
             myProduct.ProductAttributes.Clear();
-            foreach (var attribute in product.SelectedAttributes)
+            if (product.SelectedAttributes != null)
             {
-                ProductAttribute model = new ProductAttribute
+                foreach (var attribute in product.SelectedAttributes)
                 {
-                    AttributeID = Convert.ToInt32(attribute),
-                    Value = product.ValueSelectedAttributes[arrIndex],
-                    ProductID = product.ID
-                };
-                arrIndex++;
-                myProduct.ProductAttributes.Add(model);
+                    ProductAttribute model = new ProductAttribute
+                    {
+                        AttributeID = Convert.ToInt32(attribute),
+                        Value = product.ValueSelectedAttributes[arrIndex],
+                        ProductID = product.ID
+                    };
+                    arrIndex++;
+                    myProduct.ProductAttributes.Add(model);
+                }
             }
 
 
@@ -269,8 +279,6 @@ namespace Angle.Controllers
             }
 
             LoggingController.writeLog(productToDelete, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
-
-
             return View(productToDelete);
         }
 
@@ -417,10 +425,11 @@ namespace Angle.Controllers
         //Used by 'Jquery Validate Obstruhiv Framework' 
         //Checks in Create Product View if Serial Number is already in use
         [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> SerialNumberExist(string serialNumber)
+        public async Task<IActionResult> SerialNumberExist(string serialNumber, long typeID)
         {
+         
             var validateName = await _db.Product.FirstOrDefaultAsync
-                                (x => x.SerialNumber == serialNumber);
+                                (x => x.SerialNumber == serialNumber && x.Type.ID == Convert.ToInt32(typeID) );
 
             if (validateName == null)
             {
@@ -468,11 +477,15 @@ namespace Angle.Controllers
                 };
                 histories.Add(history);
             }
+            histories.Sort((x, y) => DateTime.Compare(y.History.Date, x.History.Date));
             ViewBag.histories = histories;
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
 
             var QRCode = _unityOfWork.Index_QR.GetByProductId(id);
 
+            List<Product> parents = new List<Product>();
+            parents = _unityOfWork.Product.getParents(product, parents);
+          
             if (QRCode != null)
             {
                 var host = Request.Host;
@@ -480,8 +493,9 @@ namespace Angle.Controllers
             }
             else
             {
-                ViewBag.QrCode = new HtmlString("<a href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName = "Product", actionName = "Wizard" }) + "> Generate QR Code for This Product" + "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
+                ViewBag.QrCode = new HtmlString("<a class='float-right text-center' href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName = "Product", actionName = "Wizard" }) + "> Generate QR Code" + "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
             }
+            var products1 = _unityOfWork.Product.getChilds(id);
             return View(product);
         }
 
@@ -507,6 +521,8 @@ namespace Angle.Controllers
                 };
                 histories.Add(history);
             }
+            histories.Sort((x, y) => DateTime.Compare(x.History.Date,y.History.Date ));
+            
             ViewBag.histories = histories;
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
 
@@ -532,6 +548,7 @@ namespace Angle.Controllers
                 };
                 histories.Add(history);
             }
+            histories.Sort((x, y) => DateTime.Compare(y.History.Date, x.History.Date));
             ViewBag.histories = histories;
             return PartialView("_HistoryTable");
         }
@@ -549,10 +566,12 @@ namespace Angle.Controllers
                 };
                 histories.Add(history);
             }
-            histories.Reverse();
+            histories.Sort((x, y) => DateTime.Compare(y.History.Date, x.History.Date));
             ViewBag.histories = histories;
             return PartialView("TimeLine");
         }
+
+     
 
 
         [HttpGet]

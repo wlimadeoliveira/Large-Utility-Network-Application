@@ -57,7 +57,28 @@
                     document.getElementById("oldhistoryid").value = historyId;
 
         }
-
+                       var table1 = $('#datatable3').DataTable({
+                           'paging': true,
+                        "aaSorting": [],
+                           'info': true,
+                    "bLengthChange": false,
+                           
+    responsive: true,
+                    stateSave: false,
+            oLanguage: {
+                sSearch: 'Search all columns:',
+                sLengthMenu: '_MENU_ records per page',
+                info: 'Showing page _PAGE_ of _PAGES_',
+                zeroRecords: 'Nothing found - sorry',
+                infoEmpty: 'No records available',
+                infoFiltered: '(filtered from _MAX_ total records)',
+                oPaginate: {
+                    sNext: '<em class="fa fa-caret-right"></em>',
+                    sPrevious: '<em class="fa fa-caret-left"></em>'
+                }
+            },
+            keys: true
+});
     </script>
 
 }
@@ -113,61 +134,55 @@
     <!--  Productlist card-->
     <div class="card">
         <div class="card-header">
-            <div class="card-title">List of Product History <small><a  href="@Url.Action("TimeLine", "ProductHistory",new { id =  @ViewBag.ProductID  })">Show as Time Line</a></small> </div>
+            <div class="card-title">List of Product History <small><a  href="@Url.Action("_TimeLine", "ProductHistory",new { id =  @ViewBag.ProductID  })">Show as Time Line</a></small> </div>
             <div class="text-sm"></div>
         </div>
         <div class="card-body">
             <div id="printbuttons"></div><br />
-            <div id="togglecolumn" class="btn-group-toggle" data-toggle="buttons">
-                <!-- See master/js/datatable.js at the end of file for toggle button function-->
-            </div>
-            <table class="table table-striped my-4 w-100" id="datatable2">
+
+            <table class="table table-striped my-4 w-100" id="datatable3">
                 <thead>
                     <tr class="tableheader">
-                        <th>Date Time</th>
                         <th>Status</th>
+                        <th>Date Time</th>
                         <th>Comment</th>
                         <th>User</th>
                         <th>Options</th>
                     </tr>
-                    <tr class="filters" style="width: 100%;padding: 3px;box-sizing: border-box;">
-                        <th>Date Time</th>
-                        <th>Status</th>
-                        <th>Comment</th>
-                        <th>User</th>
-                        <th hidden>Options</th>
-                    </tr>
+      
+
                 </thead>
                 <tbody>
                     @foreach (var productHistory in Model)
                     {
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
+                            <div class="badge badge-@productHistory.History.History.BootStrapBadge">
                                 @try
-                                {@productHistory.History.Date}
+                                {@productHistory.History.History.Description}
                             catch { }
-                            </td>
-                            <td>
-                                <div class="badge badge-@productHistory.History.History.BootStrapBadge">
-                                    @try
-                                    {@productHistory.History.History.Description}
-                                catch { }
-                                </div>
-                            </td>
-                            <td>
-                                @try
-                                {@productHistory.History.Comment}
-                            catch { }
-                            </td>
+                            </div>
+                        </td>
+                        <td>
+                            @try
+                            {@productHistory.History.Date}
+                        catch { }
+                        </td>
 
-                            <td>
-                                @try
-                                {@productHistory.UserName}
-                            catch { }
-                            </td>
-                            <td><a a href="#addHistory" data-toggle="collapse" onclick="EditHistoryInformation('@productHistory.History.ProductID','@productHistory.History.Date.ToString()','@productHistory.History.UserID','@productHistory.History.HistoryID','@productHistory.History.Comment')">Edit</a> / <a href="@Url.Action("Delete", "ProductHistory", new { productId = productHistory.History.ProductID, userId = productHistory.History.UserID, date = productHistory.History.Date, historyId= productHistory.History.HistoryID })">Delete</a>  </td>
+                        <td>
+                            @try
+                            {@productHistory.History.Comment}
+                        catch { }
+                        </td>
 
-                        </tr>
+                        <td>
+                            @try
+                            {@productHistory.UserName}
+                        catch { }
+                        </td>
+                        <td><a a href="#addHistory" data-toggle="collapse" onclick="EditHistoryInformation('@productHistory.History.ProductID','@productHistory.History.Date.ToString()','@productHistory.History.UserID','@productHistory.History.HistoryID','@productHistory.History.Comment')">Edit</a> / <a href="@Url.Action("Delete", "ProductHistory", new { productId = productHistory.History.ProductID, userId = productHistory.History.UserID, date = productHistory.History.Date, historyId= productHistory.History.HistoryID })">Delete</a>  </td>
+
+                    </tr>
                     }
                 </tbody>
             </table>

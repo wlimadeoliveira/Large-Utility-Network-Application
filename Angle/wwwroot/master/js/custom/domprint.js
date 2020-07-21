@@ -121,6 +121,7 @@ $('#multiSelect').on('change', function (e, params) {
 });
 
 
+
 function cloneExistingAttributes() {
     var parentNode = document.getElementById("listattributes");
     var element = document.getElementById("cloneform").cloneNode(true);
@@ -236,9 +237,7 @@ function createHiddenInputNode(value, id) {
 
 
 function deleteNodes(id, parentnodeID) {
-    var parent = document.getElementById(parentnodeID);
-    var child = document.getElementById(id);
-    parent.removeChild(child);   
+    $("#" + id).remove();
 }
 
 

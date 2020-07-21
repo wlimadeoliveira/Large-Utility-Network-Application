@@ -54,10 +54,41 @@ namespace Angle.Repositories
         {
             return _context.Product.Where(x => x.ParentID == null).Include(b=>b.Type).ToList();
         }
-        public List<Product> getChilds(long parentID)
+        public List<Product> getChilds(long id)
         {
-            return _context.Product.Where(x => x.ParentID == parentID).Include(y=>y.Type).ToList();
+            Product product = _context.Product.Include(b => b.Parent).FirstOrDefault(x => x.ID == id);
+          /*  while()
+            if (product.Parent != null) {
+                Product parent = _context.Product.Include(a => a.Parent).FirstOrDefault(c => c.Parent == product.ParentID);
+                    }
+                    */
+         
+            return _context.Product.Where(x => x.ParentID == id).Include(y=>y.Type).ToList();
         }
+
+        public  List<Product> getParents(Product product, List<Product> parents)
+        {
+            Product parent = new Product();
+            if(product.ParentID != null)
+            {
+                parents.Add(_context.Product.Include(b=>b.Parent).FirstOrDefault(c => c.ParentID==product.ParentID));
+                return getParents(product.Parent, parents);
+            }
+
+            return parents;            
+        }
+
+        
+
+
+
+
+        public void productTree()
+        {
+
+        }
+
+
         public void Insert(Product product)
         {
             _context.Product.Add(product);
@@ -88,5 +119,11 @@ namespace Angle.Repositories
         {
             return _context.Product.Include(x => x.ProductHistories).Include("ProductHistories.History").FirstOrDefault(y => y.ID == id);
         }
+
+    
+
+
+  
+        
     }
 }

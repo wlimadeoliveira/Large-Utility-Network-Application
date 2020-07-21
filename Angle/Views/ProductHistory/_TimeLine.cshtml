@@ -2,7 +2,7 @@
     ViewData["Title"] = "TimeLine";
     List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
 }
-
+@model LUNA.Models.Product
 
 
 
@@ -25,7 +25,47 @@
     <div>Time Line <small></small></div>
 </div>
 
-
+                <div id="addHistory" class="card collapse">
+                    <div class="card-header">
+                        <div class="card-title" id="productDescription">Add an History to: @Model.SerialNumber  @Model.Type.Description</div>
+                        <div class="text-sm"></div>
+                    </div>
+                    <div class="card-body">
+                        <form id="formproducthistory" asp-controller="Product" asp-action="AddHistory">
+                            <input type="hidden" id="useremail" name="Email" value="@User.Identity.Name" />
+                            <input id="productID" type="hidden" name="ProductID" value="@Model.ID" />
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Product History</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select id="historytypes" name="HistoryID" class="form-control">
+                                        @foreach (LUNA.Models.History history in @ViewBag.HistoryType)
+                                        {
+                                            <option value="@history.ID" class="bg-@history.BootStrapBadge-light"> @history.Description </option>
+                                        }
+                                    </select>
+                                    <span class="field-validation-error">  </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                    Comment <span class="required">*</span>
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea name="Comment" id="comment" required="required" class="form-control"></textarea>
+                                    <span class="field-validation-error"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="#addHistory" data-toggle="collapse" class="btn btn-primary">Cancel</a>
+                                    <button id="buttonhistory" type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                                <span class="text-success float-right" id="historyaddedsuccess"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+<div id="historytable">
 <!-- ul.timeline-alt-->
 <ul class="timeline">
 
@@ -69,7 +109,7 @@
         <!-- START timeline item-->
         <li class="timeline-end"><a class="timeline-badge" role="button" aria-expanded="false" data-toggle="collapse"  href="#addHistory"><em class="fa fa-plus"></em></a></li><!-- END timeline item-->
     </ul><!-- END timeline-->
-
+</div>
 
 
 
@@ -84,8 +124,9 @@
     <script src="~/vendor/jquery/dist/jquery.js"></script>
     <script src="~/vendor/popper.js/dist/umd/popper.js"></script>
     <script src="~/vendor/bootstrap/dist/js/bootstrap.js"></script><!-- =============== PAGE VENDOR SCRIPTS ===============-->
+    <script>
     <!-- =============== APP SCRIPTS ===============-->
-              // Function for dynamicly adding a new story and reload partial view
+                  // Function for dynamicly adding a new story and reload partial view
                 $('#buttonhistory').click(function (evt) {
                     evt.preventDefault();
                     $('#historyaddedsuccess').html("");
@@ -105,9 +146,11 @@
                     });
                     console.log($('#formproducthistory').serialize());
                     $('#historyaddedsuccess').html("History was succesfully added");
-                    var url = '@Url.Action("TimeLine", "Product", new { id = Model.ID})';
-                    $("#historytable").load(url);
+                    var url = '@Url.Action("_TimeLine", "Product", new { id = Model.ID})';
+                     location.reload();
                 });
+
+        </script>
 }
 
 

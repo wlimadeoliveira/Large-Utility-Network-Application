@@ -47,6 +47,27 @@ namespace Angle.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public JsonResult CreateOnPost(History history)
+        {
+
+            try
+            {
+                _unityOfWork.History.Insert(history);
+                _unityOfWork.Save();
+                var historytypes = _unityOfWork.History.GetAll();
+                return Json(historytypes);
+                LoggingController.writeLog(history, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
+
+            }
+            catch
+            {
+                var historytypes = _unityOfWork.History.GetAll();
+                return Json(historytypes);
+            }
+        }
+
         public ActionResult Edit(int id)
         {
             var history = _unityOfWork.History.GetById(id);

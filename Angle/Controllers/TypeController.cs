@@ -36,14 +36,14 @@ namespace Angle.Controllers
             
              var model = _unityOfWork.Type.GetAll();
             var vm = _mapper.Map<List<TypeViewModel>>(model);
-
+            PType type =_unityOfWork.Type.getChilds(15);
 
             return View(vm);
         }
 
 
 
-
+        
 
 
         [HttpGet]
@@ -208,23 +208,28 @@ namespace Angle.Controllers
                     });
                 }
             }
+
+            
+
+
             if (type.SelectedAttributes != null)
             {
                 myType.TypeAttributes = new List<TypeAttribute>();
+
                 foreach (string item in type.SelectedAttributes)
                 {                      
                         myType.TypeAttributes.Add(new TypeAttribute()
                         {
                             DeviceTypeID = type.ID,
-                            AttributeID = Convert.ToInt32(item),
+                            AttributeID = _unityOfWork.Attribute.GetByName(item).ID,
                             Value = type.ValueSelectedAttributes[arrIndex]
                         }
-                        );
+                        );;
                         arrIndex++;     
                 }           
             }
 
-
+            
 
             List<long> existingChilds = new List<long>();
 
@@ -257,14 +262,14 @@ namespace Angle.Controllers
                     existingAttributes.Add(p.AttributeID);
                 }   
             
-                foreach(var AttributeID in type.SelectedAttributes)
+                foreach(var name in type.SelectedAttributes)
                 {
-                    if (!existingAttributes.Contains(Convert.ToInt32(AttributeID)))
+                    if (!existingAttributes.Contains(_unityOfWork.Attribute.GetByName(name).ID))
                     {
                         ProductAttribute pa = new ProductAttribute
                         {
                             ProductID = product.ID,
-                            AttributeID = Convert.ToInt32(AttributeID)
+                            AttributeID = _unityOfWork.Attribute.GetByName(name).ID,
                         };
                         product.ProductAttributes.Add(pa);
                     }
@@ -355,7 +360,7 @@ namespace Angle.Controllers
                     myType.TypeAttributes.Add(new TypeAttribute()
                     {
                        
-                        AttributeID = Convert.ToInt32(item),
+                        AttributeID = _unityOfWork.Attribute.GetByName(item).ID,
                         Value = type.ValueSelectedAttributes[arrIndex]
                     }
                     ); ; ; ;

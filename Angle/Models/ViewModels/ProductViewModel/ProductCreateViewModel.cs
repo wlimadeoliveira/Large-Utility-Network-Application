@@ -14,8 +14,7 @@ using System.Threading.Tasks;
 namespace Angle.Models.ViewModels.ProductViewModel
 {
     public class ProductCreateViewModel
-    {
-        
+    {  
         public long ID { get; set; }
         public string Description { get; set; }
         public long? ProjectID { get; set; }

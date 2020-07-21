@@ -37,6 +37,7 @@ namespace Angle.Controllers.Ivy
                     allProductHistories.Add(history);
                 }
             }
+            allProductHistories.Sort((y, x) => DateTime.Compare(x.History.Date, y.History.Date));
             return View(allProductHistories);
         }
         public ActionResult Details(int id)
@@ -53,6 +54,8 @@ namespace Angle.Controllers.Ivy
                 };
                 productHistories.Add(history);
             }
+           productHistories.Sort((y, x) => DateTime.Compare(x.History.Date, y.History.Date));
+
             ViewBag.ProductDescription = product.Description;
             ViewBag.SerialNumber = product.SerialNumber;
             ViewBag.ProductID = product.ID;
@@ -75,8 +78,30 @@ namespace Angle.Controllers.Ivy
             ViewBag.ProductDescription = product.Description;
             ViewBag.SerialNumber = product.SerialNumber;
             ViewBag.ProductID = product.ID;
+            productHistories.Sort((x, y) => DateTime.Compare(y.History.Date, x.History.Date));
             return View(productHistories);
         }
+
+
+        public ActionResult _TimeLine(long id)
+        {
+            var product = _unityOfWork.Product.GetByIdDetailed(id);
+            List<ProductHistoryViewModelDetail> histories = new List<ProductHistoryViewModelDetail>();
+            foreach (var productHistory in product.ProductHistories)
+            {
+                ProductHistoryViewModelDetail history = new ProductHistoryViewModelDetail()
+                {
+                    History = productHistory,
+                    UserName = _db.Users.FirstOrDefault(x => x.Id == productHistory.UserID).FirstName + " " + _db.Users.FirstOrDefault(x => x.Id == productHistory.UserID).LastName
+                };
+                histories.Add(history);
+            }
+            histories.Sort((x, y) => DateTime.Compare(y.History.Date, x.History.Date));
+            ViewBag.histories = histories;
+            ViewBag.HistoryType = _unityOfWork.History.GetAll();
+            return View(product);
+        }
+
         public ActionResult Create()
         {
             return View();

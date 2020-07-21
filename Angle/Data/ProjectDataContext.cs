@@ -165,13 +165,13 @@ namespace LUNA.Models.Models
                 .WithMany(qr => qr.Index_QRs)
                 .HasForeignKey(qr => qr.ControllerID);
             builder.Entity<Index_QR>()
-    .HasOne(qr => qr.Product)
-    .WithMany(qr => qr.Index_QRs)
-    .HasForeignKey(qr => qr.ProductID);
+                .HasOne(qr => qr.Product)
+                .WithMany(qr => qr.Index_QRs)
+                .HasForeignKey(qr => qr.ProductID);
             builder.Entity<Index_QR>()
-        .HasOne(qr => qr.User)
-        .WithMany(qr => qr.Index_QRs)
-        .HasForeignKey(qr => qr.UserID)
+                .HasOne(qr => qr.User)
+                .WithMany(qr => qr.Index_QRs)
+                .HasForeignKey(qr => qr.UserID)
                     .HasConstraintName("UserID")
                    .OnDelete(DeleteBehavior.Cascade);
 

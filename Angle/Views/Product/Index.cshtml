@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Products";
+    SelectList myTypes = ViewBag.typesForSearch;
+    string typeoptions = "";
 }
 
 
@@ -37,7 +39,7 @@
                                         <option value="@history.ID" class="bg-@history.BootStrapBadge-light"> @history.Description </option>
                                     }
                                 </select>
-                                <span class="field-validation-error"> <a href="#addHistorytype" data-toggle="collapse">add</a> </span>
+                                <span class="field-validation-error"> <a href="#addHistorytype" data-toggle="collapse" class="icon-plus"></a> </span>
                             </div>
 
                         </div>
@@ -68,7 +70,7 @@
                     <div class="text-sm"></div>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Create" asp-controller="History" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <form asp-action="CreateOnPost" asp-controller="History" id="formhistorytype" data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                             <label name="Description" class="control-label col-md-3 col-sm-3 col-xs-12">
                                 Description <span class="required">*</span>
@@ -99,7 +101,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button href="#addHistorytype" data-toggle="collapse" class="btn btn-primary">Cancel</button>
-                                <button type="submit" class="btn btn-success">Submit</button>
+                                <button id="submithistorytype" type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -132,7 +134,7 @@
                         <th>In Use</th>
                     </tr>
                     <tr class="filters" style="width: 100%;padding: 3px;box-sizing: border-box;">
-                        <th>Type</th>
+                        <th id="typedropdown">Type</th>
                         <th>Serial Number</th>
                         <th>Description</th>
                         <th>Project</th>
@@ -175,13 +177,13 @@
                             </td>
                             <td><a href="@Url.Action("Edit", "Product", new { id = product.ProductID })">Edit</a> | <a href="@Url.Action("Delete", "Product", new { id = product.ProductID })">Delete</a> | <a href="@Url.Action("Clone", "Product", new { id = product.ProductID })">Clone</a>   </td>
                             <td><a href="#addHistory" data-toggle="collapse" onclick="setHistoryInformation('@product.ProductID','@product.ProductDescription')">Add</a> | <a href="@Url.Action("Details", "ProductHistory", new { id = product.ProductID })">Show</a></td>
-                            <td class="@if (product.ParentID == null){<text>bg-gray</text>}else{<text>bg-primary-light</text>}" data-toggle="tooltip" data-placement="top" @if (product.ParentSerialNumber.Length > 1) { <text> title="@product.ParentSerialNumber" </text> }>  </td>
+                            <td class="@if (product.ParentID == null){<text>bg-gray</text>}else{<text>bg-primary-light" onclick="window.location.href='@Url.Action("Detail","Product",new { id = product.ParentID })'</text> }" data-toggle="tooltip" data-placement="top" @if (product.ParentSerialNumber.Length > 1) { <text> title="@product.ParentSerialNumber" </text> }><a href="@Url.Action("Detail","Product",new { id = product.ParentID })"></a>  </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-
+        
     </div>
 </div>
 
@@ -200,6 +202,7 @@
                 box-sizing: border-box;
             }
         </style>
+        <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
@@ -213,6 +216,7 @@
                 box-sizing: border-box;
             }
         </style>
+        <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
     </environment>
 }
 @section Scripts{
@@ -242,6 +246,44 @@
             $("#historytypes").chosen({ width: '200px' });
             $("#badgecolor").chosen({ width: '100px' });
 
+            var _typeoptions = "";
+
+            @foreach(SelectListItem types in myTypes)
+            {
+                typeoptions += "<option value='" + types.Value + "'  >" + types.Text + "</option>";
+            }
+
+            _typeoptions = "@Html.Raw(typeoptions)";
+
+
+        </script>
+        <script>
+            $('#submithistorytype').click(function (evt) {
+                evt.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: '/History/CreateOnPost',
+                    data: $('#formhistorytype').serialize(),
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        let dropdown = $('#historytypes');
+                        dropdown.empty();
+                        dropdown.prop('selectedIndex', 0);
+                        $.each(data, function (key, entry) {
+                            dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-' + entry.bootStrapBadge + '-light').text(entry.description));
+                        })
+                        dropdown.trigger("chosen:updated");
+                        /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
+                          $('#multiSelect').append(item);
+                          $("#multiSelect").trigger("chosen:updated");
+                          $('#attributesucces').html('Attribute was added successfully');*/
+                    }
+                });
+            });
+
+
         </script>
     </environment>
     <environment names="Staging,Production">
@@ -265,9 +307,48 @@
             $(document).ready(function () {
                 $("select").chosen();
                 $("chosen-select").chosen();
+
             });
             $("#historytypes").chosen({ width: '200px' });
             $("#badgecolor").chosen({ width: '100px' });
+
+            var _typeoptions = "";
+
+            @foreach(SelectListItem types in myTypes)
+            {
+                typeoptions += "<option value='" + types.Value + "'  >" + types.Text + "</option>";
+            }
+
+            _typeoptions = "@Html.Raw(typeoptions)";
+
+
+        </script>
+        <script>
+            $('#submithistorytype').click(function (evt) {
+                evt.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: '/History/CreateOnPost',
+                    data: $('#formhistorytype').serialize(),
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        let dropdown = $('#historytypes');
+                        dropdown.empty();
+                        dropdown.prop('selectedIndex', 0);
+                        $.each(data, function (key, entry) {
+                            dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-' + entry.bootStrapBadge + '-light').text(entry.description));
+                        })
+                        dropdown.trigger("chosen:updated");
+                        /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
+                          $('#multiSelect').append(item);
+                          $("#multiSelect").trigger("chosen:updated");
+                          $('#attributesucces').html('Attribute was added successfully');*/
+                    }
+                });
+            });
+
 
         </script>
     </environment>

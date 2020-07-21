@@ -17,9 +17,9 @@ namespace Angle.Interfaces
         void Insert(PType type);
         void Update(PType type);
         void Delete(PType type);
+        PType getChilds(long typeId);
+   
 
-        
 
-     
     }
 }
