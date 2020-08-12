@@ -29,6 +29,7 @@ namespace Angle.Repositories
         private Index_QRRepo _index_QRRepo;
         private Controller_QRRepo _controller_QRRepo;
         private Action_QRRepo _action_QRRepo;
+        private UploadRepo _fileRepo;
 
         public UnityOfWorkRepo(ProjectDataContext context)
         {
@@ -166,6 +167,13 @@ namespace Angle.Repositories
             get
             {
                 return _action_QRRepo = _action_QRRepo ?? new Action_QRRepo(_context);
+            }
+        }
+        public IUpload Upload
+        {
+            get
+            {
+                return _fileRepo = _fileRepo?? new UploadRepo(_context);
             }
         }
 

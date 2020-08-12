@@ -1,4 +1,5 @@
-﻿using Angle.Models.ViewModels.AccountViewModel;
+﻿
+using Angle.Models.ViewModels.AccountViewModel;
 using LUNA.Models;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace LUNA.Models.Models
         public long ControllerID { get; set; }
         [ForeignKey("ProductID")]
         public long ProductID { get; set; }
-        [ForeignKey("UserID")]
+       [ForeignKey("UserID")]
         public string UserID { get; set; }
         public string Parameter { get; set; }
         public bool IsActive { get; set; }
@@ -29,7 +30,7 @@ namespace LUNA.Models.Models
         public Action_QR Action_QR { get; set; }
         public Controller_QR Controller_QR { get; set; }
         public Product Product { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; }
 
     }
 }

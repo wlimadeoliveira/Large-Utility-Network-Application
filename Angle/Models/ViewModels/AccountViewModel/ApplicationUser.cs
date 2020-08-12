@@ -15,7 +15,7 @@ namespace Angle.Models.ViewModels.AccountViewModel
         public string LastName { get; set; }
         public string Function { get; set; }
         public List<ProductHistory> ProductHistories { get; set; }
-        public List<Index_QR> Index_QRs { get; set; }
+       // public List<Index_QR> Index_QRs { get; set; }
         
     }
 }

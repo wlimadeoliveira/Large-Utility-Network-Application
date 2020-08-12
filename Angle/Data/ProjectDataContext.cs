@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,10 @@ namespace LUNA.Models.Models
         public DbSet<Controller_QR> Controller_QR { get; set; }
         public DbSet<Index_QR> Index_QR { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Upload> Upload { get; set; }
+        public DbSet<SoftwareType> SoftwareTypes { get; set; }
+        public DbSet<SoftwareOption> SoftwareOptions { get; set; }
+        
 
         public ProjectDataContext(DbContextOptions<ProjectDataContext> options) : base(options)
         {
@@ -87,6 +92,7 @@ namespace LUNA.Models.Models
                   .HasOne(ph => ph.User)
                   .WithMany(a => a.ProductHistories)
                   .HasForeignKey(a => a.UserID);
+           
 
             builder.Entity<ProductType>()
             .HasKey(pf => new { pf.ProductID, pf.DeviceTypeID });
@@ -168,12 +174,9 @@ namespace LUNA.Models.Models
                 .HasOne(qr => qr.Product)
                 .WithMany(qr => qr.Index_QRs)
                 .HasForeignKey(qr => qr.ProductID);
-            builder.Entity<Index_QR>()
-                .HasOne(qr => qr.User)
-                .WithMany(qr => qr.Index_QRs)
-                .HasForeignKey(qr => qr.UserID)
-                    .HasConstraintName("UserID")
-                   .OnDelete(DeleteBehavior.Cascade);
+
+
+           
 
 
 

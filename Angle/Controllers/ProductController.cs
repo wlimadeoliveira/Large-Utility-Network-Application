@@ -19,6 +19,11 @@ using Angle.Models.ViewModels.AttributeViewModel;
 using Angle.Helpers;
 using Microsoft.AspNetCore.Html;
 using Angle.Repositories;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using Angle.Models.Models;
+using System.Net.Http;
 
 namespace Angle.Controllers
 {
@@ -27,10 +32,12 @@ namespace Angle.Controllers
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly ProjectDataContext _db;
-        public ProductController(IUnityOfWork unityOfWork, ProjectDataContext db)
+        private readonly IWebHostEnvironment _env;
+        public ProductController(IUnityOfWork unityOfWork, ProjectDataContext db,  IWebHostEnvironment env )
         {
             _db = db;
             _unityOfWork = unityOfWork;
+            _env = env;
         }
 
         public IActionResult Index()
@@ -293,8 +300,40 @@ namespace Angle.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public IActionResult AddHistory(CreateProductHistoryViewModel model)
+        public async Task<IActionResult> AddHistory(CreateProductHistoryViewModel model)
         {
+            if (model.UploadFile != null)
+            {
+                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                if (model.UploadFile.Length > 0)
+
+                {
+                    
+                    string fName = Path.GetFileNameWithoutExtension(model.UploadFile.FileName);
+                    string fExt = Path.GetExtension(model.UploadFile.FileName);
+                    string hashCode = RandomString(5);
+                    string newUniqueFileName = String.Concat(fName, "_" + hashCode, fExt);
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, newUniqueFileName), FileMode.Create))
+
+                    {
+
+                        await model.UploadFile.CopyToAsync(fileStream);
+
+                    }
+                    Upload myFile = new Upload()
+                    {
+                        RelativPath = Path.Combine(uploads, newUniqueFileName),
+                        Size = model.UploadFile.Length.ToString(),
+                        Format = model.UploadFile.ContentType.ToString(),
+                    };
+                    _unityOfWork.Upload.Insert(myFile);
+                    _unityOfWork.Save();
+                    model.UploadID = myFile.ID;
+
+                }
+            }
             Product product = _unityOfWork.Product.GetById(model.ProductID);
             ProductHistory productHistory = new ProductHistory
             {
@@ -302,7 +341,8 @@ namespace Angle.Controllers
                 Comment = model.Comment,
                 Date = DateTime.Now,
                 ProductID = model.ProductID,
-                HistoryID = model.HistoryID
+                HistoryID = model.HistoryID,
+                FileID = model.UploadID 
             };
             product.ProductHistories.Add(productHistory);
             _unityOfWork.Product.Update(product);
@@ -310,12 +350,48 @@ namespace Angle.Controllers
             productHistory.User = null;
             productHistory.UserID = null;
             LoggingController.writeLog(productHistory, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
-            return RedirectToAction("Index");
+           return  Redirect(Request.Headers["Referer"]);
         }
 
         [HttpPost]
-        public JsonResult QuickAddHistory(CreateProductHistoryViewModel model)
+        public async Task<JsonResult> QuickAddHistory(CreateProductHistoryViewModel model)
         {
+
+            
+            if (model.UploadFile != null)
+            {
+                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+
+
+
+                if (model.UploadFile.Length > 0)
+
+                {
+
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, model.UploadFile.FileName), FileMode.Create))
+
+                    {
+
+                        await model.UploadFile.CopyToAsync(fileStream);
+
+                    }
+                    Upload myFile = new Upload()
+                    {
+                        RelativPath = Path.Combine(uploads, model.UploadFile.FileName),
+                        Size = model.UploadFile.Length.ToString(),
+                        Format = model.UploadFile.ContentType.ToString(),
+                    };
+                    _unityOfWork.Upload.Insert(myFile);
+                    _unityOfWork.Save();
+                    model.UploadID = myFile.ID;
+
+                }
+            }
+            
+
+
             try
             {
                 Product product = _unityOfWork.Product.GetById(model.ProductID);
@@ -325,14 +401,25 @@ namespace Angle.Controllers
                     Comment = model.Comment,
                     Date = DateTime.Now,
                     ProductID = model.ProductID,
-                    HistoryID = model.HistoryID
+                    HistoryID = model.HistoryID,
+                    FileID = model.UploadID
                 };
+
+
+
                 product.ProductHistories.Add(productHistory);
                 _unityOfWork.Product.Update(product);
                 _unityOfWork.Save();
                 productHistory.User = null;
                 productHistory.UserID = null;
                 LoggingController.writeLog(productHistory, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
+
+
+
+
+
+
+
 
 
                 return Json(productHistory);
@@ -345,7 +432,7 @@ namespace Angle.Controllers
 
 
 
-
+       
 
 
 
@@ -480,12 +567,16 @@ namespace Angle.Controllers
             histories.Sort((x, y) => DateTime.Compare(y.History.Date, x.History.Date));
             ViewBag.histories = histories;
             ViewBag.HistoryType = _unityOfWork.History.GetAll();
-
+            
             var QRCode = _unityOfWork.Index_QR.GetByProductId(id);
 
             List<Product> parents = new List<Product>();
             parents = _unityOfWork.Product.getParents(product, parents);
+
+            
           
+
+
             if (QRCode != null)
             {
                 var host = Request.Host;
@@ -495,6 +586,9 @@ namespace Angle.Controllers
             {
                 ViewBag.QrCode = new HtmlString("<a class='float-right text-center' href=" + Url.Action("Create", "Index_QR", new { productID = id, controllerName = "Product", actionName = "Wizard" }) + "> Generate QR Code" + "<img src='/images/addqr.png' height='150' width='150'></img>" + "</a>");
             }
+
+            ViewBag.Files = product.ProductHistories.Where(b => b.FileID != null).ToList();
+
             var products1 = _unityOfWork.Product.getChilds(id);
             return View(product);
         }
@@ -591,6 +685,72 @@ namespace Angle.Controllers
             ViewBag.histories = histories;
             return Json(histories);
         }
+
+
+        [HttpPost]
+
+        public async Task<IActionResult> Upload([FromForm]FileUploadViewModel upload)
+
+        {
+
+         
+
+            return RedirectToAction("Index");
+
+        }
+
+        [HttpGet]
+        public async Task<FileContentResult> GetMyFile(string filename, string mimetype)
+        {
+            var filepath = Path.Combine($"{this._env.WebRootPath}/uploads/{filename}");
+            try
+            {
+                
+            var path = filepath;
+            byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(filepath);
+           
+                return new FileContentResult(fileBytes, mimetype)
+                {
+                    FileDownloadName = filename
+                };
+            }
+            catch
+            {
+                return new FileContentResult(System.Text.Encoding.Unicode.GetBytes(filepath), "text/plain")  {
+                    FileDownloadName = filename
+                };
+            }
+
+            /*
+            byte[] fileBytes = null;
+
+            if (System.IO.File.Exists(filepath))
+            {
+                fileBytes = System.IO.File.ReadAllBytes(filepath);
+            }
+            else
+            {
+                return null;
+            }
+
+            return new FileContentResult(fileBytes, mimetype)
+            {
+                FileDownloadName = filename
+            };*/
+
+
+
+        }
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+
+
 
     }
 }

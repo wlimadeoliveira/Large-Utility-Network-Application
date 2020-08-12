@@ -25,6 +25,7 @@ namespace Angle.Interfaces
         IIndex_QR Index_QR { get; }
         IAction_QR Action_QR { get; }
         IController_QR Controller_QR { get; }
+        IUpload Upload { get; }
 
         void Save();   
     }

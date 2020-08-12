@@ -1,0 +1,11 @@
+GRANT ALL ON *.* TO root@192.168.1.8 IDENTIFIED BY 'test';
+FLUSH PRIVILEGES;
+
+ES git no e zweiti Variant woes Grant access zu aune IPs git ... mach lieber die...
+
+dotnet publish -f netcoreapp2.2 -c Release
+
+
+scp -r C:\Users\WORK\source\repos\LUNA\LUNA\Angle\bin\Release\LUNAAPP\publish sdr@minnow:/var/www/LUNAAPP/publish
+
+sdr/FP9&d28yx

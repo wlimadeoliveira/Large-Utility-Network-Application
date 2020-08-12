@@ -34,7 +34,9 @@ namespace Angle.Repositories
         public Product GetByIdDetailed(long id)
         {
             return _context.Product.Include(a => a.Customer).Include(b => b.Type).Include(c => c.Project).Include(d => d.Parent).Include
-                (e => e.ProductAttributes).Include("ProductAttributes.Attribute").Include("ProductHistories.History").Include(f => f.ProductHistories).Include(g => g.StockInformation)
+                (e => e.ProductAttributes).Include("ProductAttributes.Attribute").Include("ProductHistories.History").Include("ProductHistories.File")
+                .Include(f => f.ProductHistories)
+                .Include(g => g.StockInformation)
                 .FirstOrDefault(x => x.ID == id);
         }
 

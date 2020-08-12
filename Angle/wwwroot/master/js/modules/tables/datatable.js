@@ -79,7 +79,7 @@
             ]
         });
 
-        var table = $('#datatable4').DataTable({
+        var table1 = $('#datatable4').DataTable({
             'paging': true, // Table pagination
             "aaSorting": [],
             'ordering': true, // Column ordering

@@ -5,7 +5,7 @@
     ViewData["Title"] = "Product Detail";
     List<LUNA.Models.Product> childs = ViewBag.childs;
     List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
-    
+    List<LUNA.Models.Models.ProductHistory> HistoryFiles = ViewBag.Files;
     var myQR = ViewBag.QrCode; 
 }
 
@@ -83,12 +83,12 @@
                                             </dd>
                                         </dl>
                                     </div>
-                                    <div  class="col-4 float-right">
-                                        
-                                        
+                                    <div class="col-4 float-right">
+
+
                                         @myQR
-                                  
-                                     </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-xl-6">
         <div class="card mb-3 border-info">
             <a href="#addHistory" role="button" aria-expanded="false" data-toggle="collapse" class="float-right btn btn-info"><em class="fa-1x mr-2 fas fa-plus-circle"></em>ADD History</a>
@@ -152,7 +152,7 @@
                         <div class="text-sm"></div>
                     </div>
                     <div class="card-body">
-                        <form id="formproducthistory" asp-controller="Product" asp-action="AddHistory">
+                        <form id="formproducthistory" enctype="multipart/form-data" role="form" asp-controller="Product" asp-action="AddHistory">
                             <input type="hidden" id="useremail" name="Email" value="@User.Identity.Name" />
                             <input id="productID" type="hidden" name="ProductID" value="@Model.ID" />
                             <div class="form-group">
@@ -178,6 +178,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="File">
+                                    File
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input name="UploadFile" type="file" />
+                                    <span class="field-validation-error"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                     <button href="#addHistory" data-toggle="collapse" class="btn btn-primary">Cancel</button>
                                     <button id="buttonhistory" type="submit" class="btn btn-success">Submit</button>
@@ -194,7 +203,7 @@
                             <div class="text-sm"></div>
                         </div>
                         <div class="card-body">
-                            <form asp-action="CreateOnPost" asp-controller="History" id="formhistorytype" data-parsley-validate class="form-horizontal form-label-left"  >
+                            <form asp-action="CreateOnPost" asp-controller="History" id="formhistorytype" data-parsley-validate class="form-horizontal form-label-left">
                                 <div class="form-group">
                                     <label name="Description" class="control-label col-md-3 col-sm-3 col-xs-12">
                                         Description <span class="required">*</span>
@@ -231,19 +240,105 @@
                             </form>
                         </div>
                     </div>
-
                 </div>
+
+
+
+
+
                 <div id="historytable">
                     <partial name="_HistoryTable" for="@histories" />
                 </div>
 
+             
+                <div class="card card-default">
+                    <div class="card-header">
+                        <div class="card-title">Files <input class="form-control float-right" type="text" id="searchfiles" placeholder="Search..." /></div> 
+                    </div><!-- START list group-->
+
+                    <div class="list-group" id="fileslist">
+                        @foreach (var historyfile in HistoryFiles)
+                        {
+                            string fName = @System.IO.Path.GetFileNameWithoutExtension(@System.IO.Path.GetFileName(historyfile.File.RelativPath));
+                            string fExt = @System.IO.Path.GetExtension(@System.IO.Path.GetFileName(historyfile.File.RelativPath));
+                            string fNameOutHash = fName.Remove(fName.Length - 6);
+                            string fullNameOutHash = String.Concat(fNameOutHash, fExt);
+                            <!-- START list group item-->
+                            <div class="list-group-item">
+                                <div class="media">
+                                    <div class="align-self-start mr-2"><span class="badge badge-pill badge-@historyfile.History.BootStrapBadge">@historyfile.History.Description</span></div>
+                                    <div class="media-body text-truncate">
+                                        <p class="mb-1"><a  class="text-purple m-0" href="@Url.Action("GetMyFile", "Product", new { filename = @System.IO.Path.GetFileName(historyfile.File.RelativPath), mimetype = @historyfile.File.Format })"  >@fullNameOutHash</a></p>
+                                        <p class="m-0"><small>@historyfile.Comment</small></p>
+                                    </div>
+                                    <div class="ml-auto"><small class="text-muted ml-2"><b>@historyfile.User.FirstName @historyfile.User.LastName</b><br /><b>@historyfile.Date.ToString("dd/MM/yyyy")</b><br/>@historyfile.File.Format -   @historyfile.File.Size bytes</small></div>
+                                </div>
+                            </div><!-- END list group item-->
+                        }
+                    </div><!-- END list group-->
+                    <!-- START card footer-->
+                    <!-- <div class="card-footer"><a class="text-sm" href="#">Load more</a></div><!-- END card-footer-->
+                </div>
+
+
             </div>
         </div>
     </div>
+
+    <div class="col-xl-6">
+        <div class="card mb-3 border-info">
+            <!--   <a href="#addHistory" role="button" aria-expanded="false" data-toggle="collapse" class="float-right btn btn-info"><em class="fa-1x mr-2 fas fa-plus-circle"></em>ADD History</a>
+            <div class="card-body">
+                <div id="addHistory" class="card collapse">
+                    <div class="card-header">
+                        <div class="card-title" id="productDescription">Add an History to: @Model.SerialNumber  @Model.Type.Description</div>
+                        <div class="text-sm"></div>
+                    </div>
+                     <div class="card-body">
+                    <div class="row">
+
+                          <div class="col-md-9">
+
+        <form method="post" enctype="multipart/form-data" role="form" asp-action="Upload" asp-controller="Product">
+            <div>
+                <input name="File" type="file" />
+                <input name="Description" type="text" placeholder="file description" />
+                <input type="text" name="ProductID" hidden value="@Model.ID" />
+                <input type="hidden" name="Email" value="@User.Identity.Name" />
+                <input type="submit" value="upload" />
+            </div>
+        </form>
+
+    </div>
+
+                </div>
+                    </div> -->
+        </div>
+                
+
+
+
+
+
+              
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     @section styles{
         <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
         <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
         <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+        <link rel="stylesheet" href="~/vendor/dropzone-5.7.0/dist/dropzone.css" />
+       
     }
 
     @section scripts{
@@ -352,33 +447,72 @@
 
         </script>
         <script>
-                    $('#submithistorytype').click(function (evt) {
-            evt.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: '/History/CreateOnPost',
-                data: $('#formhistorytype').serialize(),
-                dataType: "json",
-                cache: false,
-                success: function (data) {
-                    console.log(data);
-                    let dropdown = $('#historytypes');
-                    dropdown.empty();
-                    dropdown.prop('selectedIndex', 0);
-                    $.each(data, function (key, entry) {
-                        dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-'+entry.bootStrapBadge+'-light').text(entry.description));
-  })
-                  /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
-                    $('#multiSelect').append(item);
-                    $("#multiSelect").trigger("chosen:updated");
-                    $('#attributesucces').html('Attribute was added successfully');*/
-                }
+            $('#submithistorytype').click(function (evt) {
+                evt.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: '/History/CreateOnPost',
+                    data: $('#formhistorytype').serialize(),
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        let dropdown = $('#historytypes');
+                        dropdown.empty();
+                        dropdown.prop('selectedIndex', 0);
+                        $.each(data, function (key, entry) {
+                            dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-' + entry.bootStrapBadge + '-light').text(entry.description));
+                        })
+                        /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
+                          $('#multiSelect').append(item);
+                          $("#multiSelect").trigger("chosen:updated");
+                          $('#attributesucces').html('Attribute was added successfully');*/
+                    }
+                });
             });
-        });
 
 
         </script>
+       
+        <script src="~/vendor/dropzone-5.7.0/dist/dropzone.js"></script>
+        <script>
+                 $(document).ready(function () {
 
+                Dropzone.options.uploader = {
 
+                    paramName: "files",
 
+                    maxFilesize: 100,
+
+                    accept: function (file, done) {
+
+                        if (file.name == "test.jpg") {
+
+                            alert("Can't upload a test file.");
+
+                        }
+
+                        else {
+
+                            //Show a confirm alert and display the image on the page.
+
+                        }
+
+                    }
+
+                };
+
+            });
+
+        </script>
+        <script>
+            $(document).ready(function () {
+                $("#searchfiles").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#fileslist .list-group-item").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
     }

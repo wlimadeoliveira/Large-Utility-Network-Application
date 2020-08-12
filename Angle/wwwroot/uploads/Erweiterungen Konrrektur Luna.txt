@@ -1,0 +1,8 @@
+Inkrementierung Serial Nummer Automatisch beim Klonen
+Status sold, sold stock, stock, rma
+ -Status mit History einträge verknüpfen
+
+
+Backup konzept erstellen
+	-tägliche Backup von DB
+	-Autostart oder wiederstellung der Webapplikation

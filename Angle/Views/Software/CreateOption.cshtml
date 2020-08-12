@@ -1,0 +1,141 @@
+﻿@model Angle.Models.Models.SoftwareOption
+@{
+    ViewData["Title"] = "Attribute";
+}
+
+<div class="content-heading">
+    <div>Software<small>Options</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Your Software Option Information</div>
+            <div class="card-body">
+                <form asp-action="CreateOption" asp-controller="Software" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                            Description <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input asp-for="Description" id="message" required="required" class="form-control">
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                            Inputfield Datatype <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="DataType" id="selectdatatype" required="required" class="form-control">
+                                <option value="text">String</option>
+                                <option value="number">Number</option>
+                                <option value="multiplevalues">Multiple Values</option>
+                                <option value="numericalrange">Numerical Range</option>
+                                <option value="checkbox">Boolean</option>
+                            </select>
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                            <br />
+                            <label id="labeldatatypevalue" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                            <input asp-for="DataTypeValue" id="datatypevalue" type="text" class="form-control" style="display:none" name="datatypevalue" />
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <input type="button" onclick="history.go(-1)" value="Cancel" class="btn btn-primary" />
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+       /* function setDataTypeValue(value) {          
+           if (String(value) === 'multiplevalues') {
+                $("#datatypevalue").show();
+                $("#labeldatatypevalue").text() = "value1;value2;value3;value4";
+            } else if (String(value) === 'numericalrange') {
+                $("#labeldatatypevalue").text() = "Min;Max (numerical)";
+                $("#datatypevalue").show();
+            } else {
+                $("#labeldatatypevalue").hide();
+                $("#datatypevalue").hide();
+                $("#datatypevalue").value() = null;
+            }
+        }*/
+
+        
+
+
+        $("#selectdatatype").change(function () {
+            var value = $("#selectdatatype").val();
+
+               if (value == "multiplevalues") {
+
+                   $("#datatypevalue").show();
+                   $("#datatypevalue").attr("placeholder", "value1;value2;value3;value4 ...");
+              $("#labeldatatypevalue").text("Values");
+               } else if (value == "numericalrange") {
+                   $("#datatypevalue").attr("placeholder", "Min;Max (numerical)");
+                $("#labeldatatypevalue").text("Range") ;
+                $("#datatypevalue").show();
+            } else {
+                $("#labeldatatypevalue").hide();
+                $("#datatypevalue").hide();
+                $("#datatypevalue").val(null);
+            }
+
+            $("#datatypevalue").keyup(function(){
+  //$("input").css("background-color", "pink");
+                var choice = $("#selectdatatype").val();
+                var fieldtext = $("#datatypevalue").val();
+                
+                if (choice == "multiplevalues") {
+                    var expression = new RegExp("(\d+)(;\s*\d+)*")
+                    var result = expression.test(fieldtext);
+                    if (result) {
+                        
+                    }
+                } else if (choice == "numericalrange") {
+                    var result = fieldtext.match()
+                    alert(result);
+                } else {
+
+                }
+});
+
+
+            /*  if (value == "multiplevalues") {
+                $("#datatypevalue").show();
+                $("#labeldatatypevalue").text() = "value1;value2;value3;value4";
+            } else if (value == "numericalrange") {
+                $("#labeldatatypevalue").text() = "Min;Max (numerical)";
+                $("#datatypevalue").show();
+            } else {
+                $("#labeldatatypevalue").hide();
+                $("#datatypevalue").hide();
+                $("#datatypevalue").val() = null;
+            }*/
+
+
+});
+
+
+
+
+    </script>
+    }

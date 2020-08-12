@@ -1,0 +1,10 @@
+            builder.Entity<ProductFile>()
+.HasKey(pf => new { pf.ProductID, pf.FileID });
+            builder.Entity<ProductFile>()
+              .HasOne(pf => pf.Product)
+              .WithMany(p => p.ProductFiles)
+              .HasForeignKey(a => a.ProductID);
+            builder.Entity<ProductFile>()
+                .HasOne(pf => pf.File)
+                .WithMany(p => p.ProductFiles)
+                .HasForeignKey(p => p.FileID);

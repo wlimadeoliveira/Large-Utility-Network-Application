@@ -26,13 +26,21 @@
                     <td class="badge-@try {@productHistory.History.History.BootStrapBadge} catch { }">
                         <b>
                             @try
-                            {@productHistory.History.History.Description}
-                        catch { }
+                            {
+                                <text>@productHistory.History.History.Description</text>;
+                                if(productHistory.History.FileID != null) { <text> <b>    </b></text>;
+                            }   }
+                            catch { }
                         </b>
                     </td>
                     <td>
                         @try
-                        {@productHistory.History.Comment}
+                        {
+                            <text>@productHistory.History.Comment</text>;
+                            if (productHistory.History.FileID != null)
+                            { <text> <br /><small><a class="text-purple m-0" href="@Url.Action("GetMyFile", "Product", new { filename = @System.IO.Path.GetFileName(@productHistory.History.File.RelativPath), mimetype = @productHistory.History.File.Format })">@System.IO.Path.GetFileName(@productHistory.History.File.RelativPath)   <em class="fas fa-download"></em></a></small></text>;
+                        }
+                    }
                     catch { }
                     </td>
 

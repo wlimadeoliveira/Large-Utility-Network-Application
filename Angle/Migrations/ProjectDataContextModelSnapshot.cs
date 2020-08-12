@@ -14,7 +14,7 @@ namespace Angle.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Angle.Models.Models.Ivy.Article", b =>
@@ -149,6 +149,95 @@ namespace Angle.Migrations
                     b.ToTable("Supplier");
                 });
 
+            modelBuilder.Entity("Angle.Models.Models.ProductSoftwareOptions", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SoftwareOptionID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SoftwareTypeID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("SoftwareOptionID");
+
+                    b.HasIndex("SoftwareTypeID");
+
+                    b.ToTable("ProductSoftwareOptions");
+                });
+
+            modelBuilder.Entity("Angle.Models.Models.SoftwareOption", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("DataType")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("DataTypeValue")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SoftwareOptions");
+                });
+
+            modelBuilder.Entity("Angle.Models.Models.SoftwareType", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SoftwareTypes");
+                });
+
+            modelBuilder.Entity("Angle.Models.Models.SoftwareTypeOptions", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SoftwareOptionID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SoftwareTypeID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("SoftwareOptionID");
+
+                    b.HasIndex("SoftwareTypeID");
+
+                    b.ToTable("SoftwareTypeOptions");
+                });
+
             modelBuilder.Entity("Angle.Models.Models.TypeChild", b =>
                 {
                     b.Property<long>("TypeID")
@@ -165,6 +254,26 @@ namespace Angle.Migrations
                     b.HasIndex("ChildID");
 
                     b.ToTable("TypeChild");
+                });
+
+            modelBuilder.Entity("Angle.Models.Models.Upload", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Format")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("RelativPath")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Upload");
                 });
 
             modelBuilder.Entity("Angle.Models.ViewModels.AccountViewModel.ApplicationUser", b =>
@@ -391,7 +500,12 @@ namespace Angle.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<long?>("SoftwareTypeID")
+                        .HasColumnType("bigint");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("SoftwareTypeID");
 
                     b.ToTable("PType");
                 });
@@ -465,7 +579,12 @@ namespace Angle.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<long?>("FileID")
+                        .HasColumnType("bigint");
+
                     b.HasKey("ProductID", "HistoryID", "UserID", "Date");
+
+                    b.HasIndex("FileID");
 
                     b.HasIndex("HistoryID");
 
@@ -770,6 +889,46 @@ namespace Angle.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Angle.Models.Models.ProductSoftwareOptions", b =>
+                {
+                    b.HasOne("LUNA.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Angle.Models.Models.SoftwareOption", "SoftwareOption")
+                        .WithMany()
+                        .HasForeignKey("SoftwareOptionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Angle.Models.Models.SoftwareType", "SoftwareType")
+                        .WithMany("ProductSoftwareOptions")
+                        .HasForeignKey("SoftwareTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Angle.Models.Models.SoftwareTypeOptions", b =>
+                {
+                    b.HasOne("LUNA.Models.Product", null)
+                        .WithMany("SoftwareTypeOptions")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("Angle.Models.Models.SoftwareOption", "SoftwareOption")
+                        .WithMany("SoftwareTypeOptions")
+                        .HasForeignKey("SoftwareOptionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Angle.Models.Models.SoftwareType", "SoftwareType")
+                        .WithMany("SoftwareTypeOptions")
+                        .HasForeignKey("SoftwareTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Angle.Models.Models.TypeChild", b =>
                 {
                     b.HasOne("LUNA.Models.Models.PType", "Child")
@@ -806,10 +965,15 @@ namespace Angle.Migrations
                         .IsRequired();
 
                     b.HasOne("Angle.Models.ViewModels.AccountViewModel.ApplicationUser", "User")
-                        .WithMany("Index_QRs")
-                        .HasForeignKey("UserID")
-                        .HasConstraintName("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("LUNA.Models.Models.PType", b =>
+                {
+                    b.HasOne("Angle.Models.Models.SoftwareType", "SoftwareType")
+                        .WithMany()
+                        .HasForeignKey("SoftwareTypeID");
                 });
 
             modelBuilder.Entity("LUNA.Models.Models.Person", b =>
@@ -836,6 +1000,10 @@ namespace Angle.Migrations
 
             modelBuilder.Entity("LUNA.Models.Models.ProductHistory", b =>
                 {
+                    b.HasOne("Angle.Models.Models.Upload", "File")
+                        .WithMany()
+                        .HasForeignKey("FileID");
+
                     b.HasOne("LUNA.Models.History", "History")
                         .WithMany("ProductHistories")
                         .HasForeignKey("HistoryID")

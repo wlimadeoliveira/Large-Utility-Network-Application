@@ -2,6 +2,7 @@
 using Angle.Models.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,13 +17,16 @@ namespace LUNA.Models.Models
         //public long? ParentID { get; set; }
 
        // PType Parent { get; set; }
-
+       public long? SoftwareTypeID { get; set; }
+       [ForeignKey("SoftwareTypeID")]
+        public SoftwareType SoftwareType { get; set; }
 
         public List<ProductType> ProductTypes { get; set; } = new List<ProductType>();
         public List<TypeFeature> TypeFeatures { get; set; } = new List<TypeFeature>();
         public List<TypeAttribute> TypeAttributes { get; set; } = new List<TypeAttribute>();
       // public List<TypeChild> Parents { get; set; } = new List<TypeChild>();
         public List<TypeChild> Childs { get; set; } = new List<TypeChild>();
+        
 
 
 
