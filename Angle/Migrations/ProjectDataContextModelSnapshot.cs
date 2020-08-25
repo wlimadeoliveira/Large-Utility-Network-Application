@@ -207,6 +207,9 @@ namespace Angle.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.HasKey("ID");
 
                     b.ToTable("SoftwareTypes");
@@ -218,18 +221,16 @@ namespace Angle.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ProductID")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("SoftwareOptionID")
                         .HasColumnType("bigint");
 
                     b.Property<long>("SoftwareTypeID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ID");
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasIndex("ProductID");
+                    b.HasKey("ID");
 
                     b.HasIndex("SoftwareOptionID");
 
@@ -500,12 +501,7 @@ namespace Angle.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<long?>("SoftwareTypeID")
-                        .HasColumnType("bigint");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("SoftwareTypeID");
 
                     b.ToTable("PType");
                 });
@@ -892,7 +888,7 @@ namespace Angle.Migrations
             modelBuilder.Entity("Angle.Models.Models.ProductSoftwareOptions", b =>
                 {
                     b.HasOne("LUNA.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductSoftwareOptions")
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -912,10 +908,6 @@ namespace Angle.Migrations
 
             modelBuilder.Entity("Angle.Models.Models.SoftwareTypeOptions", b =>
                 {
-                    b.HasOne("LUNA.Models.Product", null)
-                        .WithMany("SoftwareTypeOptions")
-                        .HasForeignKey("ProductID");
-
                     b.HasOne("Angle.Models.Models.SoftwareOption", "SoftwareOption")
                         .WithMany("SoftwareTypeOptions")
                         .HasForeignKey("SoftwareOptionID")
@@ -967,13 +959,6 @@ namespace Angle.Migrations
                     b.HasOne("Angle.Models.ViewModels.AccountViewModel.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserID");
-                });
-
-            modelBuilder.Entity("LUNA.Models.Models.PType", b =>
-                {
-                    b.HasOne("Angle.Models.Models.SoftwareType", "SoftwareType")
-                        .WithMany()
-                        .HasForeignKey("SoftwareTypeID");
                 });
 
             modelBuilder.Entity("LUNA.Models.Models.Person", b =>

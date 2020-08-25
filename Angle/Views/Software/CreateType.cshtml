@@ -1,0 +1,224 @@
+﻿@model Angle.Models.ViewModels.SoftwareTypeViewModel
+
+@{
+    ViewData["Title"] = "Add a Type";
+    List<Angle.Models.Models.SoftwareOption> softwareOptions = ViewBag.ListOfOption;
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script src="~/master/js/custom/ajaxrequests.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+        $('#submitattribute').click(function (evt) {
+            evt.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Attribute/CreateQuick',
+                data: $('#attributeform').serialize(),
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    var item = '<option value ="' + data.id + '">' + data.name + '</option>';
+                    $('#multiSelect').append(item);
+                    $("#multiSelect").trigger("chosen:updated");
+                    $('#attributesucces').html('Attribute was added successfully');
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
+    <script src="~/vendor/jquery/dist/jquery.validate.js"></script>
+    <script src="~/vendor/jquery/dist/jquery.validate.unobtrusive.js"></script>
+    <option value="text">String</option>
+    <option value="number">Number</option>
+    <option value="multiplevalues">Multiple Values</option>
+    <option value="numericalrange">Numerical Range</option>
+    <option value="checkbox">Boolean</option>
+    <script>
+      
+
+
+
+       function createOptionInput(type, values, description,id) {
+           var htmlInput = "";
+           var myvalues;
+            if (values != null) {
+                 myvalues = values.split(';');
+            }
+           if (type == "text" || type == "number") {
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input class='form-control' name='Values' type='" + type + "'></input></div></div>";
+           } else if (type == "multiplevalues") {
+               var select = document.createElement("select");
+               select.setAttribute('class', 'form-control')
+               select.setAttribute('name', 'Values')
+               if (myvalues != null) {
+                   for (var i = 0; i < myvalues.length; i++) {
+                       var opt = myvalues[i];
+                       var el = document.createElement("option");
+                       el.textContent = opt;
+                       el.value = opt;
+                       select.appendChild(el);
+                   }
+               }
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label>" + select.outerHTML + "</div></div>";
+           } else if (type == "numericalrange") {
+
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input class='form-control' name='Values' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
+           } else if (type == "checkbox") {
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='checkbox' data-val='true' data-val-required='The IsChecked field is required.' id='IsChecked' name='Values' value='true'><input name='Values' type='hidden' value='false'></input></div></div>";
+           }
+           console.log(htmlInput);
+           
+           $('#listattributes').append(htmlInput);
+        }
+
+          $(document).on('change', '#multiSelectOptions', function (evt, params) {
+            if (params.selected != undefined) {
+                var json = @Html.Raw(Json.Serialize(@softwareOptions));
+                console.log(params.selected);
+                var result = json.find(x => x.id == params.selected);
+                createOptionInput(result.dataType, result.dataTypeValue, result.description, result.id);
+                $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.id + "' value='" + result.id + "'></input>")
+                
+                console.log(json);
+                console.log(result);
+            }
+            if (params.deselected != undefined) {
+                console.log('deselected: ' + params.deselected);
+                var json = @Html.Raw(Json.Serialize(@softwareOptions));
+                console.log(params.selected);
+                var result = json.find(x => x.id == params.selected);
+                var childID = "#vID" + params.deselected;
+                var formID = "#fType" + params.deselected;
+                $(childID).remove();
+                $(formID).remove();
+
+
+            }
+        });
+
+
+
+        
+
+
+    </script>
+
+
+
+}
+
+
+
+<div class="content-heading">
+    <div>Software<small>Add a Type</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card mb-3 border-info">
+            <div class="card-header text-white bg-info">Your Software Type Information</div>
+            <div class="card-body">
+                <form asp-action="CreateType" asp-controller="Software" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="form-group" id="cloneform">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="Name" id="message" required="required" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="cloneform">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Description">
+                            Description <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea asp-for="Description" id="message" required="required" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group mb-4">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Option <a href="#addattribute" data-toggle="collapse"> <em class="icon-plus"></em> </a></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="multiSelectOptions" asp-items="@(new SelectList(@ViewBag.ListOfOption,"ID","Description"))" multiple class="chosen-select form-control">
+                            </select>
+                            <span class="field-validation-error"></span>
+                        </div>
+
+
+
+                    </div>
+
+                    <div id="hiddenAttributeID">
+                    </div>
+
+
+                    <div id="listattributes"></div>
+
+
+
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <input type="button" onclick="history.go(-1)" value="Cancel" class="btn btn-primary" />
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="addattribute" class="card collapse">
+            <div class="card-header">New attribute</div>
+            <div class="card-body">
+                <form id="attributeform" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                            Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input id="message" required="required" class="form-control">
+                            <span class="field-validation-error"></span>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <a href="#addattribute" class="btn btn-light">Cancel</a>
+                            <button id="submitattribute" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <span id="attributesucces" class="text-success"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

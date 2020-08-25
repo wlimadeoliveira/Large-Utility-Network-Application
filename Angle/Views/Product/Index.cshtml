@@ -9,14 +9,6 @@
 
 
 
-<div class="content-heading">
-   <div class="row"></div>
-    <div class="col">
-        Products<small></small> 
-    </div>
-    <div class="col"><a class="float-right" href="@Url.Action("Create", "Product")"><button type="button" class="btn btn-oval btn-info"> <span class="fa-1x mr-2 fas fa-plus-circle"></span>NEW</button></a>
-</div>
-    </div>
 <div class="container-fluid">
     <!--  History ADD card-->
     <div class="row">
@@ -66,7 +58,7 @@
         <div class="col collapse" id="addHistorytype">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title" id="productDescription">Create a new History Type</div>
+                    <div class="card-title" id="productDescription">Create a new History Type </div>
                     <div class="text-sm"></div>
                 </div>
                 <div class="card-body">
@@ -111,9 +103,9 @@
         </div>
     </div>
     <!--  Productlist card-->
-    <div class="card">
-        <div class="card-header">
-            <div class="card-title">List of all Products <small></small></div>
+    <div class="card mb-3 border-info">
+        <div class="card-header text-white bg-info">
+            <div class="card-title"><b>List of all Products</b> <small> <a class="float-right" href="@Url.Action("Create", "Product")"><button type="button" class="btn btn-oval btn-green"> <span class="fa-1x mr-2 fas fa-plus-circle"></span>NEW</button></a></small></div>
             <div class="text-sm"></div>
         </div>
         <div class="card-body">
@@ -183,7 +175,7 @@
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 </div>
 

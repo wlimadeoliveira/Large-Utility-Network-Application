@@ -33,6 +33,6 @@ namespace LUNA.Models
         public List<ProductHistory> ProductHistories { get; set; } = new List<ProductHistory>();
         public List<ProductType> ProductTypes { get; set; } = new List<ProductType>();
         public List<Index_QR> Index_QRs { get; set; } = new List<Index_QR>();
-        public List<SoftwareTypeOptions> SoftwareTypeOptions { get; set; }
+        public List<ProductSoftwareOptions> ProductSoftwareOptions { get; set; } = new List<ProductSoftwareOptions>();
     }
 }

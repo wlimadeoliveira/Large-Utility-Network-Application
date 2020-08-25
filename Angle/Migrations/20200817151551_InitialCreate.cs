@@ -189,6 +189,35 @@ namespace Angle.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SoftwareOptions",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    DataType = table.Column<string>(nullable: true),
+                    DataTypeValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoftwareOptions", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SoftwareTypes",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoftwareTypes", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StockInformation",
                 columns: table => new
                 {
@@ -488,6 +517,33 @@ namespace Angle.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SoftwareTypeOptions",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SoftwareTypeID = table.Column<long>(nullable: false),
+                    SoftwareOptionID = table.Column<long>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoftwareTypeOptions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_SoftwareTypeOptions_SoftwareOptions_SoftwareOptionID",
+                        column: x => x.SoftwareOptionID,
+                        principalTable: "SoftwareOptions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SoftwareTypeOptions_SoftwareTypes_SoftwareTypeID",
+                        column: x => x.SoftwareTypeID,
+                        principalTable: "SoftwareTypes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
@@ -693,6 +749,40 @@ namespace Angle.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductSoftwareOptions",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Value = table.Column<string>(nullable: true),
+                    ProductID = table.Column<long>(nullable: false),
+                    SoftwareTypeID = table.Column<long>(nullable: false),
+                    SoftwareOptionID = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSoftwareOptions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProductSoftwareOptions_Product_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Product",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSoftwareOptions_SoftwareOptions_SoftwareOptionID",
+                        column: x => x.SoftwareOptionID,
+                        principalTable: "SoftwareOptions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSoftwareOptions_SoftwareTypes_SoftwareTypeID",
+                        column: x => x.SoftwareTypeID,
+                        principalTable: "SoftwareTypes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductType",
                 columns: table => new
                 {
@@ -830,6 +920,21 @@ namespace Angle.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductSoftwareOptions_ProductID",
+                table: "ProductSoftwareOptions",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSoftwareOptions_SoftwareOptionID",
+                table: "ProductSoftwareOptions",
+                column: "SoftwareOptionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSoftwareOptions_SoftwareTypeID",
+                table: "ProductSoftwareOptions",
+                column: "SoftwareTypeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductType_DeviceTypeID",
                 table: "ProductType",
                 column: "DeviceTypeID");
@@ -848,6 +953,16 @@ namespace Angle.Migrations
                 name: "IX_Projects_CustomerID",
                 table: "Projects",
                 column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoftwareTypeOptions_SoftwareOptionID",
+                table: "SoftwareTypeOptions",
+                column: "SoftwareOptionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoftwareTypeOptions_SoftwareTypeID",
+                table: "SoftwareTypeOptions",
+                column: "SoftwareTypeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TypeAttribute_AttributeID",
@@ -898,6 +1013,9 @@ namespace Angle.Migrations
                 name: "ProductHistory");
 
             migrationBuilder.DropTable(
+                name: "ProductSoftwareOptions");
+
+            migrationBuilder.DropTable(
                 name: "ProductType");
 
             migrationBuilder.DropTable(
@@ -905,6 +1023,9 @@ namespace Angle.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectPerson");
+
+            migrationBuilder.DropTable(
+                name: "SoftwareTypeOptions");
 
             migrationBuilder.DropTable(
                 name: "Supplier");
@@ -944,6 +1065,12 @@ namespace Angle.Migrations
 
             migrationBuilder.DropTable(
                 name: "Persons");
+
+            migrationBuilder.DropTable(
+                name: "SoftwareOptions");
+
+            migrationBuilder.DropTable(
+                name: "SoftwareTypes");
 
             migrationBuilder.DropTable(
                 name: "Attribute");

@@ -37,7 +37,10 @@ namespace LUNA.Models.Models
         public DbSet<Upload> Upload { get; set; }
         public DbSet<SoftwareType> SoftwareTypes { get; set; }
         public DbSet<SoftwareOption> SoftwareOptions { get; set; }
-        
+        public DbSet<SoftwareTypeOptions> SoftwareTypeOptions { get; set; }
+        public DbSet<ProductSoftwareOptions> ProductSoftwareOptions { get; set; }
+
+
 
         public ProjectDataContext(DbContextOptions<ProjectDataContext> options) : base(options)
         {

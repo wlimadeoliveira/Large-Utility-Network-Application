@@ -91,7 +91,8 @@ namespace Angle.Controllers
             var listAvaible = Newtonsoft.Json.JsonConvert.SerializeObject(listOfAvailbeChildProducts, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             ViewBag.ListOfChilds = listType;
             ViewBag.ListOfAvaible = listAvaible;
-
+            ViewBag.ListOfSoftware = _db.SoftwareTypes.ToList();
+            ViewBag.ListOfSoftwareOption = _db.SoftwareTypeOptions.Include(x=>x.SoftwareOption).ToList();
             return View();
         }
 
@@ -134,6 +135,22 @@ namespace Angle.Controllers
             myProduct.ProductHistories.Add(history);
             _unityOfWork.Product.Insert(myProduct);
             _unityOfWork.Save();
+            int counterOptionsValues = 0;
+
+            foreach(var optionID in product.SelectedSoftwareOptions)
+            {
+                ProductSoftwareOptions productSoftwareOption = new ProductSoftwareOptions()
+                {
+                    ProductID = myProduct.ID,
+                    SoftwareOptionID = Convert.ToInt32(optionID),
+                    SoftwareTypeID = product.SoftwareID ?? 0,
+                    Value = product.ValueSelectedOptions[counterOptionsValues]
+                };
+                counterOptionsValues++;
+                _db.Add(productSoftwareOption);
+                _db.SaveChanges();
+
+            }
 
             try
             {
@@ -572,10 +589,13 @@ namespace Angle.Controllers
 
             List<Product> parents = new List<Product>();
             parents = _unityOfWork.Product.getParents(product, parents);
+            List<ProductSoftwareOptions> softwareOptions = _db.ProductSoftwareOptions.Where(x => x.ProductID == id).Include(b => b.SoftwareOption).Include(c => c.SoftwareType).ToList();
 
-            
-          
-
+            ViewBag.ListOfSoftwareOptions = softwareOptions;
+            if(softwareOptions.Count != 0)
+            {
+                ViewBag.SoftwareType = softwareOptions[0].SoftwareType.Name;
+            }
 
             if (QRCode != null)
             {

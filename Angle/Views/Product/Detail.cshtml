@@ -1,12 +1,39 @@
 ﻿@model LUNA.Models.Product
 @using Angle.Helpers
+@using Newtonsoft.Json;
 
 @{
     ViewData["Title"] = "Product Detail";
     List<LUNA.Models.Product> childs = ViewBag.childs;
     List<Angle.Models.ViewModels.ProductHistoryViewModels.ProductHistoryViewModelDetail> histories = ViewBag.histories;
     List<LUNA.Models.Models.ProductHistory> HistoryFiles = ViewBag.Files;
-    var myQR = ViewBag.QrCode; 
+    List<Angle.Models.Models.ProductSoftwareOptions> productSoftwareOptions = ViewBag.ListOfSoftwareOptions;
+
+    var myQR = ViewBag.QrCode;
+    string OptionType(string type, Angle.Models.Models.ProductSoftwareOptions option)
+    {
+        string htmlOutput = "";
+        if (type == "text" || type == "numerical")
+        {
+            return type;
+        }
+        else if (type == "multiplevalue")
+        {
+
+        }
+        else if (type == "checkbox")
+        {
+
+        }
+        else if (type == "numerical range")
+        {
+
+        }
+
+        return null;
+    }
+
+
 }
 
 
@@ -107,6 +134,27 @@
                                     }
                                 </dl>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card mb-3 border-info">
+                            <div class="card-header text-white bg-info">Software - @ViewBag.SoftwareType  </div>
+                            <div class="card-body">
+                                <dl class="row">
+
+                                    @foreach (var option in productSoftwareOptions)
+                                    {
+                                        <dt class="col-sm-3">@option.SoftwareOption.Description :</dt>
+                                        <dd class="col-sm-9">@option.Value</dd>
+                                    }
+
+
+                                    <dt class="col-sm-3">Key :</dt>
+                                    <dd class="col-sm-9">DIF3136154JODI51125MKD14MFKSDS</dd>
+                                </dl>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -250,10 +298,10 @@
                     <partial name="_HistoryTable" for="@histories" />
                 </div>
 
-             
+
                 <div class="card card-default">
                     <div class="card-header">
-                        <div class="card-title">Files <input class="form-control float-right" type="text" id="searchfiles" placeholder="Search..." /></div> 
+                        <div class="card-title">Files <input class="form-control float-right" type="text" id="searchfiles" placeholder="Search..." /></div>
                     </div><!-- START list group-->
 
                     <div class="list-group" id="fileslist">
@@ -268,10 +316,10 @@
                                 <div class="media">
                                     <div class="align-self-start mr-2"><span class="badge badge-pill badge-@historyfile.History.BootStrapBadge">@historyfile.History.Description</span></div>
                                     <div class="media-body text-truncate">
-                                        <p class="mb-1"><a  class="text-purple m-0" href="@Url.Action("GetMyFile", "Product", new { filename = @System.IO.Path.GetFileName(historyfile.File.RelativPath), mimetype = @historyfile.File.Format })"  >@fullNameOutHash</a></p>
+                                        <p class="mb-1"><a class="text-purple m-0" href="@Url.Action("GetMyFile", "Product", new { filename = @System.IO.Path.GetFileName(historyfile.File.RelativPath), mimetype = @historyfile.File.Format })">@fullNameOutHash</a></p>
                                         <p class="m-0"><small>@historyfile.Comment</small></p>
                                     </div>
-                                    <div class="ml-auto"><small class="text-muted ml-2"><b>@historyfile.User.FirstName @historyfile.User.LastName</b><br /><b>@historyfile.Date.ToString("dd/MM/yyyy")</b><br/>@historyfile.File.Format -   @historyfile.File.Size bytes</small></div>
+                                    <div class="ml-auto"><small class="text-muted ml-2"><b>@historyfile.User.FirstName @historyfile.User.LastName</b><br /><b>@historyfile.Date.ToString("dd/MM/yyyy")</b><br />@historyfile.File.Format -   @historyfile.File.Size bytes</small></div>
                                 </div>
                             </div><!-- END list group item-->
                         }
@@ -288,42 +336,42 @@
     <div class="col-xl-6">
         <div class="card mb-3 border-info">
             <!--   <a href="#addHistory" role="button" aria-expanded="false" data-toggle="collapse" class="float-right btn btn-info"><em class="fa-1x mr-2 fas fa-plus-circle"></em>ADD History</a>
-            <div class="card-body">
-                <div id="addHistory" class="card collapse">
-                    <div class="card-header">
-                        <div class="card-title" id="productDescription">Add an History to: @Model.SerialNumber  @Model.Type.Description</div>
-                        <div class="text-sm"></div>
+                    <div class="card-body">
+                        <div id="addHistory" class="card collapse">
+                            <div class="card-header">
+                                <div class="card-title" id="productDescription">Add an History to: @Model.SerialNumber  @Model.Type.Description</div>
+                                <div class="text-sm"></div>
+                            </div>
+                             <div class="card-body">
+                            <div class="row">
+
+                                  <div class="col-md-9">
+
+                <form method="post" enctype="multipart/form-data" role="form" asp-action="Upload" asp-controller="Product">
+                    <div>
+                        <input name="File" type="file" />
+                        <input name="Description" type="text" placeholder="file description" />
+                        <input type="text" name="ProductID" hidden value="@Model.ID" />
+                        <input type="hidden" name="Email" value="@User.Identity.Name" />
+                        <input type="submit" value="upload" />
                     </div>
-                     <div class="card-body">
-                    <div class="row">
+                </form>
 
-                          <div class="col-md-9">
-
-        <form method="post" enctype="multipart/form-data" role="form" asp-action="Upload" asp-controller="Product">
-            <div>
-                <input name="File" type="file" />
-                <input name="Description" type="text" placeholder="file description" />
-                <input type="text" name="ProductID" hidden value="@Model.ID" />
-                <input type="hidden" name="Email" value="@User.Identity.Name" />
-                <input type="submit" value="upload" />
             </div>
-        </form>
+
+                        </div>
+                            </div> -->
+        </div>
+
+
+
+
+
+
+
 
     </div>
-
-                </div>
-                    </div> -->
-        </div>
-                
-
-
-
-
-
-              
-
-            </div>
-        </div>
+</div>
     </div>
 
 
@@ -333,36 +381,36 @@
 
 
 
-    @section styles{
-        <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
-        <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
-        <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
-        <link rel="stylesheet" href="~/vendor/dropzone-5.7.0/dist/dropzone.css" />
-       
-    }
+@section styles{
+    <link rel="stylesheet" href="~/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+    <link rel="stylesheet" href="~/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+    <link rel="stylesheet" href="~/vendor/dropzone-5.7.0/dist/dropzone.css" />
 
-    @section scripts{
-        <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
-        <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
-        <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
-        <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
-        <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
-        <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
-        <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
-        <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
-        <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
-        <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
-        <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-        <script src="~/vendor/jszip/dist/jszip.js"></script>
-        <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
-        <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
-        <script>
-            function resizeMyQR(sizeinpx) {
-                document.getElementById("qrcodegenerated").width = sizeinpx;
-            }
-        </script>
+}
 
-        <script type="text/javascript">
+@section scripts{
+    <script src="~/vendor/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
+    <script src="~/vendor/datatables.net-buttons/js/buttons.print.js"></script>
+    <script src="~/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
+    <script src="~/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
+    <script src="~/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/vendor/jszip/dist/jszip.js"></script>
+    <script src="~/vendor/pdfmake/build/pdfmake.js"></script>
+    <script src="~/vendor/pdfmake/build/vfs_fonts.js"></script>
+    <script>
+        function resizeMyQR(sizeinpx) {
+            document.getElementById("qrcodegenerated").width = sizeinpx;
+        }
+    </script>
+
+    <script type="text/javascript">
                 var table1 = $('#datatable3').DataTable({
             'paging': true,
             'ordering': true,
@@ -445,67 +493,67 @@
 
                 });
 
-        </script>
-        <script>
-            $('#submithistorytype').click(function (evt) {
-                evt.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: '/History/CreateOnPost',
-                    data: $('#formhistorytype').serialize(),
-                    dataType: "json",
-                    cache: false,
-                    success: function (data) {
-                        console.log(data);
-                        let dropdown = $('#historytypes');
-                        dropdown.empty();
-                        dropdown.prop('selectedIndex', 0);
-                        $.each(data, function (key, entry) {
-                            dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-' + entry.bootStrapBadge + '-light').text(entry.description));
-                        })
-                        /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
-                          $('#multiSelect').append(item);
-                          $("#multiSelect").trigger("chosen:updated");
-                          $('#attributesucces').html('Attribute was added successfully');*/
-                    }
-                });
+    </script>
+    <script>
+        $('#submithistorytype').click(function (evt) {
+            evt.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/History/CreateOnPost',
+                data: $('#formhistorytype').serialize(),
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    let dropdown = $('#historytypes');
+                    dropdown.empty();
+                    dropdown.prop('selectedIndex', 0);
+                    $.each(data, function (key, entry) {
+                        dropdown.append($('<option></option>').attr('value', entry.id).attr('class', 'bg-' + entry.bootStrapBadge + '-light').text(entry.description));
+                    })
+                    /*  var item = '<option value ="' + data.id + '">' + data.name + '</option>';
+                      $('#multiSelect').append(item);
+                      $("#multiSelect").trigger("chosen:updated");
+                      $('#attributesucces').html('Attribute was added successfully');*/
+                }
             });
+        });
 
 
-        </script>
-       
-        <script src="~/vendor/dropzone-5.7.0/dist/dropzone.js"></script>
-        <script>
-                 $(document).ready(function () {
+    </script>
 
-                Dropzone.options.uploader = {
+    <script src="~/vendor/dropzone-5.7.0/dist/dropzone.js"></script>
+    <script>
+        $(document).ready(function () {
 
-                    paramName: "files",
+            Dropzone.options.uploader = {
 
-                    maxFilesize: 100,
+                paramName: "files",
 
-                    accept: function (file, done) {
+                maxFilesize: 100,
 
-                        if (file.name == "test.jpg") {
+                accept: function (file, done) {
 
-                            alert("Can't upload a test file.");
+                    if (file.name == "test.jpg") {
 
-                        }
-
-                        else {
-
-                            //Show a confirm alert and display the image on the page.
-
-                        }
+                        alert("Can't upload a test file.");
 
                     }
 
-                };
+                    else {
 
-            });
+                        //Show a confirm alert and display the image on the page.
 
-        </script>
-        <script>
+                    }
+
+                }
+
+            };
+
+        });
+
+    </script>
+    <script>
             $(document).ready(function () {
                 $("#searchfiles").on("keyup", function () {
                     var value = $(this).val().toLowerCase();
@@ -514,5 +562,13 @@
                     });
                 });
             });
-        </script>
-    }
+
+
+                var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@productSoftwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
+
+
+
+
+
+    </script>
+}

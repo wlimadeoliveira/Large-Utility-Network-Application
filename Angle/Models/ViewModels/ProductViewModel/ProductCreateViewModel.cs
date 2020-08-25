@@ -30,7 +30,10 @@ namespace Angle.Models.ViewModels.ProductViewModel
         public string Email { get; set; }
         public string[] TypeChild { get; set; }
         public string[] SelectedAttributes{ get; set; }
-        public string[] ValueSelectedAttributes { get; set; }      
+        public string[] ValueSelectedAttributes { get; set; }
+        public string[] SelectedSoftwareOptions { get; set; }
+        public string[] ValueSelectedOptions { get; set; }
+        public long? SoftwareID { get; set; }
         
     }
 }

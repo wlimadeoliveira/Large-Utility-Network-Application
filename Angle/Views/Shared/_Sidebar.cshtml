@@ -101,6 +101,19 @@
                             </ul>
                         </li>
 
+                        <!--Software-->
+                        <li class=" ">
+                            <a href="#software" title="Software" data-toggle="collapse"><em class="icon-star"></em><span>Software</span></a>
+                            <ul class="sidebar-nav sidebar-subnav collapse" id="software">
+                                <li class="sidebar-subnav-header">Contacts</li>
+                                <li class=" @Html.isActive(action: "Index", controller: "Software")"><a href="@Url.Action("Index", "Software")" title="List Projects"><em class="icon-list"></em><span>My Softwares</span></a></li>
+                                <li class=" @Html.isActive(action: "CreateType", controller: "Software")"><a href="@Url.Action("CreateType", "Software")" title="Create a Software Type"><em class="icon-plus text-green"></em><span>Add Software Type</span></a></li>
+                                <li class=" @Html.isActive(action: "CreateOption", controller: "Software")"><a href="@Url.Action("CreateOption", "Software")" title="Create a Software Type"><em class="icon-plus text-warning"></em><span>Add Software Option</span></a></li>
+                            </ul>
+                        </li>
+
+
+
                         <!--Customers-->
                         <li class=" ">
                             <a href="#customers" title="Customers" data-toggle="collapse"><em class="icon-badge"></em><span>Customers</span></a>

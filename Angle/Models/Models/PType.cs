@@ -16,10 +16,7 @@ namespace LUNA.Models.Models
         public string Description { get; set; }
         //public long? ParentID { get; set; }
 
-       // PType Parent { get; set; }
-       public long? SoftwareTypeID { get; set; }
-       [ForeignKey("SoftwareTypeID")]
-        public SoftwareType SoftwareType { get; set; }
+
 
         public List<ProductType> ProductTypes { get; set; } = new List<ProductType>();
         public List<TypeFeature> TypeFeatures { get; set; } = new List<TypeFeature>();

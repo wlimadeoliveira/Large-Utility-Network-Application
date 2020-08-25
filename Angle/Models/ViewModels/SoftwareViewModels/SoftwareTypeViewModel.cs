@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Angle.Models.Models
+namespace Angle.Models.ViewModels
 {
-    public class SoftwareType
+    public class SoftwareTypeViewModel
     {
         public long ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<SoftwareTypeOptions> SoftwareTypeOptions { get; set; }
-        public List<ProductSoftwareOptions> ProductSoftwareOptions { get; set; }
+        public string[] Values{ get; set; }
+        public string[] hiddenID { get; set; }
     }
 }
