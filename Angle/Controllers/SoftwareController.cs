@@ -11,7 +11,7 @@ using LUNA.Models;
 using LUNA.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Angle.Controllers
 {
@@ -20,7 +20,7 @@ namespace Angle.Controllers
     {
        
         private readonly IUnityOfWork _unityOfWork;
-
+        int nued;
    
         ProjectDataContext _db;
 
@@ -128,6 +128,48 @@ namespace Angle.Controllers
                 return Json(null);
             }
         
+        }
+
+
+        [HttpGet]
+
+        public IActionResult EditType(long id)
+        {
+            var model = _db.SoftwareTypes.Include(b=>b.SoftwareTypeOptions).FirstOrDefault(x => x.ID == id);
+
+
+            SoftwareTypeViewModel typeViewModel = new SoftwareTypeViewModel()
+            {
+                ID = model.ID,
+                Description = model.Description,
+                Name = model.Name,
+              
+            };
+            ViewBag.ListOfOption = _db.SoftwareOptions.ToList();
+            if (model.SoftwareTypeOptions != null)
+            {
+                typeViewModel.hiddenID = model.SoftwareTypeOptions.Select(b => b.SoftwareOptionID.ToString()).ToArray();
+                typeViewModel.Values = model.SoftwareTypeOptions.Select(c => c.Value).ToArray();
+
+            }
+
+
+
+            return View(typeViewModel);
+        }
+
+        [HttpPost]
+
+        public IActionResult EditType(SoftwareTypeViewModel vm)
+        {
+            SoftwareType model = new SoftwareType()
+            {
+                ID = vm.ID,
+                Name = vm.Name,
+                Description = vm.Description,
+                
+            };
+            return null;
         }
 
 

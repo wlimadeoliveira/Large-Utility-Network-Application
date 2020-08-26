@@ -1,8 +1,15 @@
 ﻿@model Angle.Models.ViewModels.SoftwareTypeViewModel
+@using Newtonsoft.Json.Serialization;
+@using Newtonsoft.Json;
 
 @{
     ViewData["Title"] = "Add a Type";
     List<Angle.Models.Models.SoftwareOption> softwareOptions = ViewBag.ListOfOption;
+
+
+    
+
+
 }
 
 @section styles{
@@ -39,28 +46,39 @@
     <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
     <script src="~/vendor/jquery/dist/jquery.validate.js"></script>
     <script src="~/vendor/jquery/dist/jquery.validate.unobtrusive.js"></script>
-    <option value="text">String</option>
-    <option value="number">Number</option>
-    <option value="multiplevalues">Multiple Values</option>
-    <option value="numericalrange">Numerical Range</option>
-    <option value="checkbox">Boolean</option>
+  
     <script>
-      
+
+        var optionsIDs = @Html.Raw(Json.Serialize(@Model.hiddenID));
+        var values = @Html.Raw(Json.Serialize(@Model.Values));
+                    var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
+
+        for (var i = 0; i < optionsIDs.length; i++) {
+            console.log(json);
+            var result = json.find(x => x.ID == optionsIDs[i]);
+            console.log(result);
+            createOptionInput(result.DataType, result.DataTypeValue, result.Description, result.ID, values[i]);
+            $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.id + "' value='" + result.id + "'></input>")
+
+        }
 
 
+        
+        $('#multiSelectOptions').val(optionsIDs);
+        $('#multiSelectOptions').trigger("liszt:updated");
 
-       function createOptionInput(type, values, description,id) {
+          function createOptionInput(type, values, description,id, value) {
            var htmlInput = "";
            var myvalues;
             if (values != null) {
                  myvalues = values.split(';');
             }
-           if (type == "text" || type == "number") {
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input class='form-control' name='Values' type='" + type + "'></input></div></div>";
+                 if (type == "text" || type == "number") {
+                     htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input value='" + value + "' class='form-control' name='ValueSelectedOptions' type='" + type + "'></input></div></div>";
            } else if (type == "multiplevalues") {
                var select = document.createElement("select");
                select.setAttribute('class', 'form-control')
-               select.setAttribute('name', 'Values')
+               select.setAttribute('name', 'ValueSelectedOptions')
                if (myvalues != null) {
                    for (var i = 0; i < myvalues.length; i++) {
                        var opt = myvalues[i];
@@ -69,33 +87,34 @@
                        el.value = opt;
                        select.appendChild(el);
                    }
-               }
+                     }
+                     select.value = value;
                htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label>" + select.outerHTML + "</div></div>";
            } else if (type == "numericalrange") {
 
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input class='form-control' name='Values' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input value='"+value+"' class='form-control' name='ValueSelectedOptions' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
            } else if (type == "checkbox") {
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='checkbox' data-val='true' data-val-required='The IsChecked field is required.' id='IsChecked' name='Values' value='true'><input name='Values' type='hidden' value='false'></input></div></div>";
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='checkbox' data-val='true' data-val-required='The IsChecked field is required.' id='IsChecked' name='ValueSelectedOptions' value='true'><input name='Values' type='hidden' value='false'></input></div></div>";
            }
            console.log(htmlInput);
            
-           $('#listattributes').append(htmlInput);
+           $('#listoptions').append(htmlInput);
         }
 
           $(document).on('change', '#multiSelectOptions', function (evt, params) {
             if (params.selected != undefined) {
-                var json = @Html.Raw(Json.Serialize(@softwareOptions));
+                var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
                 console.log(params.selected);
                 var result = json.find(x => x.id == params.selected);
                 createOptionInput(result.dataType, result.dataTypeValue, result.description, result.id);
                 $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.id + "' value='" + result.id + "'></input>")
-                
+
                 console.log(json);
                 console.log(result);
             }
             if (params.deselected != undefined) {
                 console.log('deselected: ' + params.deselected);
-                var json = @Html.Raw(Json.Serialize(@softwareOptions));
+                var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
                 console.log(params.selected);
                 var result = json.find(x => x.id == params.selected);
                 var childID = "#vID" + params.deselected;
@@ -108,8 +127,6 @@
         });
 
 
-
-        
 
 
     </script>
@@ -128,13 +145,15 @@
         <div class="card mb-3 border-info">
             <div class="card-header text-white bg-info">Your Software Type Information</div>
             <div class="card-body">
-                <form asp-action="CreateType" asp-controller="Software" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                <form asp-action="EditType" asp-controller="Software" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" value="@Model.ID" />
+
                     <div class="form-group" id="cloneform">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
                             Name <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" asp-for="Name" id="message" required="required" class="form-control" />
+                            <input type="text" asp-for="Name" value="@Model.Name" id="message" required="required" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
@@ -144,7 +163,7 @@
                             Description <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea asp-for="Description" id="message" required="required" class="form-control"></textarea>
+                            <textarea value="@Model.Description" asp-for="Description" id="message" required="required" class="form-control"></textarea>
                             <span asp-validation-for="Description" class="field-validation-error"></span>
                         </div>
                     </div>
@@ -168,7 +187,7 @@
                     </div>
 
 
-                    <div id="listattributes"></div>
+                    <div id="listoptions"></div>
 
 
 
