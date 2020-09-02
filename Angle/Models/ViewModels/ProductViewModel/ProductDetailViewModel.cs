@@ -1,4 +1,5 @@
-﻿using LUNA.Models;
+﻿using Angle.Models.Models;
+using LUNA.Models;
 using LUNA.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,13 @@ namespace Angle.Models.ViewModels.ProductViewModel
         public List<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
         public List<ProductHistory> ProductHistories { get; set; } = new List<ProductHistory>();
         public List<ProductType> ProductTypes { get; set; } = new List<ProductType>();
+        public List<ProductSoftwareOptions> ProductSoftwareOptions { get; set; } = new List<ProductSoftwareOptions>();
+        public SoftwareType SoftwareType { get; set; }
+
+
+
+      
+
 
 
     }

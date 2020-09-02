@@ -20,5 +20,12 @@ namespace Angle.Models.Models
         public SoftwareType SoftwareType { get; set; }
         [ForeignKey("SoftwareOptionID")]
         public SoftwareOption SoftwareOption { get; set; }
+
+
+
+        
+
+
+
     }
 }

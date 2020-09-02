@@ -39,7 +39,9 @@
     <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
     <script src="~/vendor/jquery/dist/jquery.validate.js"></script>
     <script src="~/vendor/jquery/dist/jquery.validate.unobtrusive.js"></script>
-   
+
+
+
     <script>
       
 
@@ -71,7 +73,8 @@
 
                htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input class='form-control' name='Values' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
            } else if (type == "checkbox") {
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='checkbox' data-val='true' data-val-required='The IsChecked field is required.' id='IsChecked' name='Values' value='true'><input name='Values' type='hidden' value='false'></input></div></div>";
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='hidden' name='Values' value='0'><input type='checkbox' onclick='this.previousSibling.value=1-this.previousSibling.value'></div></div>";
+
            }
            console.log(htmlInput);
            

@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Angle.Models.Models;
 using System.Net.Http;
+using PrecLicenseGenerator;
 
 namespace Angle.Controllers
 {
@@ -96,6 +97,8 @@ namespace Angle.Controllers
             return View();
         }
 
+
+        
         [HttpPost]
         public IActionResult Create(ProductCreateViewModel product)
         {
@@ -132,6 +135,9 @@ namespace Angle.Controllers
                 }
             }
 
+            
+           
+
             myProduct.ProductHistories.Add(history);
             _unityOfWork.Product.Insert(myProduct);
             _unityOfWork.Save();
@@ -147,11 +153,11 @@ namespace Angle.Controllers
                     Value = product.ValueSelectedOptions[counterOptionsValues]
                 };
                 counterOptionsValues++;
-                _db.Add(productSoftwareOption);
-                _db.SaveChanges();
+                _db.ProductSoftwareOptions.Add(productSoftwareOption);
+             
 
             }
-
+            _db.SaveChanges();
             try
             {
                 foreach (string productChild in product.TypeChild)
@@ -215,9 +221,14 @@ namespace Angle.Controllers
             }
             ViewBag.myChilds = selectedChilds;
 
+            ViewBag.ListOfSoftware = _db.SoftwareTypes.ToList();
+            ViewBag.ListOfSoftwareOption = _db.SoftwareTypeOptions.Include(x => x.SoftwareOption).ToList();
+
+           
             return View(myproduct);
         }
 
+        
         [HttpPost]
         public IActionResult Edit(ProductCreateViewModel product)
         {
@@ -610,6 +621,44 @@ namespace Angle.Controllers
             ViewBag.Files = product.ProductHistories.Where(b => b.FileID != null).ToList();
 
             var products1 = _unityOfWork.Product.getChilds(id);
+
+            if (softwareOptions!= null)
+            {
+                if (softwareOptions[0].SoftwareType.Name == "DAB" || softwareOptions[0].SoftwareType.Name == "FM")
+                {
+                    LicenseV2 license = new LicenseV2()
+                    {
+                        SerialNumber = product.SerialNumber,
+                        ExpirationDate = Convert.ToDateTime(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Expiration Date").Value),
+                        Customer = product.Customer,
+                        LicenseIsInfinite = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Lincense Is Infinite").Value)),
+                        NrBreakinChannels = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of BreakIn Channels").Value),
+                        NrEmsembles = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Emsembles").Value),
+                        NrEmsemblesBreakIn = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Emsembles").Value),
+                        NrOfChannels = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Channels").Value),
+                        Product = product,
+                        VBIType = softwareOptions[0].SoftwareType.Name,
+                        Warranty = Convert.ToDateTime(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Warranty Expiration Date").Value),
+                    };
+                    license.VBIOptions["2ndOutput"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Dual Output(2 RF Tx)").Value));
+                    license.VBIOptions["2ndInput"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "2nd RF Input").Value));
+                    license.VBIOptions["VOIP"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "MP3/VoIP").Value));
+                    license.VBIOptions["Playout"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Playout").Value));
+                    license.VBIOptions["MultiAudio"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Dual Voice Break-In").Value));
+                    license.VBIOptions["NoLogin"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "No Config Login").Value));
+                    license.VBIOptions["OEM"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "OEM Mode").Value));
+                }
+            }
+
+
+
+
+
+
+
+
+
+
             return View(product);
         }
 

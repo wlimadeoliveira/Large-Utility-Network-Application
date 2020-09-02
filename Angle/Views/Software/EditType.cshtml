@@ -7,7 +7,7 @@
     List<Angle.Models.Models.SoftwareOption> softwareOptions = ViewBag.ListOfOption;
 
 
-    
+
 
 
 }
@@ -46,39 +46,44 @@
     <script type="text/javascript" src="~/master/js/custom/domprint.js"></script>
     <script src="~/vendor/jquery/dist/jquery.validate.js"></script>
     <script src="~/vendor/jquery/dist/jquery.validate.unobtrusive.js"></script>
-  
+    <script type="text/html" id="MyCheckBox">
+        <input type="checkbox"  />
+
+    </script>
     <script>
 
         var optionsIDs = @Html.Raw(Json.Serialize(@Model.hiddenID));
         var values = @Html.Raw(Json.Serialize(@Model.Values));
-                    var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
+        var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
 
         for (var i = 0; i < optionsIDs.length; i++) {
             console.log(json);
             var result = json.find(x => x.ID == optionsIDs[i]);
             console.log(result);
             createOptionInput(result.DataType, result.DataTypeValue, result.Description, result.ID, values[i]);
-            $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.id + "' value='" + result.id + "'></input>")
+            $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.ID + "' value='" + result.ID + "'></input>")
 
         }
 
 
-        
+
         $('#multiSelectOptions').val(optionsIDs);
         $('#multiSelectOptions').trigger("liszt:updated");
 
-          function createOptionInput(type, values, description,id, value) {
+
+
+                function createOptionInput(type, values, description,id, value) {
            var htmlInput = "";
            var myvalues;
             if (values != null) {
                  myvalues = values.split(';');
             }
                  if (type == "text" || type == "number") {
-                     htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input value='" + value + "' class='form-control' name='ValueSelectedOptions' type='" + type + "'></input></div></div>";
+                     htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input value='" + value + "' class='form-control' name='Values' type='" + type + "'></input></div></div>";
            } else if (type == "multiplevalues") {
                var select = document.createElement("select");
                select.setAttribute('class', 'form-control')
-               select.setAttribute('name', 'ValueSelectedOptions')
+               select.setAttribute('name', 'Values')
                if (myvalues != null) {
                    for (var i = 0; i < myvalues.length; i++) {
                        var opt = myvalues[i];
@@ -92,31 +97,74 @@
                htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label>" + select.outerHTML + "</div></div>";
            } else if (type == "numericalrange") {
 
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input value='"+value+"' class='form-control' name='ValueSelectedOptions' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
-           } else if (type == "checkbox") {
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='checkbox' data-val='true' data-val-required='The IsChecked field is required.' id='IsChecked' name='ValueSelectedOptions' value='true'><input name='Values' type='hidden' value='false'></input></div></div>";
-           }
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input value='"+value+"' class='form-control' name='Values' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
+                 } else if (type == "checkbox") {
+
+                     var checked = "";
+                     if (value == 1) {
+                         checked = "checked";
+                     } else {
+                         checked = "";
+                     }
+
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label><input type='hidden' name='Values' value='"+value+"'><input type='checkbox' "+checked+"  onclick='this.previousSibling.value=1-this.previousSibling.value'></div></div>";
+                 }
            console.log(htmlInput);
-           
+
            $('#listoptions').append(htmlInput);
         }
 
+            function createNewOptionInput(type, values, description,id) {
+           var htmlInput = "";
+           var myvalues;
+            if (values != null) {
+                 myvalues = values.split(';');
+            }
+           if (type == "text" || type == "number") {
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input class='form-control' name='Values' type='" + type + "'></input></div></div>";
+           } else if (type == "multiplevalues") {
+               var select = document.createElement("select");
+               select.setAttribute('class', 'form-control')
+               select.setAttribute('name', 'Values')
+               if (myvalues != null) {
+                   for (var i = 0; i < myvalues.length; i++) {
+                       var opt = myvalues[i];
+                       var el = document.createElement("option");
+                       el.textContent = opt;
+                       el.value = opt;
+                       select.appendChild(el);
+                   }
+               }
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label>" + select.outerHTML + "</div></div>";
+           } else if (type == "numericalrange") {
+
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input class='form-control' name='Values' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
+           } else if (type == "checkbox") {
+               
+
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='hidden' name='Values' value='0'><input type='checkbox' onclick='this.previousSibling.value=1-this.previousSibling.value'></div></div>";
+           }
+           console.log(htmlInput);
+
+           $('#listoptions').append(htmlInput);
+        }
+
+
           $(document).on('change', '#multiSelectOptions', function (evt, params) {
             if (params.selected != undefined) {
-                var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
-                console.log(params.selected);
-                var result = json.find(x => x.id == params.selected);
-                createOptionInput(result.dataType, result.dataTypeValue, result.description, result.id);
-                $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.id + "' value='" + result.id + "'></input>")
+                console.log(json);
+                var result = json.find(x => x.ID == params.selected);
+            console.log(result);
+            createNewOptionInput(result.DataType, result.DataTypeValue, result.Description, result.ID);
+            $("#hiddenAttributeID").append("<input type='hidden' name='hiddenID' id='vID" + result.ID + "' value='" + result.ID + "'></input>")
 
                 console.log(json);
                 console.log(result);
             }
             if (params.deselected != undefined) {
                 console.log('deselected: ' + params.deselected);
-                var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@softwareOptions, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));;
                 console.log(params.selected);
-                var result = json.find(x => x.id == params.selected);
+                var result = json.find(x => x.ID == params.selected);
                 var childID = "#vID" + params.deselected;
                 var formID = "#fType" + params.deselected;
                 $(childID).remove();

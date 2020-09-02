@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Angle.Controllers
 {
-    
+   
     public class AdministrationController : Controller
     {
 
@@ -82,7 +82,7 @@ namespace Angle.Controllers
                 Id = role.Id,
                 RoleName = role.Name
             };
-            foreach (var user in _userManager.Users)
+            foreach (var user in _userManager.Users.ToList())
             {
                 if (await _userManager.IsInRoleAsync(user, role.Name))
                 {
@@ -135,7 +135,7 @@ namespace Angle.Controllers
 
             var model = new List<UserRoleViewModel>();
 
-            foreach (var user in _userManager.Users)
+            foreach (var user in _userManager.Users.ToList())
             {
                 var userRoleViewModel = new UserRoleViewModel
                 {
@@ -330,7 +330,7 @@ namespace Angle.Controllers
 
             var model = new List<UserRolesViewModel>();
 
-            foreach (var role in _roleManager.Roles)
+            foreach (var role in _roleManager.Roles.ToList())
             {
                 var userRolesViewModel = new UserRolesViewModel
                 {

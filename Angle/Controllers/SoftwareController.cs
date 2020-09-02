@@ -48,11 +48,7 @@ namespace Angle.Controllers
         [HttpPost]
         public IActionResult CreateType(SoftwareTypeViewModel vm)
         {
-
-            
-
-            
-
+                  
                 SoftwareType model = new SoftwareType()
                 {
                     Description = vm.Description,
@@ -68,7 +64,7 @@ namespace Angle.Controllers
                     {
                         SoftwareOptionID = Convert.ToInt32(option),
                         SoftwareTypeID = model.ID,
-                        Value = vm.Values[counter],
+                        Value = vm.Values[counter].ToString(),
                     };
 
                     _db.Add(softwareTypeOption);
@@ -159,17 +155,41 @@ namespace Angle.Controllers
         }
 
         [HttpPost]
-
         public IActionResult EditType(SoftwareTypeViewModel vm)
         {
             SoftwareType model = new SoftwareType()
             {
                 ID = vm.ID,
-                Name = vm.Name,
                 Description = vm.Description,
-                
+                Name = vm.Name,
             };
-            return null;
+            _db.SoftwareTypes.Update(model);
+            _db.SaveChanges();
+            int counter = 0;
+            List<SoftwareTypeOptions> softwareTypeOptions = new List<SoftwareTypeOptions>();
+            foreach (var option in vm.hiddenID)
+            {
+                SoftwareTypeOptions softwareTypeOption = new SoftwareTypeOptions()
+                {
+                    SoftwareOptionID = Convert.ToInt32(option),
+                    SoftwareTypeID = model.ID,
+                    Value = vm.Values[counter].ToString(),
+                };
+
+
+                //_db.Update(softwareTypeOption);
+                softwareTypeOptions.Add(softwareTypeOption);
+                counter++;
+            }
+            
+            var type = _db.SoftwareTypes.Include(c=>c.SoftwareTypeOptions).FirstOrDefault(x => x.ID == vm.ID);
+            type.SoftwareTypeOptions.Clear();
+            
+            type.SoftwareTypeOptions = softwareTypeOptions;
+            _db.Update(type);
+
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
 
@@ -202,9 +222,7 @@ namespace Angle.Controllers
 
         public IActionResult Delete(long id)
         {
-           
-            
-           
+                              
             
             return View();
         }

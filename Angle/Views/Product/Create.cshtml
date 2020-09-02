@@ -1,7 +1,7 @@
 ﻿@model Angle.Models.ViewModels.ProductViewModel.ProductCreateViewModel
 @using Newtonsoft.Json.Serialization;
 @using Newtonsoft.Json;
-
+@using PrecLicenseGenerator;
 
 
 @{
@@ -19,8 +19,12 @@
 
 @section scripts{
 
-    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script src="~/vendor/chosen-js/chosen.jquery.js">
 
+        
+
+    </script>
+    
     <script type="text/javascript">
         $(document).ready(function () {
             $("select").chosen();
@@ -91,8 +95,15 @@
 
                htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + "<small>  min:" + myvalues[0] + " max:" + myvalues[1] + "</small> </label> <input value='"+value+"' class='form-control' name='ValueSelectedOptions' type='number' min='" + myvalues[0] + "' max='" + myvalues[1] + "'></input></div></div>";
            } else if (type == "checkbox") {
-               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input type='checkbox' data-val='true' data-val-required='The IsChecked field is required.' id='IsChecked' name='ValueSelectedOptions' value='true'><input name='Values' type='hidden' value='false'></input></div></div>";
-           }
+                     var checked = "";
+                     if (value == 1) {
+                         checked = "checked";
+                     } else {
+                         checked = "";
+                     }
+
+               htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label><input type='hidden' name='ValueSelectedOptions' value='"+value+"'><input type='checkbox' "+checked+"  onclick='this.previousSibling.value=1-this.previousSibling.value'></div></div>";
+                 }
            console.log(htmlInput);
            
            $('#listoptions').append(htmlInput);

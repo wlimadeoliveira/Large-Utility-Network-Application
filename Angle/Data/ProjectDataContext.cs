@@ -9,6 +9,7 @@ using Angle.Models.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Angle.Models.ViewModels.AccountViewModel;
 using Angle.Models.Models.Ivy;
+using Microsoft.AspNetCore.Identity;
 
 namespace LUNA.Models.Models
 {
@@ -74,7 +75,39 @@ namespace LUNA.Models.Models
 
 
 
+            // Shorten key length for Identity 
+            builder.Entity<ApplicationUser>(entity => {
+                entity.Property(m => m.Id).HasMaxLength(36);
+                entity.Property(m => m.Email).HasMaxLength(36);
+                entity.Property(m => m.NormalizedEmail).HasMaxLength(36);
+                entity.Property(m => m.NormalizedUserName).HasMaxLength(36);
+                entity.Property(m => m.UserName).HasMaxLength(36);
+            });
+            builder.Entity<IdentityRole>(entity => {
+                entity.Property(m => m.Id).HasMaxLength(36);
+                entity.Property(m => m.Name).HasMaxLength(36);
+                entity.Property(m => m.NormalizedName).HasMaxLength(36);
+            });
+            builder.Entity<IdentityUserLogin<string>>(entity =>
+            {
+                
+                entity.Property(m => m.LoginProvider).HasMaxLength(36);
+                entity.Property(m => m.ProviderKey).HasMaxLength(36);
+            });
+            builder.Entity<IdentityUserRole<string>>(entity =>
+            {
+                
+                entity.Property(m => m.UserId).HasMaxLength(36);
+                entity.Property(m => m.RoleId).HasMaxLength(36);
+            });
+            builder.Entity<IdentityUserToken<string>>(entity =>
+            {
+               
+                entity.Property(m => m.UserId).HasMaxLength(36);
+                entity.Property(m => m.LoginProvider).HasMaxLength(36);
+                entity.Property(m => m.Name).HasMaxLength(36);
 
+            });
 
 
 
