@@ -52,8 +52,8 @@
            var myvalues;
             if (values != null) {
                  myvalues = values.split(';');
-            }
-           if (type == "text" || type == "number") {
+           }
+           if (type == "text" || type == "number" || type =="date") {
                htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input class='form-control' name='Values' type='" + type + "'></input></div></div>";
            } else if (type == "multiplevalues") {
                var select = document.createElement("select");

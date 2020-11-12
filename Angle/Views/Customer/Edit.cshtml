@@ -17,7 +17,14 @@
 
 
                     <input type="hidden" value="@Model.ID" />
-
+                    <div class="form-group">
+                        <label asp-for="CustomerNumber" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Customer Number<span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input asp-for="CustomerNumber" value="@Model.CustomerNumber" type="text" id="title" required="required" class="form-control">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label asp-for="CompanyName" class="control-label col-md-3 col-sm-3 col-xs-12">
                             CompanyName <span class="required">*</span>
@@ -28,26 +35,26 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="AddressOffice" class="control-label col-md-3 col-sm-3 col-xs-12">
-                            Address Office<span class="required">*</span>
+                            Address Office
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input asp-for="AddressOffice" value="@Model.AddressOffice" type="text" id="title" required="required" class="form-control">
+                            <input asp-for="AddressOffice" value="@Model.AddressOffice" type="text" id="title" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label asp-for="AddressBill"  class="control-label col-md-3 col-sm-3 col-xs-12">
-                            Address Bill <span class="required">*</span>
+                        <label asp-for="AddressBill" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Address Bill
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input asp-for="AddressBill" value="@Model.AddressBill" type="text" id="title" required="required" class="form-control">
+                            <input asp-for="AddressBill" value="@Model.AddressBill" type="text" id="title" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label asp-for="PhoneNumber" class="control-label col-md-3 col-sm-3 col-xs-12">
-                           Phone Number <span class="required">*</span>
+                            Phone Number
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input asp-for="PhoneNumber" value="@Model.PhoneNumber" type="text" id="title" required="required" class="form-control">
+                            <input asp-for="PhoneNumber" value="@Model.PhoneNumber" type="text" id="title" class="form-control">
                         </div>
                     </div>
 

@@ -35,7 +35,7 @@ namespace Angle.Models.Models
             {"OEM", false },
 };
 
-        public LicencePacket_V2 getLincence() 
+        public  LicencePacket_V2 getLincence() 
         {
              var lic = new LicencePacket_V2();
 
@@ -48,7 +48,7 @@ namespace Angle.Models.Models
                 lic.licenceID = (ushort)(0x0002 | LicencePacket_V2.versionmask);
             }
 
-            lic.serialnumber = Convert.ToUInt32(Product.SerialNumber);
+            lic.serialnumber = Convert.ToUInt32("1712060001");
             if (Customer.ID < 1) { Customer.ID = 0; }
             lic.customernumber = Convert.ToUInt16(Customer.ID);
             lic.warrantyexpirationdate = UInt32.Parse(Warranty.Date.ToString("yyyyMMdd"));
@@ -60,8 +60,8 @@ namespace Angle.Models.Models
             else
                 lic.licenseexpirationdate = UInt32.Parse(ExpirationDate.Date.ToString("yyyyMMdd"));
             lic.licensecreationdate = UInt32.Parse(DateTime.Now.ToString("yyyyMMdd"));
-            lic.nrChannels = byte.Parse(NrEmsembles.ToString());
-            lic.nrBreakInChannels = byte.Parse(NrEmsemblesBreakIn.ToString());
+            lic.nrChannels = byte.Parse(NrOfChannels.ToString());
+            lic.nrBreakInChannels = byte.Parse(NrBreakinChannels.ToString());
 
             lic.swflags = 0;
             if (VBIOptions["2ndOutput"])

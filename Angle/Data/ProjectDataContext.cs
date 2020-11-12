@@ -40,6 +40,7 @@ namespace LUNA.Models.Models
         public DbSet<SoftwareOption> SoftwareOptions { get; set; }
         public DbSet<SoftwareTypeOptions> SoftwareTypeOptions { get; set; }
         public DbSet<ProductSoftwareOptions> ProductSoftwareOptions { get; set; }
+        public DbSet<Status> Status { get; set; }
 
 
 

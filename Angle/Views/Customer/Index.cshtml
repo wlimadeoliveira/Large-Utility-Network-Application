@@ -61,6 +61,7 @@
                         <th>Phone Number</th>
                         <th>Address Office</th>
                         <th>Address Bill</th>
+                        <th>Customer Number</th>
                         <th>Options</th>
                     </tr>
                     <tr class="filters" style="width: 100%;padding: 3px;box-sizing: border-box;">
@@ -68,6 +69,7 @@
                         <th>Phone Number</th>
                         <th>Address Office</th>
                         <th>Address Bill</th>
+                        <th>Customer Number</th>
                         <th hidden>Options</th>
                     </tr>
                 </thead>
@@ -80,6 +82,7 @@
                             <td>@customer.PhoneNumber</td>
                             <td>@customer.AddressOffice</td>
                             <td>@customer.AddressBill</td>
+                            <td>@customer.CustomerNumber</td>
                             <td><a href="@Url.Action("Edit", "Customer",new { id = customer.ID })">Edit</a> / <a href="@Url.Action("Delete", "Customer", new { id = customer.ID })">Delete</a></td>
                         </tr>
                     }

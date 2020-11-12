@@ -15,5 +15,7 @@ namespace LUNA.Models.Models
         public string TypeName { get; set; }
         public long? ParentID { get; set; }
         public string ParentSerialNumber { get; set; }
+        public string StockInformation { get; set; }
+        public List<ProductAttribute> ProductAttributes { get; set; }
     }
 }

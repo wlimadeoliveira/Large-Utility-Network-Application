@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="chilkat-x64" Version="9.5.0.84" />
     <PackageReference Include="dropzone" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
@@ -22,9 +23,13 @@
     <PackageReference Include="Nancy" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
+    <PackageReference Include="Raksha" Version="0.3.0" />
     <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" Version="5.8.64" />
     <PackageReference Include="Sendgrid" Version="9.19.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.7.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.6" />
   </ItemGroup>
@@ -32,28 +37,6 @@
 
   <ItemGroup>
     <Content Update="wwwroot/master/**/*" CopyToPublishDirectory="Always" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Remove="Migrations\**" />
-    <Content Remove="Migrations\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Include="Migrations\20200828122909_Init.cs" />
-    <Compile Include="Migrations\20200828122909_Init.Designer.cs" />
-    <Compile Include="Migrations\ProjectDataContextModelSnapshot.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Reference Include="PCWKeyGen">
-      <HintPath>PCWKeyGen_netcore2.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Target Name="PrepublishMinification" BeforeTargets="BeforeBuild">
     <Exec Command="gulp $(ConfigurationName)" />

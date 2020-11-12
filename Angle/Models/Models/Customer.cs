@@ -12,12 +12,12 @@ namespace LUNA.Models
     {  [Key]
         public long ID { get; set; }
 
-       
+       public string CustomerNumber { get; set; }
         public string CompanyName { get; set; }
         public string AddressOffice { get; set; }
         public string AddressBill { get; set; }
         public string PhoneNumber { get; set; }
-
+        
         // history für customer wäre auch gut. wenn man z.B. telefoniert hat/kontakt hatte
 
         /*[ForeignKey("CustomerID")]

@@ -20,7 +20,7 @@ namespace Angle.Models.ViewModels.ProductViewModel
         public long? ProjectID { get; set; }
         public long? CustomerID { get; set; }
         public long? StockInformationID { get; set; }
-        [Remote(action: "SerialNumberExist", controller:"Product")]
+        [Remote(action: "SerialNumberExist", controller:"Product", AdditionalFields = nameof(DeviceTypeID))]
         public string SerialNumber { get; set; }
         [Required]
         [Range(1, Int32.MaxValue, ErrorMessage = "Must Select A Value")]

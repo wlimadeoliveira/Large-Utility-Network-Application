@@ -23,7 +23,7 @@ namespace Angle.Repositories
 
         public List<Product> GetAll()
         {
-            return _context.Product.Include(x => x.Customer).Include(b => b.Project).Include(c => c.Type).Include(d => d.Parent).ToList();
+            return _context.Product.Include(x => x.Customer).Include(b => b.Project).Include(c => c.Type).Include(d => d.Parent).Include(t=>t.ProductAttributes).Include("ProductAttributes.Attribute").Include(i=>i.StockInformation).ToList();
         }
 
         public Product GetById(long id)

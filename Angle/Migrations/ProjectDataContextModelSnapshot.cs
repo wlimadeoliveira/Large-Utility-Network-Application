@@ -129,6 +129,20 @@ namespace Angle.Migrations
                     b.ToTable("ProjectArticles");
                 });
 
+            modelBuilder.Entity("Angle.Models.Models.Ivy.Status", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Status");
+                });
+
             modelBuilder.Entity("Angle.Models.Models.Ivy.Supplier", b =>
                 {
                     b.Property<long>("ID")
@@ -364,6 +378,9 @@ namespace Angle.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("CompanyName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("CustomerNumber")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("PhoneNumber")

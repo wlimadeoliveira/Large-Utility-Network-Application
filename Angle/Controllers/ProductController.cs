@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Hosting;
 using Angle.Models.Models;
 using System.Net.Http;
 using PrecLicenseGenerator;
+using System.Security.Cryptography;
 
 namespace Angle.Controllers
 {
@@ -40,6 +41,8 @@ namespace Angle.Controllers
             _unityOfWork = unityOfWork;
             _env = env;
         }
+
+        
 
         public IActionResult Index()
         {
@@ -60,6 +63,8 @@ namespace Angle.Controllers
                     TypeName = (product.Type?.Name ?? "").ToString(),
                     ParentID = (product.Parent?.ID ?? null),
                     ParentSerialNumber = (product.Parent?.SerialNumber ?? "").ToString(),
+                    ProductAttributes = product.ProductAttributes,
+                    StockInformation = (product.StockInformation?.Description ?? "").ToString(),
                 };
 
                 if (model.ParentID != null)
@@ -150,14 +155,17 @@ namespace Angle.Controllers
                     ProductID = myProduct.ID,
                     SoftwareOptionID = Convert.ToInt32(optionID),
                     SoftwareTypeID = product.SoftwareID ?? 0,
+                    Product = myProduct,
+                    SoftwareOption = _db.SoftwareOptions.FirstOrDefault(x => x.ID == Convert.ToInt32(optionID)),
+                    SoftwareType = _db.SoftwareTypes.FirstOrDefault(c=>c.ID == product.SoftwareID),
                     Value = product.ValueSelectedOptions[counterOptionsValues]
                 };
                 counterOptionsValues++;
                 _db.ProductSoftwareOptions.Add(productSoftwareOption);
-             
+                _db.SaveChanges();
 
             }
-            _db.SaveChanges();
+            
             try
             {
                 foreach (string productChild in product.TypeChild)
@@ -441,15 +449,6 @@ namespace Angle.Controllers
                 productHistory.User = null;
                 productHistory.UserID = null;
                 LoggingController.writeLog(productHistory, User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), this.ControllerContext.RouteData.Values["controller"].ToString());
-
-
-
-
-
-
-
-
-
                 return Json(productHistory);
             }
             catch
@@ -540,19 +539,19 @@ namespace Angle.Controllers
         //Used by 'Jquery Validate Obstruhiv Framework' 
         //Checks in Create Product View if Serial Number is already in use
         [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> SerialNumberExist(string serialNumber, long typeID)
+        public IActionResult SerialNumberExist(string SerialNumber, long DeviceTypeID)
         {
          
-            var validateName = await _db.Product.FirstOrDefaultAsync
-                                (x => x.SerialNumber == serialNumber && x.Type.ID == Convert.ToInt32(typeID) );
+            var validateName = _db.Product.FirstOrDefaultAsync
+                                (x => x.SerialNumber == SerialNumber && x.Type.ID == Convert.ToInt32(DeviceTypeID) );
 
-            if (validateName == null)
+            if (validateName.Result == null)
             {
                 return Json(true);
             }
             else
             {
-                return Json($"Serial Number: { serialNumber} already in use");
+                return Json($"Serial Number: { SerialNumber} already in use");
             }
         }
 
@@ -622,40 +621,76 @@ namespace Angle.Controllers
 
             var products1 = _unityOfWork.Product.getChilds(id);
 
-            if (softwareOptions!= null)
+            /*  if (softwareOptions!= null)
+               {
+                   if (softwareOptions[0].SoftwareType.Name == "DAB+" || softwareOptions[0].SoftwareType.Name == "FM")
+                   {
+                       LicenseV2 myLicense = new LicenseV2()
+                       {
+                           SerialNumber = product.SerialNumber,
+                           ExpirationDate = Convert.ToDateTime(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Expiration Date").Value),
+                           Customer = product.Customer,
+                           LicenseIsInfinite = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Lincense Is Infinite").Value)),
+                           NrBreakinChannels = (int?)Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of BreakIn Channels").Value)  ?? 0,
+                           NrEmsembles = (int?)Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Ensembles").Value) ?? 0,
+                           NrEmsemblesBreakIn = (int?)Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Ensembles Break In").Value)??0, // Option name würde mit N neu geschrieben
+                           NrOfChannels = (int?)Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Channels").Value) ?? 0,
+                           Product = product,
+                           VBIType = softwareOptions[0].SoftwareType.Name,
+                           Warranty = Convert.ToDateTime(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Warranty Expiration Date").Value),
+                       };
+                       myLicense.VBIOptions["2ndOutput"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Dual Output(2 RF Tx)").Value));
+                       myLicense.VBIOptions["2ndInput"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "2nd RF Input").Value));
+                       myLicense.VBIOptions["VOIP"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "MP3/VoIP").Value));
+                       myLicense.VBIOptions["Playout"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Playout").Value));
+                       myLicense.VBIOptions["MultiAudio"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Dual Voice Break-In").Value));
+                       myLicense.VBIOptions["NoLogin"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "No Config Login").Value));
+                       myLicense.VBIOptions["OEM"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "OEM Mode").Value));
+                   }
+               }*/
+
+
+            product.Customer.ID = 0;
+          LicenseV2 license = new LicenseV2()
             {
-                if (softwareOptions[0].SoftwareType.Name == "DAB" || softwareOptions[0].SoftwareType.Name == "FM")
-                {
-                    LicenseV2 license = new LicenseV2()
-                    {
-                        SerialNumber = product.SerialNumber,
-                        ExpirationDate = Convert.ToDateTime(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Expiration Date").Value),
-                        Customer = product.Customer,
-                        LicenseIsInfinite = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Lincense Is Infinite").Value)),
-                        NrBreakinChannels = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of BreakIn Channels").Value),
-                        NrEmsembles = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Emsembles").Value),
-                        NrEmsemblesBreakIn = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Emsembles").Value),
-                        NrOfChannels = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Channels").Value),
-                        Product = product,
-                        VBIType = softwareOptions[0].SoftwareType.Name,
-                        Warranty = Convert.ToDateTime(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Warranty Expiration Date").Value),
-                    };
-                    license.VBIOptions["2ndOutput"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Dual Output(2 RF Tx)").Value));
-                    license.VBIOptions["2ndInput"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "2nd RF Input").Value));
-                    license.VBIOptions["VOIP"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "MP3/VoIP").Value));
-                    license.VBIOptions["Playout"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Playout").Value));
-                    license.VBIOptions["MultiAudio"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Dual Voice Break-In").Value));
-                    license.VBIOptions["NoLogin"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "No Config Login").Value));
-                    license.VBIOptions["OEM"] = Convert.ToBoolean(Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "OEM Mode").Value));
-                }
-            }
+                SerialNumber = "1712060001",
+                ExpirationDate = Convert.ToDateTime("12/12/20"),
+                Customer = product.Customer,
+                LicenseIsInfinite = true,
+                NrOfChannels = 4,
+                NrBreakinChannels = 4,
+               // NrEmsembles = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Emsembles").Value),
+              //  NrEmsemblesBreakIn = Convert.ToInt32(softwareOptions.FirstOrDefault(x => x.SoftwareOption.Description == "Number of Emsembles").Value),   
+                Product = product,
+                VBIType = "DAB",
+                Warranty = Convert.ToDateTime("12/12/2020"),
+            };
+            license.VBIOptions["2ndOutput"] = false;
+            license.VBIOptions["2ndInput"] = false;
+            license.VBIOptions["VOIP"] = false;
+            license.VBIOptions["Playout"] = false;
+            license.VBIOptions["MultiAudio"] = false;
+            license.VBIOptions["NoLogin"] = false;
+            license.VBIOptions["OEM"] = false;
+
+            UInt32 serial = UInt32.Parse("1712060001");
+
+            var lic = license.getLincence();
+
+
+           
+
+            var enc =  PCWKeyGen.generateKey(lic, serial);
+
+            var key = PCWKeyGen.keyAsString(enc);
+
+          // var enc = PrecLicenseGenerator.PCWKeyGen.generateKey(lic, serial);
+
+            Console.WriteLine(enc);
 
 
 
-
-
-
-
+            
 
 
 

@@ -141,6 +141,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <select id="selectcustomer" asp-for="CustomerID" asp-items="@(new SelectList(@ViewBag.ListOfCustomers,"ID","CompanyName"))" class="chosen-select form-control">
+                                <option value="" >Select a Customer</option>
                             </select>
                             <span asp-validation-for="CustomerID" class="field-validation-error"></span>
 
@@ -150,6 +151,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Project</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <select id="selectproject" asp-for="ProjectID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfProjects,"ID","Title"))">
+                                <option value="" >Select a Project</option>
                             </select>
                             <span asp-validation-for="ProjectID" class="field-validation-error"></span>
 

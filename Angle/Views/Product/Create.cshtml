@@ -74,7 +74,7 @@
             if (values != null) {
                  myvalues = values.split(';');
             }
-                 if (type == "text" || type == "number") {
+                 if (type == "text" || type == "number" || type =="date") {
                      htmlInput = "<div class='form-group'id='fType" + id + "'  > <div class='col-md-9 col-sm-9 col-xs-12'><label class='control-label col-md-3 col-sm-3 col-xs-12'>" + description + " </label> <input value='" + value + "' class='form-control' name='ValueSelectedOptions' type='" + type + "'></input></div></div>";
            } else if (type == "multiplevalues") {
                var select = document.createElement("select");
@@ -121,7 +121,7 @@
 
                 for (var i = 0; i < result.length; i++) {
                     createOptionInput(result[i].SoftwareOption['DataType'], result[i].SoftwareOption['DataTypeValue'], result[i].SoftwareOption['Description'], result[i].SoftwareOption['ID'], result[i].Value)
-                    $("#hiddenoptionsID").append("<input type='hidden' name='SelectedSoftwareOptions' id='vID" + result[i].ID + "' value='" + result[i].ID + "'></input>")
+                    $("#hiddenoptionsID").append("<input type='hidden' name='SelectedSoftwareOptions' id='vID" + result[i].SoftwareOptionID + "' value='" + result[i].SoftwareOptionID + "'></input>")
 
 
                 }
@@ -193,7 +193,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                                 <select asp-for="CustomerID" asp-items="@(new SelectList(@ViewBag.ListOfCustomers,"ID","CompanyName"))" class="chosen-select form-control">
-                                    <option value="" disabled selected>Select a Project</option>
+                                    <option value="" disabled selected>Select a Customer</option>
                                 </select>
                                 <span asp-validation-for="CustomerID" class="field-validation-error"></span>
 

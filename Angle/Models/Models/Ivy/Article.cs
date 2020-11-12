@@ -19,7 +19,7 @@ namespace Angle.Models.Models.Ivy
         public string ManufacturerPartNumber { get; set; }
         public long? ManufacturerID { get; set; }
         public long? SupplierID { get; set; }     
-        public string Status { get; set; }
+        public long? StatusID { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public long? LocationID { get; set; }

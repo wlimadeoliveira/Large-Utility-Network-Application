@@ -121,6 +121,7 @@
                         <th>Description</th>
                         <th>Project</th>
                         <th>Customer</th>
+                        <th>Stock</th>
                         <th id="not-export-col">Options</th>
                         <th name="notexport">History</th>
                         <th>In Use</th>
@@ -131,6 +132,7 @@
                         <th>Description</th>
                         <th>Project</th>
                         <th>Customer</th>
+                        <th>Stock</th>
                         <th id="not-export-col" hidden>Options</th>
                         <th name="notexport" hidden>History</th>
                         <th hidden>In Use</th>
@@ -140,10 +142,15 @@
                     @foreach (var product in Model)
                     {
                         <tr>
-                            <td>
+                            <td data-toggle="tooltip" data-placement="left" title="@foreach (var productatributtes in product.ProductAttributes)
+                                    {
+                                       <text> @productatributtes.Attribute.Name: @productatributtes.Value&#10;</text>
+                                    }" >
                                 @try
                                 {@product.TypeName}
                             catch { }
+                             
+
                             </td>
                             <td>
                                 <a href="@Url.Action("Detail", "Product", new { id = product.ProductID })">
@@ -167,9 +174,15 @@
                                 {@product.CustomerName}
                             catch { }
                             </td>
+                            <td>
+                                @try
+                                {@product.StockInformation}
+                            catch { }
+                                                    </td>
                             <td><a href="@Url.Action("Edit", "Product", new { id = product.ProductID })">Edit</a> | <a href="@Url.Action("Delete", "Product", new { id = product.ProductID })">Delete</a> | <a href="@Url.Action("Clone", "Product", new { id = product.ProductID })">Clone</a>   </td>
                             <td><a href="#addHistory" data-toggle="collapse" onclick="setHistoryInformation('@product.ProductID','@product.ProductDescription')">Add</a> | <a href="@Url.Action("Details", "ProductHistory", new { id = product.ProductID })">Show</a></td>
-                            <td class="@if (product.ParentID == null){<text>bg-gray</text>}else{<text>bg-primary-light" onclick="window.location.href='@Url.Action("Detail","Product",new { id = product.ParentID })'</text> }" data-toggle="tooltip" data-placement="top" @if (product.ParentSerialNumber.Length > 1) { <text> title="@product.ParentSerialNumber" </text> }><a href="@Url.Action("Detail","Product",new { id = product.ParentID })"></a>  </td>
+                            <td class="@if (product.ParentID == null){<text>bg-gray</text>}else{<text>bg-primary-light" onclick="window.location.href='@Url.Action("Detail","Product",new { id = product.ParentID })'</text> }" data-toggle="tooltip"  data-placement="top" @if (product.ParentSerialNumber.Length > 1) { <text> title="@product.ParentSerialNumber" </text> }><a style="opacity: 0.0" href="@Url.Action("Detail","Product",new { id = product.ParentID })"> @if (product.ParentSerialNumber.Length > 1)
+{<text> a </text>}</a>  </td>
                         </tr>
                     }
                 </tbody>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Angle.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,9 +25,9 @@ namespace Angle.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Name = table.Column<string>(maxLength: 36, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 36, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -39,11 +39,11 @@ namespace Angle.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    UserName = table.Column<string>(maxLength: 36, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 36, nullable: true),
+                    Email = table.Column<string>(maxLength: 36, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 36, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
@@ -108,6 +108,7 @@ namespace Angle.Migrations
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CustomerNumber = table.Column<string>(nullable: true),
                     CompanyName = table.Column<string>(nullable: true),
                     AddressOffice = table.Column<string>(nullable: true),
                     AddressBill = table.Column<string>(nullable: true),
@@ -189,6 +190,48 @@ namespace Angle.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SoftwareOptions",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    DataType = table.Column<string>(nullable: true),
+                    DataTypeValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoftwareOptions", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SoftwareTypes",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoftwareTypes", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Status",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Status", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StockInformation",
                 columns: table => new
                 {
@@ -214,6 +257,21 @@ namespace Angle.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Supplier", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Upload",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RelativPath = table.Column<string>(nullable: true),
+                    Size = table.Column<string>(nullable: true),
+                    Format = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Upload", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,8 +320,8 @@ namespace Angle.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 36, nullable: false),
+                    ProviderKey = table.Column<string>(maxLength: 36, nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -282,8 +340,8 @@ namespace Angle.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(maxLength: 36, nullable: false),
+                    RoleId = table.Column<string>(maxLength: 36, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -306,9 +364,9 @@ namespace Angle.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(maxLength: 36, nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 36, nullable: false),
+                    Name = table.Column<string>(maxLength: 36, nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -320,31 +378,6 @@ namespace Angle.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "File",
-                columns: table => new
-                {
-                    ID = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    UploadDate = table.Column<DateTime>(nullable: false),
-                    RelativPath = table.Column<string>(nullable: true),
-                    Size = table.Column<string>(nullable: true),
-                    Format = table.Column<string>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_File", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_File_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,6 +526,33 @@ namespace Angle.Migrations
                         name: "FK_TypeFeature_Features_FeatureID",
                         column: x => x.FeatureID,
                         principalTable: "Features",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SoftwareTypeOptions",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SoftwareTypeID = table.Column<long>(nullable: false),
+                    SoftwareOptionID = table.Column<long>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoftwareTypeOptions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_SoftwareTypeOptions_SoftwareOptions_SoftwareOptionID",
+                        column: x => x.SoftwareOptionID,
+                        principalTable: "SoftwareOptions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SoftwareTypeOptions_SoftwareTypes_SoftwareTypeID",
+                        column: x => x.SoftwareTypeID,
+                        principalTable: "SoftwareTypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -663,32 +723,6 @@ namespace Angle.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductFile",
-                columns: table => new
-                {
-                    ID = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductID = table.Column<long>(nullable: false),
-                    FileID = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductFile", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ProductFile_File_FileID",
-                        column: x => x.FileID,
-                        principalTable: "File",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductFile_Product_ProductID",
-                        column: x => x.ProductID,
-                        principalTable: "Product",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductHistory",
                 columns: table => new
                 {
@@ -696,11 +730,18 @@ namespace Angle.Migrations
                     HistoryID = table.Column<long>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     UserID = table.Column<string>(nullable: false),
-                    Comment = table.Column<string>(nullable: true)
+                    Comment = table.Column<string>(nullable: true),
+                    FileID = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductHistory", x => new { x.ProductID, x.HistoryID, x.UserID, x.Date });
+                    table.ForeignKey(
+                        name: "FK_ProductHistory_Upload_FileID",
+                        column: x => x.FileID,
+                        principalTable: "Upload",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProductHistory_History_HistoryID",
                         column: x => x.HistoryID,
@@ -718,6 +759,40 @@ namespace Angle.Migrations
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSoftwareOptions",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Value = table.Column<string>(nullable: true),
+                    ProductID = table.Column<long>(nullable: false),
+                    SoftwareTypeID = table.Column<long>(nullable: false),
+                    SoftwareOptionID = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSoftwareOptions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProductSoftwareOptions_Product_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Product",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSoftwareOptions_SoftwareOptions_SoftwareOptionID",
+                        column: x => x.SoftwareOptionID,
+                        principalTable: "SoftwareOptions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSoftwareOptions_SoftwareTypes_SoftwareTypeID",
+                        column: x => x.SoftwareTypeID,
+                        principalTable: "SoftwareTypes",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -789,11 +864,6 @@ namespace Angle.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_File_UserId1",
-                table: "File",
-                column: "UserId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Index_QR_ActionID",
                 table: "Index_QR",
                 column: "ActionID");
@@ -849,14 +919,9 @@ namespace Angle.Migrations
                 column: "AttributeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductFile_FileID",
-                table: "ProductFile",
+                name: "IX_ProductHistory_FileID",
+                table: "ProductHistory",
                 column: "FileID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductFile_ProductID",
-                table: "ProductFile",
-                column: "ProductID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductHistory_HistoryID",
@@ -867,6 +932,21 @@ namespace Angle.Migrations
                 name: "IX_ProductHistory_UserID",
                 table: "ProductHistory",
                 column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSoftwareOptions_ProductID",
+                table: "ProductSoftwareOptions",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSoftwareOptions_SoftwareOptionID",
+                table: "ProductSoftwareOptions",
+                column: "SoftwareOptionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSoftwareOptions_SoftwareTypeID",
+                table: "ProductSoftwareOptions",
+                column: "SoftwareTypeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductType_DeviceTypeID",
@@ -887,6 +967,16 @@ namespace Angle.Migrations
                 name: "IX_Projects_CustomerID",
                 table: "Projects",
                 column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoftwareTypeOptions_SoftwareOptionID",
+                table: "SoftwareTypeOptions",
+                column: "SoftwareOptionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoftwareTypeOptions_SoftwareTypeID",
+                table: "SoftwareTypeOptions",
+                column: "SoftwareTypeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TypeAttribute_AttributeID",
@@ -934,10 +1024,10 @@ namespace Angle.Migrations
                 name: "ProductAttribute");
 
             migrationBuilder.DropTable(
-                name: "ProductFile");
+                name: "ProductHistory");
 
             migrationBuilder.DropTable(
-                name: "ProductHistory");
+                name: "ProductSoftwareOptions");
 
             migrationBuilder.DropTable(
                 name: "ProductType");
@@ -947,6 +1037,12 @@ namespace Angle.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectPerson");
+
+            migrationBuilder.DropTable(
+                name: "SoftwareTypeOptions");
+
+            migrationBuilder.DropTable(
+                name: "Status");
 
             migrationBuilder.DropTable(
                 name: "Supplier");
@@ -970,10 +1066,13 @@ namespace Angle.Migrations
                 name: "Controller_QR");
 
             migrationBuilder.DropTable(
-                name: "File");
+                name: "Upload");
 
             migrationBuilder.DropTable(
                 name: "History");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Product");
@@ -985,13 +1084,16 @@ namespace Angle.Migrations
                 name: "Persons");
 
             migrationBuilder.DropTable(
+                name: "SoftwareOptions");
+
+            migrationBuilder.DropTable(
+                name: "SoftwareTypes");
+
+            migrationBuilder.DropTable(
                 name: "Attribute");
 
             migrationBuilder.DropTable(
                 name: "Features");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "PType");
