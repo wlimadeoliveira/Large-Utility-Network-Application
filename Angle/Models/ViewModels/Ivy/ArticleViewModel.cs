@@ -8,6 +8,7 @@ namespace Angle.Models.ViewModels.Ivy
     public class ArticleViewModel
     {
         public long ID { get; set; }
+        public long CategoryID { get; set; }
         public string Description { get; set; }
         public double Princing { get; set; }
         public int Quantity { get; set; }

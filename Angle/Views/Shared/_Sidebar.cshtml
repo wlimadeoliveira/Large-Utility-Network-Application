@@ -175,40 +175,7 @@
 
 
 
-                <!-- Start Inventar Admin -->
-                <li class=" ">
-                    <a href="#ivy" title="Multilevel" data-toggle="collapse"><em class="fa-2x mr-2 fas fa-microchip"></em><span>Inventory</span></a>
-                    <ul class="sidebar-nav sidebar-subnav collapse" id="ivy">
-                        <li class="sidebar-subnav-header">Inventory</li>
-                        <li class=" ">
-                            <!--Manufacturer-->
-                            <a href="#manufacturer" title="Manufacturer" data-toggle="collapse"><em class="fas fa-warehouse"></em><span>Manufacturer</span></a>
-                            <ul class="sidebar-nav sidebar-subnav collapse" id="manufacturer">
-                                <li class="sidebar-subnav-header">Manufacturers</li>
-                                <li class=" @Html.isActive(action: "Index", controller: "Manufacturer")"> <a href="@Url.Action("Index", "Manufacturer")" title="My Manufacturers"><em class="icon-list"></em><span>My Manufacturers</span></a></li>
-                                <li class=" @Html.isActive(action: "Create", controller: "Manufacturer")"><a href="@Url.Action("Create", "Manufacturer")" title="Insert a Manufacturer"><em class="icon-plus"></em><span>Add</span></a></li>
-                            </ul>
-                            <!--Supplier-->
-                            <a href="#supplier" title="Supplier" data-toggle="collapse"><em class="fas fa-box-open"></em><span>Supplier</span></a>
-                            <ul class="sidebar-nav sidebar-subnav collapse" id="supplier">
-                                <li class="sidebar-subnav-header">Manufacturers</li>
-                                <li class=" @Html.isActive(action: "Index", controller: "Supplier")"> <a href="@Url.Action("Index", "Supplier")" title="My Suppliers"><em class="icon-list"></em><span>My Suppliers</span></a></li>
-                                <li class=" @Html.isActive(action: "Create", controller: "Supplier")"><a href="@Url.Action("Create", "Supplier")" title="Insert a Suppliers"><em class="icon-plus"></em><span>Add</span></a></li>
-                            </ul>
-                            <!--Category-->
-                            <a href="#category" title="Category" data-toggle="collapse"><em class="fas fa-palette"></em><span>Category</span></a>
-                            <ul class="sidebar-nav sidebar-subnav collapse" id="category">
-                                <li class="sidebar-subnav-header">Categories</li>
-                                <li class=" @Html.isActive(action: "Index", controller: "Category")"> <a href="@Url.Action("Index", "Category")" title="My Categories"><em class="icon-list"></em><span>My Category</span></a></li>
-                                <li class=" @Html.isActive(action: "Create", controller: "Category")"><a href="@Url.Action("Create", "Category")" title="Insert a Category"><em class="icon-plus"></em><span>Add</span></a></li>
-                            </ul>
-                        </li>
-                    </ul>
-
-
-                </li>
-
-                <!-- End Inventar Admin -->
+      
             }
             <!--Start User Admin-->
             @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Angle.Migrations
 {
     [DbContext(typeof(ProjectDataContext))]
-    [Migration("20201028135619_Init")]
+    [Migration("20201123160457_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

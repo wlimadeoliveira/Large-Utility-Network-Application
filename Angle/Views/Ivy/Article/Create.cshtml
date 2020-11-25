@@ -1,0 +1,176 @@
+﻿@model Angle.Models.ViewModels.Ivy.ArticleViewModel
+el
+@{
+    ViewData["Title"] = "Insert an Article";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/vendor/chosen-js/chosen.css">
+}
+
+@section scripts{
+
+    <script src="~/vendor/chosen-js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").chosen();
+            $("chosen-select").chosen();
+
+        });
+    </script>
+}
+
+
+
+<div class="content-heading">
+    <div>Article<small>Insert a Article</small></div>
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-default">
+            <div class="card-header">Article</div>
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="Article" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Categories</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="CategoryID" class="form-control" >
+
+
+                                @foreach (Angle.Models.Models.Ivy.Category Category in @ViewBag.ListOfCategories)
+                                {
+                                    var catID = Category.ID.ToString();
+
+                                        <option value="@Category.ID" selected>                      @Category.ID  -  @Category.Description</option>
+                                  
+
+                                }
+
+                            </select>
+                            <span asp-validation-for="CategoryID" class="field-validation-error"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="Description" id="message" required="required" class="form-control" />
+
+                            <span asp-validation-for="Description" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Manufacturer Part Number <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="ManufacturerPartNumber" id="message" required="required" class="form-control" />
+
+                            <span asp-validation-for="ManufacturerPartNumber" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Supplier Part Number <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="SupplierPartNumber" id="message" required="required" class="form-control" />
+
+                            <span asp-validation-for="SupplierPartNumber" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="SupplierID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfSuppliers,"ID","Name"))">
+                                <option value="" selected>Select Supplier</option>
+                            </select>
+                            <span asp-validation-for="SupplierID" class="field-validation-error"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Manufacturer</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="ManufacturerID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfManufacturers,"ID","Name"))">
+                                <option value="" selected>Select Manufacturer</option>
+                            </select>
+                            <span asp-validation-for="ManufacturerID" class="field-validation-error"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Pricing <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="Princing" id="message" required="required" class="form-control" />
+
+                            <span asp-validation-for="Princing" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">
+                            Quantity <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" asp-for="Quantity" id="message" required="required" class="form-control" />
+
+                            <span asp-validation-for="Quantity" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="Status" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfStatus,"Description","Description"))">
+                                <option value="" selected>Select Location</option>
+                            </select>
+                            <span asp-validation-for="Status" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Location</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select asp-for="LocationID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListOfLocations,"ID","Description"))">
+                                <option value="" selected>Select Location</option>
+                            </select>
+                            <span asp-validation-for="LocationID" class="field-validation-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="submit" class="btn btn-primary">Cancel</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

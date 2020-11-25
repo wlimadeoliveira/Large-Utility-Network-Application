@@ -619,7 +619,7 @@ namespace Angle.Controllers
 
             ViewBag.Files = product.ProductHistories.Where(b => b.FileID != null).ToList();
 
-            var products1 = _unityOfWork.Product.getChilds(id);
+          //  var products1 = _unityOfWork.Product.getChilds(id);
 
             /*  if (softwareOptions!= null)
                {
@@ -650,7 +650,7 @@ namespace Angle.Controllers
                }*/
 
 
-            product.Customer.ID = 0;
+       /*     product.Customer.ID = 0;
           LicenseV2 license = new LicenseV2()
             {
                 SerialNumber = "1712060001",
@@ -684,9 +684,9 @@ namespace Angle.Controllers
 
             var key = PCWKeyGen.keyAsString(enc);
 
-          // var enc = PrecLicenseGenerator.PCWKeyGen.generateKey(lic, serial);
+           var enc = PrecLicenseGenerator.PCWKeyGen.generateKey(lic, serial);
 
-            Console.WriteLine(enc);
+            Console.WriteLine(enc);*/
 
 
 

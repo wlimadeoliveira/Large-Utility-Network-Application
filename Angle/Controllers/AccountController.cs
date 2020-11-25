@@ -128,7 +128,7 @@ namespace Angle.Controllers
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var passwordResetLink = Url.Action("ResetPassword", "Account",
                             new { email = model.Email, token = token }, Request.Scheme);                 
-                    var apiKey = "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";
+                    var apiKey = "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";
                     var client = new SendGridClient(apiKey);
                     var from = new EmailAddress("noreply@precisionwave.com", "no-reply@precisionwave.com");
                     var subject = "Password reset link";

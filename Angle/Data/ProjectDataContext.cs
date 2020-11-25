@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Angle.Models.ViewModels.AccountViewModel;
 using Angle.Models.Models.Ivy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using static Angle.Models.Models.Ivy.Article;
 
 namespace LUNA.Models.Models
 {
@@ -91,19 +93,19 @@ namespace LUNA.Models.Models
             });
             builder.Entity<IdentityUserLogin<string>>(entity =>
             {
-                
+
                 entity.Property(m => m.LoginProvider).HasMaxLength(36);
                 entity.Property(m => m.ProviderKey).HasMaxLength(36);
             });
             builder.Entity<IdentityUserRole<string>>(entity =>
             {
-                
+
                 entity.Property(m => m.UserId).HasMaxLength(36);
                 entity.Property(m => m.RoleId).HasMaxLength(36);
             });
             builder.Entity<IdentityUserToken<string>>(entity =>
             {
-               
+
                 entity.Property(m => m.UserId).HasMaxLength(36);
                 entity.Property(m => m.LoginProvider).HasMaxLength(36);
                 entity.Property(m => m.Name).HasMaxLength(36);
@@ -129,7 +131,7 @@ namespace LUNA.Models.Models
                   .HasOne(ph => ph.User)
                   .WithMany(a => a.ProductHistories)
                   .HasForeignKey(a => a.UserID);
-           
+
 
             builder.Entity<ProductType>()
             .HasKey(pf => new { pf.ProductID, pf.DeviceTypeID });
@@ -212,8 +214,14 @@ namespace LUNA.Models.Models
                 .WithMany(qr => qr.Index_QRs)
                 .HasForeignKey(qr => qr.ProductID);
 
+       /*     builder.Entity<Article>()
+                .Property(b => b.AD_Mounting).HasConversion(
+            v => v.ToString(),
+            v => (Mounting)Enum.Parse(typeof(Mounting), v));*/
 
-           
+
+
+
 
 
 
