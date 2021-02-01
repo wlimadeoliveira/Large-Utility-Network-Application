@@ -1,6 +1,6 @@
 # Large-Utility-Network-Application
 
-Complex ERP-Software for small and medium scale Bussiness
+Complex ERP-Software for small and medium scale Bussiness.
 Based on Various .NET Core and full Open-Source Technologies
 
 HTML, CSS, Bootstrap, JavaScript, Jquery, XAML, JSON
